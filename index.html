@@ -889,6 +889,67 @@
     gap: 8px;
     align-items: flex-start;
   }
+
+  /* ── SUB-TABS ── */
+  .subtabs-nav {
+    display: flex;
+    overflow-x: auto;
+    background: var(--bg3);
+    border-bottom: 2px solid var(--border);
+    scrollbar-width: none;
+    gap: 2px;
+    padding: 0 8px;
+  }
+  .subtabs-nav::-webkit-scrollbar { display: none; }
+  .subtab-btn {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-family: var(--head);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text2);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .subtab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+  .subtab-btn:hover:not(.active) { color: var(--text); }
+  .subtab-page { display: none; }
+  .subtab-page.active { display: block; }
+  .params-group {
+    margin: 12px 12px 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .params-group-head {
+    padding: 10px 14px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--head);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .params-group-body { display: none; }
+  .params-group.open .params-group-body { display: block; }
+  .params-group.open .params-group-head { border-bottom: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -971,6 +1032,7 @@
           <option value="PF700">PowerFlex 700</option>
           <option value="PF750">PowerFlex 750</option>
           <option value="PF755">PowerFlex 755</option>
+          <option value="PF7000">PowerFlex 7000 MV</option>
         </select>
       </div>
       <button class="analyze-btn" id="btnAnalyzeCam" onclick="analyzeWithAI('camera')" disabled>
@@ -992,6 +1054,7 @@
           <option value="PF700">PF 700</option>
           <option value="PF750">PF 750</option>
           <option value="PF755">PF 755</option>
+          <option value="PF7000">PF 7000 MV</option>
         </select>
       </div>
       <button class="analyze-btn" onclick="analyzeWithAI('code')">
@@ -1035,13 +1098,26 @@
 <div class="page" id="page-pf525">
   <div class="sec-head">
     <div class="sec-title">⚡ PowerFlex 520 / 523 / 525</div>
-    <div class="sec-desc">Banco de falhas — Série 520</div>
+    <div class="sec-desc">Série 520 — Banco completo de falhas, parâmetros e comissionamento</div>
   </div>
-  <div class="fault-search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf525', this.value)" />
+  <div class="subtabs-nav" id="subtabs-pf525">
+    <button class="subtab-btn active" onclick="showSubTab('pf525','falhas',this)">🔴 Falhas</button>
+    <button class="subtab-btn" onclick="showSubTab('pf525','params',this)">⚙️ Parâmetros</button>
+    <button class="subtab-btn" onclick="showSubTab('pf525','comiss',this)">🚀 Comissionamento</button>
   </div>
-  <div class="fault-list" id="fault-list-pf525"></div>
+  <div class="subtab-page active" id="st-pf525-falhas">
+    <div class="fault-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf525', this.value)" />
+    </div>
+    <div class="fault-list" id="fault-list-pf525"></div>
+  </div>
+  <div class="subtab-page" id="st-pf525-params">
+    <div id="params-pf525-body"></div>
+  </div>
+  <div class="subtab-page" id="st-pf525-comiss">
+    <div class="steps-list" id="comiss-steps-pf525"></div>
+  </div>
   <div class="pb"></div>
 </div>
 
@@ -1051,13 +1127,26 @@
 <div class="page" id="page-pf527">
   <div class="sec-head">
     <div class="sec-title">⚡ PowerFlex 527</div>
-    <div class="sec-desc">Banco de falhas — PF 527</div>
+    <div class="sec-desc">Série 527 — Banco completo de falhas, parâmetros e comissionamento</div>
   </div>
-  <div class="fault-search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf527', this.value)" />
+  <div class="subtabs-nav" id="subtabs-pf527">
+    <button class="subtab-btn active" onclick="showSubTab('pf527','falhas',this)">🔴 Falhas</button>
+    <button class="subtab-btn" onclick="showSubTab('pf527','params',this)">⚙️ Parâmetros</button>
+    <button class="subtab-btn" onclick="showSubTab('pf527','comiss',this)">🚀 Comissionamento</button>
   </div>
-  <div class="fault-list" id="fault-list-pf527"></div>
+  <div class="subtab-page active" id="st-pf527-falhas">
+    <div class="fault-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf527', this.value)" />
+    </div>
+    <div class="fault-list" id="fault-list-pf527"></div>
+  </div>
+  <div class="subtab-page" id="st-pf527-params">
+    <div id="params-pf527-body"></div>
+  </div>
+  <div class="subtab-page" id="st-pf527-comiss">
+    <div class="steps-list" id="comiss-steps-pf527"></div>
+  </div>
   <div class="pb"></div>
 </div>
 
@@ -1067,13 +1156,26 @@
 <div class="page" id="page-pf700">
   <div class="sec-head">
     <div class="sec-title">⚡ PowerFlex 700</div>
-    <div class="sec-desc">Banco de falhas — PF 700</div>
+    <div class="sec-desc">PF 700 — Banco completo de falhas, parâmetros e comissionamento</div>
   </div>
-  <div class="fault-search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf700', this.value)" />
+  <div class="subtabs-nav" id="subtabs-pf700">
+    <button class="subtab-btn active" onclick="showSubTab('pf700','falhas',this)">🔴 Falhas</button>
+    <button class="subtab-btn" onclick="showSubTab('pf700','params',this)">⚙️ Parâmetros</button>
+    <button class="subtab-btn" onclick="showSubTab('pf700','comiss',this)">🚀 Comissionamento</button>
   </div>
-  <div class="fault-list" id="fault-list-pf700"></div>
+  <div class="subtab-page active" id="st-pf700-falhas">
+    <div class="fault-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf700', this.value)" />
+    </div>
+    <div class="fault-list" id="fault-list-pf700"></div>
+  </div>
+  <div class="subtab-page" id="st-pf700-params">
+    <div id="params-pf700-body"></div>
+  </div>
+  <div class="subtab-page" id="st-pf700-comiss">
+    <div class="steps-list" id="comiss-steps-pf700"></div>
+  </div>
   <div class="pb"></div>
 </div>
 
@@ -1083,13 +1185,26 @@
 <div class="page" id="page-pf755">
   <div class="sec-head">
     <div class="sec-title">⚡ PowerFlex 750 / 755</div>
-    <div class="sec-desc">Banco de falhas — Série 750</div>
+    <div class="sec-desc">Série 750 — Banco completo de falhas, parâmetros e comissionamento</div>
   </div>
-  <div class="fault-search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf755', this.value)" />
+  <div class="subtabs-nav" id="subtabs-pf755">
+    <button class="subtab-btn active" onclick="showSubTab('pf755','falhas',this)">🔴 Falhas</button>
+    <button class="subtab-btn" onclick="showSubTab('pf755','params',this)">⚙️ Parâmetros</button>
+    <button class="subtab-btn" onclick="showSubTab('pf755','comiss',this)">🚀 Comissionamento</button>
   </div>
-  <div class="fault-list" id="fault-list-pf755"></div>
+  <div class="subtab-page active" id="st-pf755-falhas">
+    <div class="fault-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf755', this.value)" />
+    </div>
+    <div class="fault-list" id="fault-list-pf755"></div>
+  </div>
+  <div class="subtab-page" id="st-pf755-params">
+    <div id="params-pf755-body"></div>
+  </div>
+  <div class="subtab-page" id="st-pf755-comiss">
+    <div class="steps-list" id="comiss-steps-pf755"></div>
+  </div>
   <div class="pb"></div>
 </div>
 
@@ -1100,135 +1215,309 @@
 <div class="page" id="page-pf7000">
   <div class="sec-head">
     <div class="sec-title">⚡ PowerFlex 7000 MV</div>
-    <div class="sec-desc">Banco de falhas — Inversor de Média Tensão (2.4kV-6.6kV)</div>
+    <div class="sec-desc">Inversor de Média Tensão 2.4kV–6.6kV — Pub. 7000-TG002L / 7000-TD002C</div>
   </div>
 
-  <div class="ip-info-box" style="margin:12px">
-    <strong>⚠️ ATENÇÃO:</strong> O PowerFlex 7000 é um inversor de <strong>MÉDIA TENSÃO</strong> (2.400V a 6.600V).
-    <br>• Topologia: CSI-PWM com SGCTs/SCRs
-    <br>• Carcaças: A, B e C Frame
-    <br>• Retificadores: 6 pulsos, 18 pulsos ou AFE (PWM)
-    <br>• Sempre siga os procedimentos de segurança de média tensão!
+  <div class="subtabs-nav" id="subtabs-pf7000">
+    <button class="subtab-btn active" onclick="showSubTab('pf7000','falhas',this)">🔴 Falhas</button>
+    <button class="subtab-btn" onclick="showSubTab('pf7000','advert',this)">🟡 Advertências</button>
+    <button class="subtab-btn" onclick="showSubTab('pf7000','params',this)">⚙️ Parâmetros</button>
+    <button class="subtab-btn" onclick="showSubTab('pf7000','comiss',this)">🚀 Comissionamento</button>
+    <button class="subtab-btn" onclick="showSubTab('pf7000','seguranca',this)">🛡️ Segurança MV</button>
   </div>
 
-  <div class="fault-search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf7000', this.value)" />
-  </div>
-
-  <div class="fault-list" id="fault-list-pf7000"></div>
-
-  <!-- Guia de Navegação IHM PF7000 -->
-  <div class="card" style="margin:12px">
-    <div class="card-head">
-      <span class="icon">🖥️</span>
-      <div class="card-title">Guia de Navegação na IHM do PF 7000</div>
-      <span class="badge badge-blue">IHM</span>
+  <!-- ── SUB: FALHAS ── -->
+  <div class="subtab-page active" id="st-pf7000-falhas">
+    <div class="ip-info-box" style="margin:12px">
+      ⚡ <strong>MÉDIA TENSÃO:</strong> Topologia CSI-PWM • SGCTs/SCRs • Carcaças A, B e C Frame • Retificadores 6P / 18P / AFE-PWM
     </div>
-    <div class="card-body">
-      <div style="font-size:13px;line-height:1.7;color:var(--text)">
-        <strong style="color:var(--accent2)">Estrutura de Menus da IHM:</strong>
-        <table class="param-table" style="margin-top:10px">
-          <tr><th>Caminho</th><th>Função</th></tr>
-          <tr><td>Menu → Status</td><td>Visualiza status atual do drive</td></tr>
-          <tr><td>Menu → Alarms</td><td>Lista de alarmes ativos e histórico</td></tr>
-          <tr><td>Menu → Parameters</td><td>Acesso a todos os parâmetros</td></tr>
-          <tr><td>Menu → Metering</td><td>Medições em tempo real</td></tr>
-          <tr><td>Menu → Diagnostic</td><td>Testes e diagnósticos</td></tr>
-          <tr><td>Menu → Trending</td><td>Tendências de variáveis</td></tr>
+    <div class="fault-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf7000', this.value)" />
+    </div>
+    <div class="fault-list" id="fault-list-pf7000"></div>
+  </div>
+
+  <!-- ── SUB: ADVERTÊNCIAS ── -->
+  <div class="subtab-page" id="st-pf7000-advert">
+    <div class="ip-info-box" style="margin:12px">
+      🟡 <strong>Advertências</strong> não desarmam o drive — indicam condições anormais que requerem atenção. Documente todas antes de limpar a fila (<strong>Clr Warn Que — P257 bit 4</strong>).
+    </div>
+    <div class="fault-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="fault-search" placeholder="Buscar advertência..." oninput="filterWarnings('pf7000', this.value)" />
+    </div>
+    <div class="fault-list" id="warn-list-pf7000"></div>
+  </div>
+
+  <!-- ── SUB: PARÂMETROS ── -->
+  <div class="subtab-page" id="st-pf7000-params">
+
+    <div class="params-group open" id="pg7k-monit">
+      <div class="params-group-head" onclick="toggleCard('pg7k-monit')">📊 Monitoramento — Leitura em Tempo Real <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <table class="param-table" style="margin:0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição</th><th>Acesso</th></tr>
+          <tr><td>122</td><td>Line Current pu</td><td>Corrente de linha medida (pu) — soma da corrente do retificador + capacitor filtro linha</td><td>Serviço</td></tr>
+          <tr><td>135</td><td>Line Voltage pu</td><td>Tensão de linha estimada na entrada (pu)</td><td>Serviço</td></tr>
+          <tr><td>252</td><td>Inv HSink Temp C</td><td>Temperatura do dissipador do inversor em °C</td><td>Monitor</td></tr>
+          <tr><td>254</td><td>Rec HSink Temp C</td><td>Temperatura do dissipador do retificador em °C</td><td>Monitor</td></tr>
+          <tr><td>257</td><td>Logic Command</td><td>Palavra de comando lógico — bit 0=Not Stop, bit1=Start, bit2=Jog, bit3=Clr Flt, bit5=Reset, bit6=Direction</td><td>Monitor</td></tr>
+          <tr><td>258</td><td>Logic Status</td><td>Palavra de status — bit0=Ready, bit1=Running, bit6=At Speed, bit9=Fault, bit10=Warning</td><td>Monitor</td></tr>
+          <tr><td>262</td><td>Drive Not Ready1</td><td>Status de condições "Não Pronto": bit2=No Line Sync, bit5=Inp IsoOpen, bit14=Line Loss, bit15=CtrlPwr Loss</td><td>Monitor</td></tr>
+          <tr><td>276</td><td>Speed Command In</td><td>Comando de velocidade selecionado (entrada do bloco de controle)</td><td>Monitor</td></tr>
+          <tr><td>277</td><td>Speed Command</td><td>Comando de velocidade após limites máx/mín aplicados</td><td>Monitor</td></tr>
+          <tr><td>278</td><td>Speed Reference</td><td>Referência de velocidade após rampa de aceleração/desaceleração</td><td>Monitor</td></tr>
+          <tr><td>554</td><td>Motor Voltage pu</td><td>Tensão nos terminais do motor (pu)</td><td>Serviço</td></tr>
+          <tr><td>555</td><td>Motor Current pu</td><td>Corrente do motor medida pelos HECS (pu)</td><td>Serviço</td></tr>
+          <tr><td>643</td><td>Inv DCLink Volt</td><td>Tensão do indutor DC no lado do inversor (pu)</td><td>Serviço</td></tr>
+          <tr><td>645</td><td>Rec DCLink Volt</td><td>Tensão do indutor DC no lado do retificador (pu)</td><td>Serviço</td></tr>
+          <tr><td>696</td><td>Rec Input Volt</td><td>Tensão medida na entrada da ponte do retificador mestre (pu)</td><td>Serviço</td></tr>
+          <tr><td>761</td><td>Inv Output Volt</td><td>Tensão de saída do inversor medida no capacitor de filtro do motor (pu)</td><td>Serviço</td></tr>
         </table>
-
-        <strong style="color:var(--accent2);display:block;margin-top:15px">Navegação por Grupos de Parâmetros:</strong>
-        <ul style="margin-top:8px;padding-left:20px">
-          <li><strong>Group 1:</strong> Parâmetros de Setup Básico</li>
-          <li><strong>Group 2:</strong> Parâmetros de Motor</li>
-          <li><strong>Group 3:</strong> Parâmetros de Controle de Velocidade</li>
-          <li><strong>Group 4:</strong> Parâmetros de Controle de Corrente</li>
-          <li><strong>Group 5:</strong> Parâmetros de Proteção</li>
-          <li><strong>Group 6:</strong> Parâmetros de Comunicação</li>
-          <li><strong>Group 7:</strong> Parâmetros de Diagnóstico</li>
-          <li><strong>Group 8:</strong> Parâmetros de Hardware</li>
-        </ul>
       </div>
     </div>
+
+    <div class="params-group" id="pg7k-setup">
+      <div class="params-group-head" onclick="toggleCard('pg7k-setup')">🔧 Setup Básico — Configuração Inicial <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <table class="param-table" style="margin:0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição / Opções</th><th>Padrão</th></tr>
+          <tr><td>1</td><td>Rated Line Freq</td><td>Frequência nominal da linha (Hz) — 60 Hz para o Brasil</td><td>60</td></tr>
+          <tr><td>2</td><td>Rated Line Volt</td><td>Tensão nominal de linha do sistema MV (V) — ex: 2400, 3300, 4160, 6600</td><td>—</td></tr>
+          <tr><td>7</td><td>Speed Ref Select</td><td>Fonte da referência de velocidade: 0=Local (potenciômetro), 1–3=DPI Adapter, 4–6=Analógico (0-10V/4-20mA), 7–9=Preset Speed</td><td>0</td></tr>
+          <tr><td>49</td><td>Skip Speed 1</td><td>Velocidade de inibição 1 — evita operação contínua na frequência especificada (ressonâncias mecânicas)</td><td>0</td></tr>
+          <tr><td>50</td><td>Skip Speed 2</td><td>Velocidade de inibição 2</td><td>0</td></tr>
+          <tr><td>51</td><td>Skip Speed 3</td><td>Velocidade de inibição 3</td><td>0</td></tr>
+          <tr><td>53</td><td>Skip Speed Band1</td><td>Faixa da velocidade de inibição 1 (± Hz)</td><td>0</td></tr>
+          <tr><td>98</td><td>Base Speed</td><td>Velocidade base do motor em Hz — Speed Command Max não pode exceder 125% deste valor</td><td>—</td></tr>
+          <tr><td>141</td><td>Hardware Options1</td><td>Opções de hardware em bits: Redn ConvFan, Input IsoSw, Output IsoSw, Bypass IsoSw, Output Ctctr, Bypass Ctctr, Ambient Temp, etc.</td><td>128</td></tr>
+          <tr><td>159</td><td>Bypass Frequency</td><td>Frequência usada durante transferência síncrona para bypass</td><td>—</td></tr>
+          <tr><td>213</td><td>Autotune Spd Cmd</td><td>Velocidade usada durante autotuning do regulador de fluxo e velocidade</td><td>—</td></tr>
+          <tr><td>290</td><td>Speed Cmd Max</td><td>Limite máximo do comando de velocidade (Hz)</td><td>—</td></tr>
+          <tr><td>293</td><td>Speed Cmd Min</td><td>Limite mínimo do comando de velocidade (Hz)</td><td>—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="params-group" id="pg7k-motor">
+      <div class="params-group-head" onclick="toggleCard('pg7k-motor')">🏭 Parâmetros do Motor MV <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <div class="warn-box" style="margin:12px 12px 0">⚠️ Configure sempre com os dados da placa do motor. Erros nestes parâmetros causam falhas de proteção ou controle inadequado.</div>
+        <table class="param-table" style="margin:8px 0 0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição</th><th>Unidade</th></tr>
+          <tr><td>3</td><td>Rated Motor Freq</td><td>Frequência nominal do motor (placa)</td><td>Hz</td></tr>
+          <tr><td>4</td><td>Rated Motor Volt</td><td>Tensão nominal do motor (placa)</td><td>V</td></tr>
+          <tr><td>5</td><td>Rated Motor Amps</td><td>Corrente nominal do motor (placa) — crítico para proteção de sobrecarga</td><td>A</td></tr>
+          <tr><td>6</td><td>Rated Motor RPM</td><td>Velocidade nominal do motor (placa)</td><td>RPM</td></tr>
+          <tr><td>8</td><td>Rated Motor KW</td><td>Potência nominal do motor (placa)</td><td>kW</td></tr>
+          <tr><td>10</td><td>Motor Type</td><td>0 = Motor de Indução (assíncrono) | 1 = Motor Síncrono (com excitação)</td><td>—</td></tr>
+          <tr><td>11</td><td>Motor Poles</td><td>Número de polos do motor</td><td>—</td></tr>
+          <tr><td>14</td><td>Stator Resistance</td><td>Resistência do estator — obtida pelo autotuning (Rs tune)</td><td>pu</td></tr>
+          <tr><td>15</td><td>Leakage Inductance</td><td>Indutância de dispersão total — obtida pelo autotuning (Ls tune)</td><td>pu</td></tr>
+          <tr><td>18</td><td>Rotor Time Const</td><td>Constante de tempo do rotor — faixa típica de 0,5 a 5 segundos para motores MV</td><td>s</td></tr>
+          <tr><td>22</td><td>Motor Inertia</td><td>Inércia total da carga (motor + carga mecânica) — necessária para autotuning do regulador de velocidade</td><td>kg·m²</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="params-group" id="pg7k-ramp">
+      <div class="params-group-head" onclick="toggleCard('pg7k-ramp')">🎛️ Rampas e Controle de Velocidade <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <div class="warn-box" style="margin:12px 12px 0">⚠️ Motores de MV com alta inércia (bombas, ventiladores, compressores) exigem rampas longas — tipicamente 60 a 180s. Rampas curtas causam trip por sobrecorrente ou sobretensão DC.</div>
+        <table class="param-table" style="margin:8px 0 0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição</th><th>Sugestão</th></tr>
+          <tr><td>40</td><td>Accel Time 1</td><td>Tempo de aceleração de 0 até velocidade base</td><td>60–180s</td></tr>
+          <tr><td>41</td><td>Decel Time 1</td><td>Tempo de desaceleração de velocidade base até 0</td><td>60–180s</td></tr>
+          <tr><td>42</td><td>Accel Time 2</td><td>Rampa de aceleração auxiliar (selecionável)</td><td>—</td></tr>
+          <tr><td>43</td><td>Decel Time 2</td><td>Rampa de desaceleração auxiliar (selecionável)</td><td>—</td></tr>
+          <tr><td>475</td><td>S-curve Percent</td><td>Percentual da curva S aplicado nas rampas. 0 = rampa linear. Valor &gt; 0 suaviza partidas e paradas</td><td>0–20%</td></tr>
+          <tr><td>481</td><td>S-curve Acc1</td><td>Parâmetro da parte não linear da curva S (calculado automaticamente pelo drive)</td><td>—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="params-group" id="pg7k-prot">
+      <div class="params-group-head" onclick="toggleCard('pg7k-prot')">🛡️ Proteções — Motor e Drive <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <table class="param-table" style="margin:0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição</th><th>Ref.</th></tr>
+          <tr><td>200</td><td>Motor Overload</td><td>Proteção de sobrecarga do motor I²t — use a corrente nominal do motor</td><td>Fault 101</td></tr>
+          <tr><td>201</td><td>OL Mode</td><td>Modo sobrecarga: 0=Desativado, 1=Trip, 2=Reduz velocidade, 3=Aviso</td><td>—</td></tr>
+          <tr><td>202</td><td>OL Reset Level</td><td>Nível de corrente para resetar proteção de sobrecarga após trip</td><td>—</td></tr>
+          <tr><td>317</td><td>Air Pressure Nom</td><td>Pressão de ar nominal medida pelo transdutor durante operação normal (A/B-Frame)</td><td>—</td></tr>
+          <tr><td>319</td><td>AirLoPresure Trp</td><td>Nível de trip por baixa pressão de ar — abaixo deste valor: Fault 176 (Convrtr Air Flow)</td><td>Fault 176</td></tr>
+          <tr><td>320</td><td>AirLoPresure Wrn</td><td>Nível de advertência por baixa pressão de ar</td><td>—</td></tr>
+          <tr><td>445</td><td>Aux Prot Class</td><td>Classe da proteção auxiliar (XIO): 0=Warning, 1=Fault — define se a entrada XIO gera falha ou advertência</td><td>Fault 37</td></tr>
+          <tr><td>483</td><td>CoolantTemp Trip</td><td>Temperatura de trip do fluido de resfriamento em °C (C-Frame com resfriamento líquido)</td><td>Fault 67</td></tr>
+          <tr><td>484</td><td>DrvStatus Flag3</td><td>Flags de status do drive — bit0=Uncoupled Mode, bit1=DB Gate Test, bit2=DB MV Test</td><td>—</td></tr>
+          <tr><td>699</td><td>Drive Not Ready2</td><td>Status de condições adicionais "Não Pronto": bit0=SCR Gate Pwr, bit1=InpCtctrOpen</td><td>—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="params-group" id="pg7k-diag">
+      <div class="params-group-head" onclick="toggleCard('pg7k-diag')">🔬 Diagnóstico — Status e Flags <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <table class="param-table" style="margin:0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição</th></tr>
+          <tr><td>238</td><td>DrvStatus Flag2</td><td>bit2=Class1 Fault, bit3=Class2 Fault, bit6=Gating Enable, bit8=Gate Test, bit9=Short Circuit Test, bit11=Open Circuit Test</td></tr>
+          <tr><td>505</td><td>Contactor Cmd</td><td>Comando dos contatores: bit0=Input Ctctr, bit1=Output Ctctr, bit2=Bypass Ctctr</td></tr>
+          <tr><td>506</td><td>Contactor Status</td><td>Status dos contatores e chaves de isolação — bit1=fechado</td></tr>
+          <tr><td>569</td><td>DrvStatus Flag1</td><td>bit0=Ready/Not Ready, bit1=Running, bit3=Faulted, bit5=Fans On, bit6=Input Open/Closed, bit7=Output Open/Closed</td></tr>
+          <tr><td>663</td><td>Master Phasing</td><td>Fase de ponte do mestre — parâmetro de comissionamento (somente serviço)</td></tr>
+          <tr><td>684</td><td>BusTransient Trp</td><td>Valor interno do desarme transiente de barramento DC</td></tr>
+          <tr><td>764</td><td>Cur Sens FltCode</td><td>Código de falha do sensor de corrente — consultar quando Fault 155 (Current Sensor) ocorrer</td></tr>
+          <tr><td>767</td><td>BusTransient Lvl</td><td>Nível de transiente do barramento medido — comparado ao P684 para detectar transiente</td></tr>
+          <tr><td>778</td><td>TransientVoltMax</td><td>Tensão de pico do capacitor durante o último transiente de barramento DC</td></tr>
+          <tr><td>788</td><td>ChA Airflow</td><td>Velocidade do fluxo de ar canal A — medida pela placa TFB 3ª geração ou superior (pés/min)</td></tr>
+          <tr><td>897</td><td>Cap Neutral Volt</td><td>Tensão neutra do capacitor de linha (pu) — diagnóstico de falha</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="params-group" id="pg7k-him">
+      <div class="params-group-head" onclick="toggleCard('pg7k-him')">🖥️ Navegação na IHM do PF 7000 <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body" style="padding:14px">
+        <table class="param-table">
+          <tr><th>Caminho</th><th>Função</th></tr>
+          <tr><td>Menu → Status</td><td>Status geral: Running, Ready, Faulted, Warning</td></tr>
+          <tr><td>Menu → Metering</td><td>Medições em tempo real: corrente, tensão, temperatura</td></tr>
+          <tr><td>Menu → Alarms</td><td>Fila de falhas e advertências ativas com timestamp</td></tr>
+          <tr><td>Menu → Parameters</td><td>Acesso a todos os parâmetros por grupo ou número linear</td></tr>
+          <tr><td>Menu → Diagnostic</td><td>Gating Test, SGCT Test, DC Current Test, Open Circuit Test</td></tr>
+          <tr><td>Menu → Trending</td><td>Tendências de variáveis — registra histórico de medições</td></tr>
+        </table>
+        <strong style="color:var(--accent2);display:block;margin-top:12px;font-size:12px">Grupos de Parâmetros (Firmware 8.xxx):</strong>
+        <table class="param-table" style="margin-top:6px">
+          <tr><th>Grupo</th><th>Conteúdo</th></tr>
+          <tr><td>Feedback</td><td>Tensões, correntes, temperaturas (P122, P135, P252, P554, P555)</td></tr>
+          <tr><td>Diagnostic</td><td>Logic Command/Status, Drive Not Ready, Status Flags (P257, P258, P262)</td></tr>
+          <tr><td>Setup</td><td>Frequência e tensão nominais, Speed Ref Select, Hardware Options (P1, P2, P7, P141)</td></tr>
+          <tr><td>Motor Control</td><td>Parâmetros do motor, autotuning, controle vetorial (P3–P22)</td></tr>
+          <tr><td>Speed Ref</td><td>Speed Command, rampas, Skip Speeds (P40–P55, P276–P293)</td></tr>
+          <tr><td>Protection</td><td>Sobrecarga, pressão de ar, temperatura, auxiliar (P200–P445)</td></tr>
+          <tr><td>Communications</td><td>DPI adapters, Network Loss Action, Comm Timeout</td></tr>
+          <tr><td>Commissioning</td><td>Master Phasing, parâmetros de ajuste fino (P663+)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="pb"></div>
   </div>
 
-  <!-- Testes de Diagnóstico -->
-  <div class="card" style="margin:12px">
-    <div class="card-head">
-      <span class="icon">🔬</span>
-      <div class="card-title">Testes de Diagnóstico SGCT/SCR</div>
-      <span class="badge badge-warn">TESTE</span>
-    </div>
-    <div class="card-body">
-      <div style="font-size:13px;line-height:1.7;color:var(--text)">
-        <strong style="color:var(--accent2)">Teste de Resistência SGCT (Offline):</strong>
-        <ol class="ip-ol" style="margin-top:8px">
-          <li>Desligue e isole o drive da média tensão (Lockout/Tagout)</li>
-          <li>Aguarde 5 minutos para descarga dos capacitores</li>
-          <li>Acesse: <strong>Menu → Diagnostic → SGCT Test</strong></li>
-          <li>Selecione o dispositivo a testar (DBSE1-4, DBSH1-4)</li>
-          <li>Resistência normal: Anodo-Catodo > 100kΩ</li>
-          <li>Resistência de amortecimento: conforme especificação</li>
-        </ol>
+  <!-- ── SUB: COMISSIONAMENTO ── -->
+  <div class="subtab-page" id="st-pf7000-comiss">
+    <div class="steps-list" id="comiss-steps-pf7000"></div>
+    <div class="pb"></div>
+  </div>
 
-        <strong style="color:var(--accent2);display:block;margin-top:15px">Teste de Disparo (Gating Test):</strong>
-        <ol class="ip-ol" style="margin-top:8px">
+  <!-- ── SUB: SEGURANÇA MV ── -->
+  <div class="subtab-page" id="st-pf7000-seguranca">
+    <div class="danger-box" style="margin:12px">
+      🔴 <strong>PERIGO DE MORTE:</strong> O PowerFlex 7000 opera com tensões de 2.400V a 6.600V. Apenas pessoal qualificado com treinamento em segurança de média tensão pode trabalhar neste equipamento.
+    </div>
+
+    <div class="ip-method-card" id="seg7k-loto" style="margin:12px 12px 0">
+      <div class="ip-method-head" onclick="toggleCard('seg7k-loto')">
+        <span class="ip-method-icon">🔒</span>
+        <span class="ip-method-title">Lockout / Tagout (LOTO) — Procedimento Obrigatório</span>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="ip-method-body">
+        <ol class="ip-ol">
+          <li>Emita a <strong>Permissão de Trabalho (PT)</strong> antes de qualquer atividade</li>
+          <li>Comande o <strong>Stop</strong> do drive e aguarde parada completa do motor</li>
+          <li>Desligue o <strong>disjuntor de média tensão</strong> de alimentação do drive</li>
+          <li>Aplique <strong>cadeado pessoal</strong> no disjuntor de MV (cada técnico com o seu)</li>
+          <li>Instale <strong>tag de aviso</strong> identificando: nome, data e motivo do isolamento</li>
+          <li>Desligue também a <strong>alimentação de controle</strong> (LV — 120V CA / 24V DC)</li>
+          <li>Verifique <strong>ausência de tensão</strong> com detector de MV homologado nas 3 fases</li>
+          <li>Aguarde mínimo <strong>5 minutos</strong> para descarga dos capacitores do barramento DC</li>
+          <li>Meça a tensão no <strong>barramento DC</strong> antes de tocar em qualquer componente (&lt;50V)</li>
+          <li>Se necessário, instale <strong>aterramento temporário</strong> nos barramentos DC+ e DC-</li>
+        </ol>
+        <div class="danger-box" style="margin-top:10px">🔴 NUNCA confie apenas no comando de Stop do drive. Sempre isole fisicamente a fonte de MV com cadeado pessoal.</div>
+      </div>
+    </div>
+
+    <div class="ip-method-card" id="seg7k-epi" style="margin:12px 12px 0">
+      <div class="ip-method-head" onclick="toggleCard('seg7k-epi')">
+        <span class="ip-method-icon">🥽</span>
+        <span class="ip-method-title">EPIs Obrigatórios — Arc Flash NFPA 70E</span>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="ip-method-body">
+        <table class="param-table">
+          <tr><th>EPI</th><th>Especificação</th></tr>
+          <tr><td>Luvas isolantes</td><td>Classe compatível com tensão do sistema (ex: Classe 3 para 6.6kV)</td></tr>
+          <tr><td>Capacete com viseira</td><td>Anti-arco elétrico — cal/cm² conforme estudo de arco flash</td></tr>
+          <tr><td>Vestimenta anti-chama</td><td>Macacão ou conjunto calça+jaqueta AR/FR — cal/cm² conforme estudo</td></tr>
+          <tr><td>Calçado dielétrico</td><td>Norma ABNT NBR 10623 — Classe I (tensão até 5kV)</td></tr>
+          <tr><td>Detector de MV</td><td>Homologado para a tensão do sistema, testado antes do uso</td></tr>
+          <tr><td>Óculos de segurança</td><td>Sob a viseira — proteção adicional contra estilhaços</td></tr>
+        </table>
+        <div class="warn-box" style="margin-top:10px">⚠️ Realize o <strong>Estudo de Arco Flash (IEEE 1584)</strong> para determinar a categoria de PPE correta para cada ponto de trabalho. Categorias típicas do PF7000 variam de CAT 2 a CAT 4.</div>
+      </div>
+    </div>
+
+    <div class="ip-method-card" id="seg7k-descarga" style="margin:12px 12px 0">
+      <div class="ip-method-head" onclick="toggleCard('seg7k-descarga')">
+        <span class="ip-method-icon">⚡</span>
+        <span class="ip-method-title">Verificação de Descarga dos Capacitores DC</span>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="ip-method-body">
+        <div class="warn-box" style="margin-bottom:10px">⚠️ Mesmo com a MV desligada, os capacitores do barramento DC retêm energia letal por vários minutos.</div>
+        <ol class="ip-ol">
+          <li>Desligue a MV e aguarde o drive entrar em modo de coast stop</li>
+          <li>Aguarde mínimo <strong>5 minutos</strong> após o desligamento completo</li>
+          <li>Acesse a IHM: <strong>Menu → Metering → DC Bus Voltage</strong> — verifique se a tensão está sendo indicada</li>
+          <li>Use multímetro CAT III na escala de <strong>10kV DC</strong> para medir nos barramentos DC+ e DC-</li>
+          <li>Somente prossiga se a tensão DC for <strong>menor que 50V</strong></li>
+          <li>Se a tensão não cair após 10 minutos, verifique o circuito de descarga (resistor de bleeding)</li>
+        </ol>
+        <table class="param-table" style="margin-top:10px">
+          <tr><th>Tensão do sistema</th><th>Tensão DC nominal</th><th>Espera mínima</th></tr>
+          <tr><td>2.400V AC</td><td>~3.400V DC</td><td>5 minutos</td></tr>
+          <tr><td>4.160V AC</td><td>~5.900V DC</td><td>5 minutos</td></tr>
+          <tr><td>6.600V AC</td><td>~9.300V DC</td><td>5 minutos</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ip-method-card" id="seg7k-diag" style="margin:12px">
+      <div class="ip-method-head" onclick="toggleCard('seg7k-diag')">
+        <span class="ip-method-icon">🔬</span>
+        <span class="ip-method-title">Testes de Diagnóstico — SGCT / SCR / Corrente DC</span>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="ip-method-body">
+        <strong style="color:var(--accent2)">Gating Test (com LV ligada, MV desligada):</strong>
+        <ol class="ip-ol" style="margin-top:6px">
+          <li>Energize apenas a alimentação de controle (LV)</li>
           <li>Acesse: <strong>Menu → Diagnostic → Gating Test</strong></li>
-          <li>Selecione o modo: SCR Test ou SGCT Test</li>
-          <li>Verifique os LEDs da placa de disparo (SPGDB)</li>
-          <li>LED verde = disparo OK, LED vermelho = falha</li>
-          <li>Verifique cabos de fibra óptica</li>
+          <li>Selecione: <strong>SCR Test</strong> (retificador) ou <strong>SGCT Test</strong> (inversor)</li>
+          <li>LED verde na placa SPGDB = disparo OK | LED vermelho = falha no dispositivo</li>
+          <li>Se LED vermelho: verifique a fibra óptica daquele SGCT/SCR</li>
         </ol>
-
-        <strong style="color:var(--accent2);display:block;margin-top:15px">Teste de Corrente DC (DC Current Test):</strong>
-        <ol class="ip-ol" style="margin-top:8px">
+        <strong style="color:var(--accent2);display:block;margin-top:12px">Teste Offline de Resistência SGCT (drive totalmente desenergizado):</strong>
+        <ol class="ip-ol" style="margin-top:6px">
+          <li>Execute LOTO completo — MV + LV desligados, capacitores descarregados</li>
+          <li>Acesse: <strong>Menu → Diagnostic → SGCT Test</strong> (quando disponível)</li>
+          <li>Meça Anodo-Catodo de cada SGCT com Megôhmetro: valor normal &gt; 100kΩ</li>
+          <li>Valor baixo ou zero = SGCT em curto → substituir</li>
+        </ol>
+        <strong style="color:var(--accent2);display:block;margin-top:12px">DC Current Test (com MV ligada — motor parado):</strong>
+        <ol class="ip-ol" style="margin-top:6px">
           <li>Acesse: <strong>Menu → Diagnostic → DC Current Test</strong></li>
-          <li>Configure corrente de teste (tipicamente 10-20% da nominal)</li>
-          <li>Verifique feedback nos parâmetros P322 (Idc Feedback)</li>
-          <li>Compare com valor comandado</li>
-          <li>Verifique sensores HECS e resistores de burden</li>
+          <li>Configure corrente de teste (tipicamente 10–20% da nominal)</li>
+          <li>Verifique feedback: <strong>P322 (Idc Feedback)</strong> — compare com o valor comandado</li>
+          <li>Discrepância indica problema nos HECS (sensores de efeito Hall) ou resistores de burden</li>
         </ol>
       </div>
     </div>
+    <div class="pb"></div>
   </div>
-
-  <!-- Procedimentos de Segurança MV -->
-  <div class="card" style="margin:12px">
-    <div class="card-head">
-      <span class="icon">⚡</span>
-      <div class="card-title">Segurança em Média Tensão</div>
-      <span class="badge badge-red">⚠ MV</span>
-    </div>
-    <div class="card-body">
-      <div class="danger-box" style="margin-bottom:10px">
-        🔴 <strong>PERIGO:</strong> O PowerFlex 7000 opera com tensões de 2.400V a 6.600V. 
-        Contato pode causar morte! Apenas pessoal qualificado e autorizado.
-      </div>
-      <div style="font-size:13px;line-height:1.7;color:var(--text)">
-        <strong style="color:var(--accent2)">Procedimento de Lockout/Tagout:</strong>
-        <ol class="ip-ol" style="margin-top:8px">
-          <li>Desligue o disjuntor de entrada de média tensão</li>
-          <li>Aplique cadeados nos disjuntores (Lockout)</li>
-          <li>Instale tags de aviso (Tagout)</li>
-          <li>Verifique ausência de tensão com detector apropriado</li>
-          <li>Aguarde 5 minutos para descarga dos capacitores DC</li>
-          <li>Meça tensão no barramento DC antes de tocar</li>
-        </ol>
-
-        <strong style="color:var(--accent2);display:block;margin-top:15px">EPIs Obrigatórios:</strong>
-        <ul style="margin-top:8px;padding-left:20px">
-          <li>Luvas isolantes para média tensão (classe 00 ou superior)</li>
-          <li>Capacete com viseira</li>
-          <li>Vestimenta anti-chama (Arc Flash)</li>
-          <li>Calçado isolante</li>
-          <li>Detectores de tensão de média tensão</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="pb"></div>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -1246,6 +1535,7 @@
       <div class="chip" onclick="selectComiss('pf527',this)">PF 527</div>
       <div class="chip" onclick="selectComiss('pf700',this)">PF 700</div>
       <div class="chip" onclick="selectComiss('pf755',this)">PF 750/755</div>
+      <div class="chip" onclick="selectComiss('pf7000',this)">⚡ PF 7000 MV</div>
     </div>
   </div>
 
@@ -2256,7 +2546,7 @@
           <tr><td>Versão</td><td style="color:var(--text)">1.0.0</td></tr>
           <tr><td>Plataforma</td><td style="color:var(--text)">Web / Mobile (HTML)</td></tr>
           <tr><td>IA</td><td style="color:var(--text)">Claude Sonnet (Anthropic)</td></tr>
-          <tr><td>Cobertura</td><td style="color:var(--text)">PF 520/523/525/527/700/750/755</td></tr>
+          <tr><td>Cobertura</td><td style="color:var(--text)">PF 520/523/525/527/700/750/755/7000</td></tr>
           <tr><td>Hospedagem</td><td style="color:var(--text)">GitHub Pages</td></tr>
         </table>
         <div class="warn-box" style="margin-top:10px">⚠️ Ferramenta de apoio. Consulte sempre os manuais oficiais Rockwell para decisões críticas de segurança.</div>
@@ -2519,6 +2809,163 @@ const FAULTS = {
   ],
 };
 
+// ── WARNINGS DATABASE (PF7000) ────────────────────────────────
+const WARNINGS = {
+  pf7000: [
+    { code:'32', name:'Input Prot\'n #1', causes:['Proteção de entrada #1 ativada — relé de proteção externo atuou','Contato auxiliar do relé de entrada aberto'], actions:['Verifique relé de proteção da linha de entrada','Verifique contato auxiliar conectado à entrada XIO','Investigue a causa da atuação do relé'] },
+    { code:'33', name:'IsoTx/ReacOvrTmp', causes:['Sobretemperatura no transformador de isolação ou reator de linha','Temperatura ambiente alta','Ventilação insuficiente'], actions:['Verifique temperatura do transformador/reator','Melhore ventilação da sala elétrica','Reduza carga se necessário'] },
+    { code:'34', name:'DCLnk OvrTemp', causes:['Temperatura do indutor DC (link) acima do limite','Circulação de ar insuficiente','Carga excessiva'], actions:['Verifique temperatura e ventilação do indutor DC','Melhore refrigeração do compartimento'] },
+    { code:'35', name:'Motor Protection', causes:['Relé de proteção do motor atuou','Proteção térmica do motor acionada'], actions:['Verifique relé de proteção do motor','Aguarde resfriamento do motor','Investigue causa da sobretemperatura'] },
+    { code:'37', name:'Auxiliary Prot\'n', causes:['Entrada auxiliar XIO ativada (classe configurada como Warning pelo P445)','Proteção externa configurada em modo advertência'], actions:['Verifique dispositivo conectado à entrada auxiliar XIO','Verifique parâmetro Aux Prot Class (P445)','Investigue a causa de abertura do contato'] },
+    { code:'57', name:'Control Pwr Loss', causes:['Queda ou oscilação na tensão de controle (120V CA) por mais de 5 ciclos','Fonte de alimentação de controle instável'], actions:['Verifique fonte de controle','Verifique confiabilidade da tensão de controle CA','Verifique se o UPS está operacional'] },
+    { code:'62', name:'UPS Fault', causes:['Falha no UPS (No-Break) instalado no drive','UPS sem bateria ou bateria fraca'], actions:['Verifique UPS instalado no drive','Verifique carga e bateria do UPS','Substitua baterias se necessário'] },
+    { code:'66', name:'CoolantTemp Low', causes:['Temperatura do fluido de resfriamento abaixo de 4°C — impede partida (C-Frame)','Temperatura ambiente do ambiente de controle baixa'], actions:['Aqueça o ambiente até temperatura operacional (mín. 10°C)','Verifique válvula termostática de bypass (V10)'] },
+    { code:'67', name:'CoolantTemp High', causes:['Temperatura do fluido de resfriamento acima de 54°C (C-Frame)','Ventiladores do trocador de calor não funcionando','Temperatura ambiente fora do especificado'], actions:['Verifique ventiladores do trocador de calor','Verifique válvula termostática totalmente aberta','Verifique temperatura ambiente da instalação'] },
+    { code:'68', name:'ConductivityHigh', causes:['Condutividade do fluido de resfriamento acima de 2 μS/cm³','Contaminação do fluido (tubulação de ferro, água não deionizada)'], actions:['Verifique fonte de contaminação','Limpe os filtros de malha','Substitua o cartucho deionizador e monitore a condutividade'] },
+    { code:'69', name:'CoolantLevel Low', causes:['Nível do fluido de resfriamento abaixo do sensor inferior (C-Frame)','Vazamento no sistema de resfriamento'], actions:['Verifique vazamentos no sistema','Adicione água deionizada até acima do sensor de aviso'] },
+    { code:'70', name:'CabinetTemp High', causes:['Temperatura em um dos gabinetes acima do limite (C-Frame)','Chave de temperatura N/C aberta','Ventiladores de circulação internos não funcionando'], actions:['Identifique qual seção está quente','Verifique fluxo de ar interno','Verifique ventiladores de circulação (stirring fans)'] },
+    { code:'96', name:'Motor OvrCurrent', causes:['Corrente do motor excedeu o limite configurado','Sobrecarga mecânica instantânea','Rampa muito curta para a inércia da carga'], actions:['Verifique carga mecânica','Aumente tempo de aceleração (P40)','Verifique parâmetro de Current Limit'] },
+    { code:'97', name:'Motor OvrVoltage', causes:['Tensão de saída do motor excedeu o limite','Condição transitória de tensão na saída'], actions:['Verifique parâmetros de tensão do motor','Verifique capacitores de filtro de saída'] },
+    { code:'98', name:'MtrNeut OvrVolt', causes:['Sobretensão no neutro do motor','Desequilíbrio de tensão nas fases de saída'], actions:['Verifique simetria das fases de saída','Verifique capacitores de filtro do motor'] },
+    { code:'99', name:'Motor Flux Unbal', causes:['Desequilíbrio de fluxo no motor','Problema nos parâmetros do modelo do motor','Motor com assimetria elétrica'], actions:['Verifique parâmetros de motor (Rs, Ls)','Execute autotuning novamente','Inspecione motor fisicamente'] },
+    { code:'100', name:'Motor CurUnbal', causes:['Desequilíbrio de corrente entre as fases do motor','Cabos de saída assimétricos','Problema de enrolamento no motor'], actions:['Meça corrente individualmente em cada fase','Inspecione cabos de saída','Verifique enrolamento do motor'] },
+    { code:'101', name:'Motor OvrLoad', causes:['Motor operando acima da corrente nominal por tempo prolongado — proteção I²t','Parâmetro Rated Motor Amps configurado incorretamente'], actions:['Reduza carga mecânica','Verifique P5 (Rated Motor Amps)','Inspecione ventilação do motor MV'] },
+    { code:'102', name:'Motor OvrSpeed', causes:['Velocidade do motor excedeu o limite máximo configurado','Carga regenerativa acelerando além do setpoint'], actions:['Verifique Speed Cmd Max (P290)','Verifique se há carga regenerativa','Inspecione feedback de velocidade'] },
+    { code:'103', name:'Motor Stall', causes:['Motor travado ou com velocidade muito abaixo do comando','Sobrecarga mecânica extrema impedindo aceleração'], actions:['Verifique carga mecânica — busque travamento','Aumente Current Limit temporariamente para diagnóstico','Desacople a carga para teste do motor'] },
+    { code:'104', name:'Motor Load Loss', causes:['Perda de carga detectada — motor girou sem carga','Correia, acoplamento ou eixo rompido'], actions:['Verifique conexão mecânica','Inspecione correia/acoplamento','Ajuste parâmetros de detecção de perda de carga'] },
+    { code:'112', name:'Line OvrCurrent', causes:['Corrente de linha de entrada excedeu o limite','Distorção harmônica excessiva','Transitório na rede de MV'], actions:['Verifique qualidade da tensão de entrada MV','Verifique parâmetros de corrente de linha','Instale filtro harmônico se necessário'] },
+    { code:'113', name:'DCLnk OvrCurrent', causes:['Corrente do link DC excedeu o limite','Curto-circuito no lado do inversor','Falha no SGCT do inversor'], actions:['Verifique dispositivos de potência do inversor (SGCTs)','Execute Gating Test','Verifique cabos e motor'] },
+    { code:'114', name:'Gnd OvrCurrent', causes:['Corrente de fuga para terra excessiva','Motor com isolamento deteriorado','Cabo com isolamento danificado'], actions:['Meça isolamento do motor com Megôhmetro de alta tensão','Inspecione cabos MV de saída','Verifique aterramento do sistema'] },
+    { code:'116', name:'Line OvrVoltage', causes:['Tensão de linha de entrada MV acima do limite','Ferroressonância','Chaveamento de banco de capacitores na rede'], actions:['Monitore qualidade da tensão de entrada MV','Verifique transitórios com registrador de qualidade de energia','Consulte o utilitário de energia'] },
+    { code:'144', name:'Drive OvrLoad', causes:['Drive operando acima da sua capacidade nominal — proteção I²t','Drive subdimensionado para a aplicação'], actions:['Reduza carga ou ciclo de trabalho','Verifique se o drive está dimensionado corretamente','Monitore temperatura dos dissipadores'] },
+    { code:'146', name:'RecHSnk OvrTemp', causes:['Temperatura do dissipador do retificador acima do limite','Ventilação insuficiente','Alta temperatura ambiente'], actions:['Verifique ventilação e fluxo de ar no retificador','Verifique temperatura ambiente','Inspecione ventiladores e filtros'] },
+    { code:'154', name:'DvcAnodCath/Snub', causes:['Resistência anodo-catodo ou de amortecimento do SGCT/SCR fora do esperado','Dispositivo de potência com defeito incipiente'], actions:['Execute SGCT Test offline','Verifique resistência de cada dispositivo','Substitua SGCT com leitura baixa'] },
+    { code:'155', name:'Current Sensor', causes:['Problema no sensor de corrente (HECS, CT ou resistor de burden)','CTs invertidos entre fases','Fiação incorreta do sensor'], actions:['Verifique P764 (Cur Sens FltCode) para identificar o tipo de problema','Se "CT Phs Seqn": CTs provavelmente trocados — verifique fiação','Se "Cap/CT Error": verifique CTs em inversores PWM'] },
+    { code:'176', name:'Convrtr Air Flow', causes:['Pressão de ar abaixo do mínimo detectado pelo transdutor (A/B-Frame)','Ventilador principal com problema','Filtros de ar entupidos'], actions:['Verifique rotação do ventilador principal','Limpe filtros de ar','Verifique transdutor de pressão em J9 da placa ACB','Consulte parâmetros P317 (Air Pressure Nom), P319, P320'] },
+    { code:'182', name:'Ambient OvrTemp', causes:['Temperatura ambiente da sala de controle acima do limite'], actions:['Verifique sistema de climatização da sala','Reduza temperatura ambiente'] },
+    { code:'602', name:'Arbitration Loss', causes:['Número excessivo de falhas de arbitragem na rede DCSL (drives paralelos)'], actions:['Verifique cabeamento DCSL','Verifique blindagem dos cabos de comunicação'] },
+    { code:'603', name:'Duplicate Node', causes:['Node ID duplicado na rede DCSL'], actions:['Altere P935 (DCSL Node ID) para um valor único','Verifique configuração de todos os drives na rede'] },
+  ],
+};
+
+// ── PARAMS ESSENCIAIS POR DRIVE ───────────────────────────────
+const PARAMS = {
+  pf525: [
+    { group:'🔧 Dados do Motor (Placa)', params:[
+      {n:'P033', name:'Motor NP Volts', desc:'Tensão nominal do motor (placa) — ligação triângulo ou estrela'},
+      {n:'P034', name:'Motor NP Hz', desc:'Frequência nominal — 60 Hz no Brasil'},
+      {n:'P035', name:'Motor NP RPM', desc:'Rotação nominal do motor (placa)'},
+      {n:'P036', name:'Motor NP Amps', desc:'Corrente nominal (placa) — crítico para proteção de sobrecarga'},
+      {n:'P037', name:'Motor NP Power', desc:'Potência nominal em kW ou HP'},
+    ]},
+    { group:'⏱️ Rampas', params:[
+      {n:'P041', name:'Accel Time 1', desc:'Tempo de aceleração 0→Max Hz. Sugestão: 5–30s conforme carga'},
+      {n:'P042', name:'Decel Time 1', desc:'Tempo de desaceleração Max→0 Hz. Sugestão: 5–30s'},
+      {n:'P043', name:'Min Speed', desc:'Velocidade mínima em Hz (normalmente 0)'},
+      {n:'P044', name:'Max Speed', desc:'Velocidade máxima em Hz (normalmente 60)'},
+    ]},
+    { group:'🎛️ Controle', params:[
+      {n:'P038', name:'Speed Reference', desc:'Fonte de velocidade: 0=Keypad, 1=Pot, 2=0-10V, 3=4-20mA, 7=Rede'},
+      {n:'P036', name:'Start Source', desc:'Fonte de partida: 0=Keypad, 1=Bornes, 2=Rede'},
+    ]},
+    { group:'🛡️ Proteções', params:[
+      {n:'A484', name:'Current Limit', desc:'Limite máximo de corrente de saída (% da corrente nominal)'},
+      {n:'A489', name:'Boost Voltage', desc:'Tensão extra em baixas frequências para torque inicial'},
+      {n:'A531', name:'Overload Mode', desc:'Modo sobrecarga: 0=Desativ., 1=Trip, 2=Redutor velocidade'},
+      {n:'A541', name:'Auto Rstrt Tries', desc:'Número de tentativas de auto-restart. 0=Desativado'},
+    ]},
+    { group:'📊 Monitoramento', params:[
+      {n:'b001', name:'Output Frequency', desc:'Frequência de saída atual (Hz)'},
+      {n:'b003', name:'Output Current', desc:'Corrente de saída atual (A) — leitura em tempo real'},
+      {n:'b004', name:'Output Voltage', desc:'Tensão de saída atual (V)'},
+      {n:'b007', name:'Fault 1 Code', desc:'Código da última falha'},
+    ]},
+  ],
+  pf527: [
+    { group:'🔧 Dados do Motor', params:[
+      {n:'P033', name:'Motor NP Volts', desc:'Tensão nominal do motor'},
+      {n:'P034', name:'Motor NP Hz', desc:'Frequência nominal — 60 Hz BR'},
+      {n:'P035', name:'Motor NP RPM', desc:'Rotação nominal'},
+      {n:'P036', name:'Motor NP Amps', desc:'Corrente nominal'},
+      {n:'P037', name:'Motor NP Power', desc:'Potência nominal'},
+    ]},
+    { group:'🌐 Rede EtherNet/IP', params:[
+      {n:'A548', name:'IP Addr Config', desc:'0=BOOTP, 1=Static — use Static em redes industriais'},
+      {n:'A549–552', name:'IP Address', desc:'Endereço IP byte a byte (ex: 192, 168, 1, 10)'},
+      {n:'A553–556', name:'Subnet Mask', desc:'Máscara de sub-rede byte a byte (ex: 255, 255, 255, 0)'},
+    ]},
+    { group:'⏱️ Rampas', params:[
+      {n:'P041', name:'Accel Time 1', desc:'Tempo de aceleração'},
+      {n:'P042', name:'Decel Time 1', desc:'Tempo de desaceleração'},
+    ]},
+    { group:'📊 Monitoramento', params:[
+      {n:'b001', name:'Output Frequency', desc:'Frequência de saída atual'},
+      {n:'b003', name:'Output Current', desc:'Corrente de saída atual'},
+    ]},
+  ],
+  pf700: [
+    { group:'🔧 Dados do Motor', params:[
+      {n:'P036', name:'Motor NP Amps', desc:'Corrente nominal do motor (placa)'},
+      {n:'P037', name:'Motor NP Volts', desc:'Tensão nominal do motor (placa)'},
+      {n:'P038', name:'Motor NP Hz', desc:'Frequência nominal — 60 Hz BR'},
+      {n:'P039', name:'Motor NP RPM', desc:'Rotação nominal'},
+      {n:'P040', name:'Motor NP Power', desc:'Potência nominal'},
+    ]},
+    { group:'⏱️ Rampas', params:[
+      {n:'P041', name:'Accel Time 1', desc:'Tempo de aceleração. Sugestão inicial: 10–30s'},
+      {n:'P042', name:'Decel Time 1', desc:'Tempo de desaceleração'},
+      {n:'P043', name:'Min Speed', desc:'Velocidade mínima em Hz'},
+      {n:'P044', name:'Max Speed', desc:'Velocidade máxima em Hz — normalmente 60 Hz'},
+    ]},
+    { group:'🎛️ Controle', params:[
+      {n:'P036', name:'Start Source', desc:'0=Keypad, 1=Bornes, 2=Rede'},
+      {n:'P038', name:'Speed Reference', desc:'Fonte de velocidade: 0=Keypad, 2=0-10V, 3=4-20mA, 7=Rede'},
+    ]},
+    { group:'🛡️ Proteções', params:[
+      {n:'A484', name:'Current Limit', desc:'Limite de corrente máxima'},
+      {n:'A489', name:'Boost Voltage', desc:'Tensão extra em baixas frequências'},
+      {n:'A437', name:'PWM Frequency', desc:'Frequência de chaveamento — reduzir para menos calor'},
+      {n:'A531', name:'Overload Mode', desc:'Modo proteção de sobrecarga'},
+      {n:'A551', name:'Analog Loss Action', desc:'Ação ao perder sinal 4-20mA'},
+    ]},
+    { group:'📊 Monitoramento', params:[
+      {n:'b001', name:'Output Frequency', desc:'Frequência de saída atual'},
+      {n:'b003', name:'Output Current', desc:'Corrente de saída atual'},
+      {n:'b004', name:'Output Voltage', desc:'Tensão de saída atual'},
+      {n:'b007', name:'Fault 1 Code', desc:'Código da última falha'},
+    ]},
+  ],
+  pf755: [
+    { group:'🔧 Dados do Motor (Port 0)', params:[
+      {n:'P26', name:'Motor NP Amps', desc:'Corrente nominal do motor (placa)'},
+      {n:'P27', name:'Motor NP Volts', desc:'Tensão nominal do motor (placa)'},
+      {n:'P28', name:'Motor NP Hz', desc:'Frequência nominal — 60 Hz BR'},
+      {n:'P29', name:'Motor NP RPM', desc:'Rotação nominal'},
+      {n:'P30', name:'Motor NP Power', desc:'Potência nominal em kW'},
+    ]},
+    { group:'⏱️ Rampas', params:[
+      {n:'P3', name:'Accel Time 1', desc:'Tempo de aceleração'},
+      {n:'P4', name:'Decel Time 1', desc:'Tempo de desaceleração'},
+      {n:'P82', name:'Maximum Speed', desc:'Velocidade máxima em Hz'},
+    ]},
+    { group:'🎛️ Controle', params:[
+      {n:'P36', name:'Speed Ref A Sel', desc:'Fonte de referência de velocidade A'},
+      {n:'P38', name:'Speed Ref B Sel', desc:'Fonte de referência de velocidade B'},
+      {n:'P70', name:'Autotune', desc:'0=Sem ação, 1=Static Tune, 2=Calc, 3=Rotate Tune'},
+    ]},
+    { group:'🌐 EtherNet/IP (Port 13)', params:[
+      {n:'Port 13:P3', name:'IP Address Config', desc:'0=BOOTP, 1=DHCP, 2=Static'},
+      {n:'Port 13:P4', name:'IP Address', desc:'Endereço IP do drive'},
+      {n:'Port 13:P5', name:'Subnet Mask', desc:'Máscara de sub-rede'},
+    ]},
+    { group:'📊 Monitoramento', params:[
+      {n:'P1', name:'Output Frequency', desc:'Frequência de saída atual'},
+      {n:'P3', name:'Output Current', desc:'Corrente de saída atual'},
+      {n:'P6', name:'DC Bus Voltage', desc:'Tensão do barramento DC'},
+    ]},
+  ],
+};
+
 // ── COMISSIONAMENTO DATA ──────────────────────────────────────
 const COMISS = {
   pf525: [
@@ -2661,6 +3108,178 @@ const COMISS = {
     { title:'4. Autotuning', body:`1. Acesse <b>P70</b> [Autotune]<br>2. Selecione <b>2 = Calc Motor Params</b> para cálculo<br>3. Para autotuning dinâmico: <b>3 = Rotate Tune</b><br>4. Execute com motor desacoplado se possível` },
     { title:'5. Configuração de I/O e rede', body:`O PF755 é altamente configurável. Configure conforme necessidade:<br><br>• Entradas/Saídas digitais: Port 0, parâmetros P157-P175<br>• Entradas analógicas: Port 0, P800 série<br>• EtherNet/IP embutido: Port 13<br>• Safe-Torque Off (STO): verifique módulo de segurança` },
   ],
+
+  pf7000: [
+    { title:'1. ⚠️ Segurança MV — OBRIGATÓRIO antes de qualquer ação', body:`<div class="danger-box" style="margin-bottom:10px">🔴 <strong>PERIGO DE MORTE:</strong> O PF 7000 opera com tensão de 2.400V a 6.600V. Apenas pessoal qualificado e autorizado pode trabalhar neste equipamento.</div>
+<strong style="color:var(--accent2)">Procedimento Lockout/Tagout obrigatório:</strong>
+<ol class="ip-ol" style="margin-top:8px">
+  <li>Desligue o <strong>disjuntor de média tensão</strong> de alimentação do drive</li>
+  <li>Aplique <strong>cadeado</strong> no disjuntor (Lockout) — cada técnico com seu cadeado pessoal</li>
+  <li>Instale <strong>tag de aviso</strong> identificando quem está trabalhando (Tagout)</li>
+  <li>Verifique ausência de tensão com <strong>detector de MV homologado</strong></li>
+  <li>Aguarde mínimo <strong>5 minutos</strong> para descarga dos capacitores do barramento DC</li>
+  <li>Meça tensão no barramento DC antes de tocar em qualquer componente</li>
+  <li>Aterramento temporário nos barramentos DC se necessário</li>
+</ol>
+<strong style="color:var(--accent2);display:block;margin-top:12px">EPIs obrigatórios:</strong>
+<ul style="margin-top:6px;padding-left:18px;color:var(--text);font-size:13px">
+  <li>Luvas isolantes para MV (classe compatível com tensão)</li>
+  <li>Capacete com viseira anti-arco elétrico</li>
+  <li>Vestimenta anti-chama (Arc Flash — NFPA 70E)</li>
+  <li>Calçado dielétrico</li>
+  <li>Detector de tensão de média tensão</li>
+</ul>` },
+
+    { title:'2. Verificação pré-energização', body:`<strong style="color:var(--accent2)">Inspeção mecânica e elétrica:</strong>
+<table class="param-table" style="margin-top:8px">
+  <tr><th>Item</th><th>Verificar</th></tr>
+  <tr><td>Cabos de MV de entrada</td><td>Conexões firmes, isolamento íntegro</td></tr>
+  <tr><td>Cabos do motor (MV saída)</td><td>Conexões firmes, isolamento íntegro</td></tr>
+  <tr><td>Aterramento (PE)</td><td>Drive e motor aterrados corretamente</td></tr>
+  <tr><td>Fibras ópticas internas</td><td>Conectadas, sem curvatura excessiva</td></tr>
+  <tr><td>Ventiladores do drive</td><td>Girando livremente, sem obstrução</td></tr>
+  <tr><td>Filtros de ar</td><td>Limpos, sem obstrução</td></tr>
+  <tr><td>Tensão de controle (LV)</td><td>120V CA ou 24V DC conforme especificação</td></tr>
+  <tr><td>Cabos de controle XIO</td><td>Conectados conforme diagrama elétrico</td></tr>
+  <tr><td>Fibra óptica do SPGDB</td><td>Conectada a cada SGCT/SCR do inversor</td></tr>
+  <tr><td>Resistor de precarga</td><td>Valor correto conforme especificação</td></tr>
+</table>
+<div class="warn-box" style="margin-top:10px">⚠️ O isolamento dos cabos de MV deve ser verificado com Megôhmetro de alta tensão (2.5kV ou 5kV DC) antes da primeira energização.</div>` },
+
+    { title:'3. Primeira energização — Alimentação de controle (LV)', body:`<strong style="color:var(--accent2)">Energize apenas a alimentação de controle (baixa tensão) primeiro:</strong>
+<ol class="ip-ol" style="margin-top:8px">
+  <li>Ligue apenas o circuito de alimentação de controle (120V CA / 24V DC)</li>
+  <li>A IHM deve iniciar e mostrar a tela de <strong>Status</strong></li>
+  <li>Verifique alarmes presentes — navegue em <strong>Menu → Alarms</strong></li>
+  <li>Confirme versão do firmware: <strong>Menu → Diagnostic → Software Version</strong></li>
+  <li>Confirme configuração do drive: <strong>Menu → Parameters → Group 1</strong></li>
+  <li>Verifique se o display mostra status <strong>"Ready to Start"</strong> ou <strong>"Not Ready"</strong></li>
+</ol>
+<strong style="color:var(--accent2);display:block;margin-top:12px">LEDs da placa SPGDB (para cada dispositivo de potência):</strong>
+<ul style="margin-top:6px;padding-left:18px;color:var(--text);font-size:13px">
+  <li><span style="color:var(--success)">■</span> Verde = OK, comunicação normal com SGCT/SCR</li>
+  <li><span style="color:var(--danger)">■</span> Vermelho = Falha no dispositivo de potência</li>
+  <li>Verifique cada placa SPGDB — uma por fase do inversor e do retificador</li>
+</ul>` },
+
+    { title:'4. Configuração dos parâmetros do motor', body:`<strong style="color:var(--accent2)">Parâmetros essenciais do motor — confirme com a placa do motor MV:</strong>
+<table class="param-table" style="margin-top:8px">
+  <tr><th>Parâmetro</th><th>Função</th><th>Obs.</th></tr>
+  <tr><td>P302</td><td>Motor NP Volts</td><td>Tensão nominal da placa do motor</td></tr>
+  <tr><td>P303</td><td>Motor NP Amps</td><td>Corrente nominal — fundamental para proteção</td></tr>
+  <tr><td>P304</td><td>Motor NP Hz</td><td>Frequência nominal (60Hz no Brasil)</td></tr>
+  <tr><td>P305</td><td>Motor NP RPM</td><td>Rotação nominal da placa</td></tr>
+  <tr><td>P306</td><td>Motor NP Power</td><td>Potência nominal em kW</td></tr>
+  <tr><td>P307</td><td>Motor Type</td><td>0=Indução, 1=Síncrono IPM</td></tr>
+  <tr><td>P308</td><td>Motor Poles</td><td>Número de polos do motor</td></tr>
+  <tr><td>P309</td><td>Motor Stator Res</td><td>Resistência do estator (obtido pelo autotuning)</td></tr>
+  <tr><td>P316</td><td>Control Mode</td><td>0=V/Hz, 1=Sensorless Vector, 2=Vector (encoder)</td></tr>
+</table>
+<div class="warn-box" style="margin-top:10px">⚠️ Os parâmetros de motor do PF7000 estão nos grupos 3xx. Sempre confirme com a placa da máquina e com o datasheet do motor de MV.</div>` },
+
+    { title:'5. Aceleração, desaceleração e velocidade', body:`<table class="param-table">
+  <tr><th>Parâmetro</th><th>Função</th><th>Sugestão inicial</th></tr>
+  <tr><td>P340</td><td>Accel Time 1</td><td>30~120s (cargas de alta inércia exigem mais)</td></tr>
+  <tr><td>P341</td><td>Decel Time 1</td><td>30~120s (cuidado com sobretensão DC)</td></tr>
+  <tr><td>P342</td><td>Accel Time 2</td><td>Rampa auxiliar (opcional)</td></tr>
+  <tr><td>P343</td><td>Decel Time 2</td><td>Rampa auxiliar (opcional)</td></tr>
+  <tr><td>P350</td><td>Min Speed</td><td>0 Hz ou mínimo da aplicação</td></tr>
+  <tr><td>P351</td><td>Max Speed</td><td>60 Hz (ou conforme motor MV)</td></tr>
+  <tr><td>P352</td><td>Speed Ref Source</td><td>Keypad / Analógico / Rede</td></tr>
+  <tr><td>P355</td><td>Start/Stop Source</td><td>Keypad / XIO / Rede</td></tr>
+</table>
+<div class="warn-box" style="margin-top:10px">⚠️ Motores de MV com alta inércia mecânica (bombas, ventiladores grandes, compressores) requerem rampas de aceleração longas — tipicamente 60 a 180 segundos. Rampas curtas causam trip por sobretensão ou sobrecorrente.</div>` },
+
+    { title:'6. Teste de disparo dos SGCTs/SCRs (Gating Test)', body:`<div class="warn-box" style="margin-bottom:10px">⚠️ Este teste verifica se cada SGCT ou SCR do inversor e retificador responde corretamente ao disparo. Realize com alimentação de controle (LV) ligada, <strong>sem a MV energizada</strong>.</div>
+<ol class="ip-ol">
+  <li>Acesse: <strong>Menu → Diagnostic → Gating Test</strong></li>
+  <li>Selecione o modo: <strong>SCR Test</strong> (para retificadores) ou <strong>SGCT Test</strong> (para inversor)</li>
+  <li>Execute o teste dispositivo por dispositivo</li>
+  <li>LEDs da placa SPGDB: Verde = OK, Vermelho = falha de disparo</li>
+  <li>Se LED vermelho: verifique a fibra óptica daquele dispositivo</li>
+  <li>Se fibra OK e falha persiste: substitua o SGCT ou SCR</li>
+</ol>
+<strong style="color:var(--accent2);display:block;margin-top:12px">Teste de resistência offline (com Megôhmetro):</strong>
+<ol class="ip-ol" style="margin-top:6px">
+  <li>Com drive completamente desenergizado e DC descarregado</li>
+  <li>Acesse: <strong>Menu → Diagnostic → SGCT Test</strong></li>
+  <li>Meça resistência Anodo-Catodo de cada SGCT</li>
+  <li>Valor normal: <strong>resistência alta (&gt; 100 kΩ)</strong></li>
+  <li>Valor baixo ou zero indica SGCT em curto — substituir</li>
+</ol>` },
+
+    { title:'7. Energização da Média Tensão e primeiro run', body:`<div class="danger-box" style="margin-bottom:12px">🔴 <strong>ATENÇÃO:</strong> A partir deste ponto a MV será energizada. Verifique que todas as proteções de segurança estão OK, EPIs em uso e área isolada.</div>
+<strong style="color:var(--accent2)">Sequência de primeira energização MV:</strong>
+<ol class="ip-ol" style="margin-top:8px">
+  <li>Confirme que a área está isolada e pessoal em local seguro</li>
+  <li>Feche o disjuntor de MV — observe LEDs e IHM durante pré-carga</li>
+  <li>Verifique tensão do barramento DC na IHM: <strong>Menu → Status → DC Bus Voltage</strong></li>
+  <li>Aguarde a mensagem <strong>"Ready to Start"</strong> na IHM</li>
+  <li>Verifique ausência de alarmes ou falhas ativas</li>
+  <li>Defina velocidade mínima (ex: 10% da nominal) via Keypad</li>
+  <li>Execute <strong>Start</strong> pelo Keypad (modo local)</li>
+  <li>Observe corrente de saída: <strong>Menu → Metering → Output Current</strong></li>
+  <li>Aumente gradualmente a velocidade observando corrente e tensão</li>
+  <li>Verifique sentido de rotação do motor</li>
+  <li>Confirme que não há ruídos ou vibrações anormais</li>
+  <li>Alcance a velocidade nominal e monitore por 5~10 minutos</li>
+</ol>` },
+
+    { title:'8. Parâmetros essenciais de proteção', body:`<table class="param-table">
+  <tr><th>Parâmetro</th><th>Função</th><th>Referência</th></tr>
+  <tr><td>P370</td><td>Current Limit</td><td>110~150% da corrente nominal do motor</td></tr>
+  <tr><td>P371</td><td>Motor Overload</td><td>Ativa proteção I²t — use corrente nominal do motor</td></tr>
+  <tr><td>P372</td><td>Overload Mode</td><td>0=Desabilitado, 1=Trip, 2=Reduz velocidade</td></tr>
+  <tr><td>P380</td><td>DC Bus Overvolt</td><td>Ajuste do limite de sobretensão DC</td></tr>
+  <tr><td>P381</td><td>DC Bus Undervolt</td><td>Ajuste do limite de subtensão DC</td></tr>
+  <tr><td>P385</td><td>Heatsink OT Level</td><td>Nível de alerta de temperatura do dissipador</td></tr>
+  <tr><td>P390</td><td>Ground Fault</td><td>Habilita/desabilita detecção de falta à terra</td></tr>
+  <tr><td>P395</td><td>Phase Loss</td><td>Detecção de perda de fase de entrada</td></tr>
+  <tr><td>P400</td><td>Comm Loss Action</td><td>Ação ao perder comunicação: 0=Fault, 1=Stop, 2=Manter</td></tr>
+  <tr><td>P401</td><td>Comm Loss Timeout</td><td>Tempo para detectar perda de rede (segundos)</td></tr>
+</table>
+<div class="warn-box" style="margin-top:10px">⚠️ Os números de parâmetros podem variar conforme a versão de firmware do PF7000. Sempre confirme no manual de programação (Pub. 7000-PM001).</div>` },
+
+    { title:'9. Autotuning do motor MV', body:`<strong style="color:var(--accent2)">Autotuning estático (motor parado):</strong>
+<ol class="ip-ol" style="margin-top:8px">
+  <li>Configure todos os dados de placa do motor (P302~P308)</li>
+  <li>Acesse: <strong>Menu → Diagnostic → Motor Autotune</strong></li>
+  <li>Selecione: <strong>Static Tune</strong> — não requer rotação do motor</li>
+  <li>O drive aplica corrente DC de teste e mede parâmetros elétricos</li>
+  <li>Aguarde a conclusão — pode levar de 1 a 3 minutos</li>
+  <li>Verifique parâmetros medidos: P309 (Stator Res), P310 (Rotor Res), P311 (Leakage Ind)</li>
+</ol>
+<strong style="color:var(--accent2);display:block;margin-top:12px">Autotuning dinâmico (motor girando — motor desacoplado da carga):</strong>
+<ol class="ip-ol" style="margin-top:6px">
+  <li>Desacople a carga mecânica do motor</li>
+  <li>Selecione: <strong>Rotate Tune</strong></li>
+  <li>O drive acelera o motor e mede parâmetros em diferentes pontos de operação</li>
+  <li>Fornece resultados mais precisos para controle vetorial</li>
+  <li>Após conclusão, o motor pode ser reacoplado à carga</li>
+</ol>
+<div class="warn-box" style="margin-top:10px">⚠️ Realize o autotuning com tensão de MV ligada. O motor de MV deve estar em condições operacionais para o teste.</div>` },
+
+    { title:'10. Configuração de rede (EtherNet/IP ou DPI)', body:`<strong style="color:var(--accent2)">Comunicação EtherNet/IP — PF7000:</strong>
+<table class="param-table" style="margin-top:8px">
+  <tr><th>Parâmetro</th><th>Função</th></tr>
+  <tr><td>P930</td><td>IP Address Config: 0=BOOTP, 1=Static</td></tr>
+  <tr><td>P931</td><td>IP Address (ex: 192.168.1.10)</td></tr>
+  <tr><td>P932</td><td>Subnet Mask (ex: 255.255.255.0)</td></tr>
+  <tr><td>P933</td><td>Gateway Address</td></tr>
+  <tr><td>P934</td><td>Network Status — monitoramento</td></tr>
+  <tr><td>P935</td><td>DCSL Node ID — ID do drive na rede</td></tr>
+</table>
+<strong style="color:var(--accent2);display:block;margin-top:12px">Configuração via adaptador DPI (se instalado):</strong>
+<ol class="ip-ol" style="margin-top:6px">
+  <li>Instale o adaptador de rede no slot DPI</li>
+  <li>Configure IP, subnet e gateway nos parâmetros do adaptador</li>
+  <li>No Studio 5000: adicione o drive usando Add-On Profile (AOP)</li>
+  <li>Mapeie o <strong>Logic Command</strong> (Output Tag): bit 0 = Start, bit 1 = Stop, bit 2 = Fault Reset</li>
+  <li>Mapeie o <strong>Speed Reference</strong> (Output Tag): velocidade desejada em Hz × 100</li>
+  <li>Leia o <strong>Logic Status</strong> (Input Tag): Running, Faulted, At Speed, Ready</li>
+  <li>Desligue e religue o drive após configuração de rede</li>
+</ol>` },
+  ],
 };
 
 // ── MANUTENÇÃO DATA ──────────────────────────────────────────
@@ -2714,8 +3333,22 @@ function showTab(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   event.target.classList.add('active');
-  // Scroll tab into view
   event.target.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+}
+
+// ── SUB-TABS ─────────────────────────────────────────────────
+function showSubTab(drive, tab, btn) {
+  // deactivate all subtab pages within this drive
+  const prefix = `st-${drive}-`;
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(p => p.classList.remove('active'));
+  // deactivate all subtab buttons
+  document.querySelectorAll(`#subtabs-${drive} .subtab-btn`).forEach(b => b.classList.remove('active'));
+  document.getElementById(`st-${drive}-${tab}`).classList.add('active');
+  btn.classList.add('active');
+  // lazy-render on first open
+  if (tab === 'params') renderParams(drive);
+  if (tab === 'comiss') renderComissInDrive(drive);
+  if (tab === 'advert') renderWarnings(drive);
 }
 
 // ── MÉTODO DIAGNÓSTICO ───────────────────────────────────────
@@ -2788,6 +3421,7 @@ function handleFile(e) {
 function getDriveKey(driveStr) {
   if (!driveStr) return null;
   const d = driveStr.toUpperCase();
+  if (d.includes('7000')) return 'pf7000';
   if (d.includes('755') || d.includes('750')) return 'pf755';
   if (d.includes('700')) return 'pf700';
   if (d.includes('527')) return 'pf527';
@@ -2923,7 +3557,7 @@ async function analyzeWithAI(method) {
 
     if (local) {
       const f = local.fault;
-      const driveLabels = { pf525:'PF 520/523/525', pf527:'PF 527', pf700:'PF 700', pf755:'PF 750/755' };
+      const driveLabels = { pf525:'PF 520/523/525', pf527:'PF 527', pf700:'PF 700', pf755:'PF 750/755', pf7000:'PF 7000 MV' };
       const driveLabel = driveLabels[local.driveKey] || local.driveKey.toUpperCase();
 
       setLoadingState(false);
@@ -3184,15 +3818,89 @@ function renderFaults(driveKey, filter='') {
 
 function toggleFault(drive, code) {
   const card = document.getElementById(`fc-${drive}-${code}`);
-  card.classList.toggle('open');
+  card?.classList.toggle('open');
 }
 
 function filterFaults(drive, val) { renderFaults(drive, val); }
 
+// ── WARNINGS RENDER ──────────────────────────────────────────
+function renderWarnings(drive, filter='') {
+  const list = document.getElementById('warn-list-' + drive);
+  if(!list) return;
+  const warns = (WARNINGS[drive] || []);
+  const f = filter.toLowerCase();
+  const filtered = f ? warns.filter(x =>
+    x.code.toString().toLowerCase().includes(f) ||
+    x.name.toLowerCase().includes(f) ||
+    (x.causes||[]).join(' ').toLowerCase().includes(f)
+  ) : warns;
+  if(!filtered.length) { list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2);font-family:var(--head);letter-spacing:2px">NENHUMA ADVERTÊNCIA ENCONTRADA</div>'; return; }
+  list.innerHTML = filtered.map(w => `
+    <div class="fault-card" id="wc-${drive}-${w.code}">
+      <div class="fault-card-head" onclick="toggleFaultCard('wc-${drive}-${w.code}')">
+        <span class="fault-code-tag" style="color:var(--warn);background:rgba(255,170,0,0.1);border-color:rgba(255,170,0,0.25)">${w.code}</span>
+        <span class="fault-name-text">${w.name}</span>
+        <span class="badge badge-warn">WARN</span>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="fault-card-body">
+        ${w.causes?.length ? `<div class="fault-section"><div class="fault-section-lbl">🔎 Possíveis Causas</div><ul>${w.causes.map(c=>`<li>${c}</li>`).join('')}</ul></div>` : ''}
+        ${w.actions?.length ? `<div class="fault-section"><div class="fault-section-lbl">✅ Ações</div><ul>${w.actions.map(a=>`<li>${a}</li>`).join('')}</ul></div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function filterWarnings(drive, val) { renderWarnings(drive, val); }
+
+function toggleFaultCard(id) {
+  document.getElementById(id)?.classList.toggle('open');
+}
+
+// ── PARAMS RENDER ─────────────────────────────────────────────
+function renderParams(drive) {
+  const el = document.getElementById('params-' + drive + '-body');
+  if(!el || el.dataset.rendered) return;
+  const groups = PARAMS[drive] || [];
+  if(!groups.length) { el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">Parâmetros em desenvolvimento.</div>'; return; }
+  el.innerHTML = groups.map((g, gi) => `
+    <div class="params-group ${gi===0?'open':''}" id="pg-${drive}-${gi}">
+      <div class="params-group-head" onclick="toggleCard('pg-${drive}-${gi}')">${g.group} <span class="fault-chevron" style="margin-left:auto">▼</span></div>
+      <div class="params-group-body">
+        <table class="param-table" style="margin:0">
+          <tr><th>Nº</th><th>Nome</th><th>Descrição</th></tr>
+          ${g.params.map(p=>`<tr><td>${p.n}</td><td>${p.name}</td><td>${p.desc}</td></tr>`).join('')}
+        </table>
+      </div>
+    </div>`).join('') + '<div class="pb"></div>';
+  el.dataset.rendered = '1';
+}
+
+// ── COMISS POR DRIVE (sub-aba) ────────────────────────────────
+function renderComissInDrive(drive) {
+  const el = document.getElementById('comiss-steps-' + drive);
+  if(!el || el.dataset.rendered) return;
+  const steps = COMISS[drive] || [];
+  if(!steps.length) { el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">Comissionamento em desenvolvimento.</div>'; return; }
+  el.innerHTML = steps.map((s,i) => `
+    <div class="step-card" id="scd-${drive}-${i}">
+      <div class="step-head" onclick="toggleStep2('${drive}',${i})">
+        <div class="step-num">${i+1}</div>
+        <div class="step-title">${s.title}</div>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="step-body">${s.body}</div>
+    </div>`).join('');
+  el.dataset.rendered = '1';
+}
+
+function toggleStep2(key, i) {
+  document.getElementById(`scd-${key}-${i}`)?.classList.toggle('open');
+}
+
 // Render all on load
 ['pf525','pf527','pf700','pf755','pf7000'].forEach(d => renderFaults(d));
 
-// ── COMISSIONAMENTO ──────────────────────────────────────────
+// ── COMISSIONAMENTO (aba dedicada) ───────────────────────────
 function selectComiss(key, el) {
   document.querySelectorAll('#comissChips .chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
@@ -3214,14 +3922,14 @@ function renderComiss(key) {
 }
 
 function toggleStep(key, i) {
-  document.getElementById(`sc-${key}-${i}`).classList.toggle('open');
+  document.getElementById(`sc-${key}-${i}`)?.classList.toggle('open');
 }
 
 renderComiss('pf525');
 
 // ── TOGGLE CARD GENÉRICO ─────────────────────────────────────
 function toggleCard(id) {
-  document.getElementById(id).classList.toggle('open');
+  document.getElementById(id)?.classList.toggle('open');
 }
 
 // ── MANUTENÇÃO ───────────────────────────────────────────────
@@ -3316,8 +4024,8 @@ renderGlossario();
 
 <!-- ═══ PWA INSTALL + SERVICE WORKER ═══ -->
 <script>
-// Registrar Service Worker
-if ('serviceWorker' in navigator) {
+// Registrar Service Worker (apenas em ambiente próprio, não em preview)
+if ('serviceWorker' in navigator && !location.hostname.includes('claudeusercontent')) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
       .then(r => console.log('SW registrado:', r.scope))
