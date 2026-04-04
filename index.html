@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#00aaff">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PowerFlex">
+<meta name="application-name" content="PowerFlex Field Guide">
+<meta name="msapplication-TileColor" content="#070c1a">
+<title>PowerFlex Field Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Barlow+Condensed:wght@300;500;700;900&family=Barlow:wght@300;400;500&display=swap');
+:root{--bg:#070c1a;--bg2:#0d1528;--bg3:#111d35;--card:#0f1a2e;--border:#1e3050;--accent:#00aaff;--accent2:#00ffcc;--warn:#ffaa00;--danger:#ff3355;--success:#00cc66;--text:#c8d8f0;--text2:#7a9bc0;--mono:'JetBrains Mono',monospace;--head:'Barlow Condensed',sans-serif;--body:'Barlow',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100dvh;overflow-x:hidden}
+.header{background:linear-gradient(135deg,#070c1a 0%,#0a1628 100%);border-bottom:1px solid var(--border);padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px}
+.header-logo{font-family:var(--head);font-weight:900;font-size:22px;letter-spacing:2px;color:var(--accent);line-height:1}
+.header-logo span{color:var(--accent2)}
+.header-sub{font-family:var(--head);font-size:11px;letter-spacing:3px;color:var(--text2);font-weight:300;text-transform:uppercase}
+.header-badge{margin-left:auto;background:var(--accent);color:#000;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:1px}
+.tabs-nav{display:flex;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border);scrollbar-width:none;position:sticky;top:57px;z-index:99}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:10px 16px;font-family:var(--head);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn:hover:not(.active){color:var(--text)}
+.page{display:none;padding:0 0 80px}.page.active{display:block}
+.sec-head{padding:16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.sec-title{font-family:var(--head);font-size:20px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+.sec-desc{font-size:13px;color:var(--text2);margin-top:2px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;margin:12px 12px 0;overflow:hidden}
+.card-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.card-title{font-family:var(--head);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+.card-body{padding:14px}
+.badge{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px}
+.badge-blue{background:rgba(0,170,255,.15);color:var(--accent);border:1px solid rgba(0,170,255,.3)}
+.badge-green{background:rgba(0,204,102,.15);color:var(--success);border:1px solid rgba(0,204,102,.3)}
+.badge-warn{background:rgba(255,170,0,.15);color:var(--warn);border:1px solid rgba(255,170,0,.3)}
+.badge-red{background:rgba(255,51,85,.15);color:var(--danger);border:1px solid rgba(255,51,85,.3)}
+.diag-hero{background:linear-gradient(135deg,#0a1628,#0d1f3c);padding:20px 16px;border-bottom:1px solid var(--border)}
+.diag-hero-title{font-family:var(--head);font-size:28px;font-weight:900;letter-spacing:3px;text-transform:uppercase;line-height:1}
+.diag-hero-title span{color:var(--accent2)}
+.diag-hero-sub{font-size:13px;color:var(--text2);margin-top:4px}
+.diag-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.diag-method-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .2s;font-family:var(--head);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+.diag-method-btn:hover,.diag-method-btn.active{border-color:var(--accent);background:rgba(0,170,255,.08);color:var(--accent)}
+.diag-method-btn .method-icon{font-size:28px}
+.diag-input-area{padding:0 12px 12px}
+.camera-area{display:none;flex-direction:column;gap:10px}.camera-area.show{display:flex}
+#camera-preview{width:100%;border-radius:8px;border:2px solid var(--border);background:#000;max-height:260px;object-fit:cover;display:none}
+#camera-canvas{display:none}
+#captured-img{width:100%;border-radius:8px;border:2px solid var(--accent2);display:none;max-height:260px;object-fit:contain}
+.camera-btn-row{display:flex;gap:8px}
+.cam-btn{flex:1;padding:12px;border-radius:8px;border:none;font-family:var(--head);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.cam-btn-primary{background:var(--accent);color:#000}
+.cam-btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.code-input-area{display:none;flex-direction:column;gap:10px}.code-input-area.show{display:flex}
+.fault-input-wrap{display:flex;gap:8px}
+.fault-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent2);text-transform:uppercase;outline:none;letter-spacing:3px}
+.fault-input::placeholder{color:var(--text2);font-size:14px;letter-spacing:1px;font-weight:400}
+.fault-input:focus{border-color:var(--accent)}
+.drive-select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 12px;color:var(--text);font-family:var(--head);font-size:14px;font-weight:700;outline:none;min-width:130px}
+.drive-select:focus{border-color:var(--accent)}
+.analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#0077cc);border:none;border-radius:8px;font-family:var(--head);font-size:16px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#000;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,170,255,.3)}
+.analyze-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.result-area{margin:0 12px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:none}.result-area.show{display:block}
+.result-header{padding:12px 14px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.result-fault-code{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--warn)}
+.result-fault-name{font-family:var(--head);font-size:15px;font-weight:700;color:var(--text);letter-spacing:1px}
+.result-body{padding:14px}
+.result-section{margin-bottom:14px}.result-section:last-child{margin-bottom:0}
+.result-section-title{font-family:var(--head);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.result-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.cause-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(30,48,80,.5);font-size:14px;line-height:1.5}.cause-item:last-child{border-bottom:none}
+.cause-num{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--accent);background:rgba(0,170,255,.1);border:1px solid rgba(0,170,255,.2);border-radius:3px;padding:1px 5px;flex-shrink:0;height:fit-content;margin-top:2px}
+.action-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(30,48,80,.5);font-size:14px;line-height:1.5;align-items:flex-start}.action-item:last-child{border-bottom:none}
+.action-step{font-family:var(--mono);font-size:10px;font-weight:700;color:#000;background:var(--success);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.type-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:12px;font-family:var(--mono);font-weight:700}
+.type-auto{background:rgba(0,204,102,.15);color:var(--success);border:1px solid rgba(0,204,102,.3)}
+.type-manual{background:rgba(255,170,0,.15);color:var(--warn);border:1px solid rgba(255,170,0,.3)}
+.loading-dots{display:none;align-items:center;gap:6px;padding:20px 14px;font-family:var(--head);font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--text2)}.loading-dots.show{display:flex}
+.dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.2s ease-in-out infinite}.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+.history-bar{margin:12px 12px 0;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.history-label{font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
+.history-chips{display:flex;gap:6px;flex-wrap:wrap}
+.history-chip{font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s}
+.history-chip:hover{border-color:var(--accent);color:var(--accent)}
+.fault-search-wrap{padding:12px;position:relative;background:var(--bg);border-bottom:1px solid var(--border)}
+.fault-search{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px 14px 11px 38px;color:var(--text);font-family:var(--body);font-size:15px;outline:none}
+.fault-search:focus{border-color:var(--accent)}
+.search-icon{position:absolute;left:24px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px;pointer-events:none}
+.fault-list{padding:0 12px 12px}
+.fault-card{background:var(--card);border:1px solid var(--border);border-radius:8px;margin-top:8px;overflow:hidden;transition:border-color .2s}
+.fault-card:hover{border-color:rgba(0,170,255,.3)}
+.fault-card-head{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.fault-code-tag{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--warn);background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.25);padding:3px 8px;border-radius:4px;white-space:nowrap}
+.fault-name-text{font-family:var(--head);font-size:15px;font-weight:700;color:var(--text);letter-spacing:.5px;flex:1}
+.fault-chevron{color:var(--text2);font-size:12px;transition:transform .2s}
+.fault-card.open .fault-chevron{transform:rotate(180deg)}
+.fault-card-body{display:none;border-top:1px solid var(--border);padding:12px 14px}
+.fault-card.open .fault-card-body{display:block}
+.fault-section{margin-bottom:12px}.fault-section:last-child{margin-bottom:0}
+.fault-section-lbl{font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:6px}
+.fault-section ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.fault-section ul li{font-size:13px;color:var(--text);line-height:1.5;padding-left:14px;position:relative}
+.fault-section ul li::before{content:'›';position:absolute;left:0;color:var(--accent);font-weight:700}
+.steps-list{padding:12px;display:flex;flex-direction:column;gap:8px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.step-head{padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#0077cc);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;color:#000;flex-shrink:0}
+.step-title{font-family:var(--head);font-size:15px;font-weight:700;letter-spacing:.5px;flex:1}
+.step-body{display:none;padding:0 14px 14px 54px;font-size:13px;line-height:1.7;color:var(--text)}
+.step-card.open .step-body{display:block}
+.step-card.open .step-head{border-bottom:1px solid var(--border)}
+.param-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;font-family:var(--mono)}
+.param-table th{background:var(--bg3);padding:6px 8px;text-align:left;color:var(--text2);font-size:10px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.param-table td{padding:7px 8px;border-bottom:1px solid rgba(30,48,80,.4);color:var(--text)}
+.param-table td:first-child{color:var(--accent2);font-weight:700}
+.param-table tr:last-child td{border-bottom:none}
+.ip-steps{padding:12px}
+.ip-info-box{background:rgba(0,170,255,.06);border:1px solid rgba(0,170,255,.2);border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:13px;line-height:1.6}
+.ip-info-box strong{color:var(--accent2)}
+.ip-method-card{background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.ip-method-head{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.ip-method-icon{font-size:20px}
+.ip-method-title{font-family:var(--head);font-size:15px;font-weight:700;letter-spacing:.5px;flex:1}
+.ip-method-body{display:none;padding:0 14px 14px;font-size:13px;line-height:1.7}
+.ip-method-card.open .ip-method-body{display:block}
+.ip-method-card.open .ip-method-head{border-bottom:1px solid var(--border)}
+ol.ip-ol{padding-left:20px;display:flex;flex-direction:column;gap:8px;margin-top:8px}
+ol.ip-ol li{color:var(--text)}
+.code-snippet{font-family:var(--mono);font-size:12px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 10px;margin-top:8px;color:var(--accent2);white-space:pre-wrap;word-break:break-all}
+.backup-grid{padding:12px;display:flex;flex-direction:column;gap:8px}
+.maint-section{padding:12px}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(30,48,80,.5)}.checklist-item:last-child{border-bottom:none}
+.check-box{width:20px;height:20px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px}
+.check-box.checked{background:var(--success);border-color:var(--success)}
+.check-box.checked::after{content:'✓';color:#000;font-size:12px;font-weight:700}
+.check-text{font-size:14px;line-height:1.5;flex:1}
+.subtabs-nav{display:flex;overflow-x:auto;background:var(--bg3);border-bottom:2px solid var(--border);scrollbar-width:none;gap:2px;padding:0 8px}
+.subtabs-nav::-webkit-scrollbar{display:none}
+.subtab-btn{flex-shrink:0;padding:8px 14px;font-family:var(--head);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.subtab-btn.active{color:var(--accent2);border-bottom-color:var(--accent2)}
+.subtab-btn:hover:not(.active){color:var(--text)}
+.subtab-page{display:none}.subtab-page.active{display:block}
+.params-group{margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.params-group-head{padding:10px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:var(--head);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);display:flex;align-items:center;gap:8px;cursor:pointer}
+.params-group-body{display:none}
+.params-group.open .params-group-body{display:block}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+.chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg3);font-family:var(--head);font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--text2);cursor:pointer;transition:all .15s}
+.chip.active{background:rgba(0,170,255,.1);border-color:var(--accent);color:var(--accent)}
+.warn-box{background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.25);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5;color:var(--warn);margin:10px 0 0;display:flex;gap:8px;align-items:flex-start}
+.danger-box{background:rgba(255,51,85,.07);border:1px solid rgba(255,51,85,.25);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5;color:var(--danger);margin:10px 0 0;display:flex;gap:8px;align-items:flex-start}
+.pb{height:20px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ccw-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,255,204,.1);border:1px solid rgba(0,255,204,.3);color:var(--accent2);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-logo">POWER<span>FLEX</span></div>
+    <div class="header-sub">Field Guide — Técnico</div>
+  </div>
+  <div class="header-badge">AI v2.0</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-nav" id="tabsNav">
+  <button class="tab-btn active" onclick="showTab('diag')">🔍 Diagnóstico</button>
+  <button class="tab-btn" onclick="showTab('pf4')">⚡ PF 4/40/400</button>
+  <button class="tab-btn" onclick="showTab('pf525')">⚡ PF 520/523/525</button>
+  <button class="tab-btn" onclick="showTab('pf527')">⚡ PF 527</button>
+  <button class="tab-btn" onclick="showTab('pf700')">⚡ PF 700</button>
+  <button class="tab-btn" onclick="showTab('pf755')">⚡ PF 750/755</button>
+  <button class="tab-btn" onclick="showTab('pf7000')">⚡ PF 7000 MV</button>
+  <button class="tab-btn" onclick="showTab('comiss')">🚀 Comissionamento</button>
+  <button class="tab-btn" onclick="showTab('glossario')">📖 Glossário</button>
+  <button class="tab-btn" onclick="showTab('sobre')">👨‍🔧 Sobre</button>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE: DIAGNÓSTICO IA
+═══════════════════════════════════ -->
+<div class="page active" id="page-diag">
+  <div class="diag-hero">
+    <div class="diag-hero-title">DIAGNÓSTICO <span>INTELIGENTE</span></div>
+    <div class="diag-hero-sub">Foto do display ou código → IA identifica a falha e orienta o técnico</div>
+  </div>
+  <div class="diag-methods">
+    <button class="diag-method-btn active" id="btn-camera-method" onclick="setMethod('camera')"><span class="method-icon">📷</span>Fotografar Display</button>
+    <button class="diag-method-btn" id="btn-code-method" onclick="setMethod('code')"><span class="method-icon">⌨️</span>Digitar Código</button>
+  </div>
+  <div class="diag-input-area">
+    <!-- CÂMERA -->
+    <div class="camera-area show" id="cameraArea">
+      <div style="position:relative">
+        <video id="camera-preview" autoplay playsinline></video>
+        <canvas id="camera-canvas"></canvas>
+        <img id="captured-img" alt="Foto capturada"/>
+        <div id="loadingOverlay" style="display:none;position:absolute;inset:0;background:rgba(7,12,26,.82);border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;backdrop-filter:blur(2px)">
+          <div style="display:flex;gap:7px;align-items:center"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+          <div style="font-family:var(--head);font-size:13px;font-weight:700;letter-spacing:3px;color:var(--accent);text-transform:uppercase">Analisando...</div>
+          <div style="font-size:11px;color:var(--text2);letter-spacing:1px">IA processando a imagem</div>
+        </div>
+      </div>
+      <div class="camera-btn-row">
+        <button class="cam-btn cam-btn-primary" id="btnStartCam" onclick="startCamera()">📷 Abrir Câmera</button>
+        <button class="cam-btn cam-btn-secondary" style="display:none" id="btnCapture" onclick="capturePhoto()">⊙ Capturar</button>
+        <button class="cam-btn cam-btn-secondary" style="display:none" id="btnRetake" onclick="retakePhoto()">↺ Refazer</button>
+      </div>
+      <label style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--bg3);border:1px dashed var(--border);border-radius:8px;padding:12px;cursor:pointer;font-family:var(--head);font-size:13px;font-weight:700;letter-spacing:1px;color:var(--text2);text-transform:uppercase">
+        <input type="file" accept="image/*" id="fileInput" onchange="handleFile(event)" style="display:none">
+        <span style="font-size:20px">🖼️</span> Selecionar da Galeria
+      </label>
+      <div style="display:flex;gap:8px">
+        <select class="drive-select" id="driveSelectCam" style="flex:1">
+          <option value="">Selecione o inversor</option>
+          <option value="PF4">PowerFlex 4</option>
+          <option value="PF40">PowerFlex 40/40P</option>
+          <option value="PF400">PowerFlex 400</option>
+          <option value="PF520">PowerFlex 520</option>
+          <option value="PF523">PowerFlex 523</option>
+          <option value="PF525">PowerFlex 525</option>
+          <option value="PF527">PowerFlex 527</option>
+          <option value="PF700">PowerFlex 700</option>
+          <option value="PF750">PowerFlex 750</option>
+          <option value="PF755">PowerFlex 755</option>
+          <option value="PF7000">PowerFlex 7000 MV</option>
+        </select>
+      </div>
+      <button class="analyze-btn" id="btnAnalyzeCam" onclick="analyzeWithAI('camera')" disabled>🤖 Analisar com IA</button>
+    </div>
+    <!-- CÓDIGO -->
+    <div class="code-input-area" id="codeArea">
+      <div class="fault-input-wrap">
+        <input class="fault-input" id="faultCodeInput" placeholder="Ex: F005" maxlength="8" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')analyzeWithAI('code')"/>
+        <select class="drive-select" id="driveSelectCode">
+          <option value="">Inversor</option>
+          <option value="PF4">PF 4</option>
+          <option value="PF40">PF 40/40P</option>
+          <option value="PF400">PF 400</option>
+          <option value="PF520">PF 520</option>
+          <option value="PF523">PF 523</option>
+          <option value="PF525">PF 525</option>
+          <option value="PF527">PF 527</option>
+          <option value="PF700">PF 700</option>
+          <option value="PF750">PF 750</option>
+          <option value="PF755">PF 755</option>
+          <option value="PF7000">PF 7000 MV</option>
+        </select>
+      </div>
+      <button class="analyze-btn" onclick="analyzeWithAI('code')">🤖 Consultar Diagnóstico</button>
+    </div>
+  </div>
+  <div class="history-bar" id="historyBar" style="display:none">
+    <div class="history-label">⏱ Consultas Recentes</div>
+    <div class="history-chips" id="historyChips"></div>
+  </div>
+  <div class="result-area show" id="loadingArea" style="display:none">
+    <div class="loading-dots show"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span style="margin-left:4px">Analisando...</span></div>
+  </div>
+  <div class="result-area" id="resultArea">
+    <div class="result-header">
+      <div><div class="result-fault-code" id="resFaultCode">–</div><div class="result-fault-name" id="resFaultName">–</div></div>
+      <div id="resFaultType" style="margin-left:auto"></div>
+    </div>
+    <div class="result-body" id="resultBody"></div>
+  </div>
+  <div class="pb"></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE: PF 4/40/400 (INTEGRADO)
+═══════════════════════════════════ -->
+<div class="page" id="page-pf4">
+  <div class="sec-head">
+    <div class="sec-title">⚡ PowerFlex 4 / 40 / 40P / 400</div>
+    <div class="sec-desc">Série Compacta — Banco de falhas integrado</div>
+  </div>
+  <div class="subtabs-nav" id="subtabs-pf4">
+    <button class="subtab-btn active" onclick="showSubTab('pf4','falhas',this)">🔴 PF 4</button>
+    <button class="subtab-btn" onclick="showSubTab('pf4','pf40',this)">🔴 PF 40/40P</button>
+    <button class="subtab-btn" onclick="showSubTab('pf4','pf400',this)">🔴 PF 400</button>
+  </div>
+  <div class="subtab-page active" id="st-pf4-falhas">
+    <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf4',this.value)"/></div>
+    <div class="fault-list" id="fault-list-pf4"></div>
+  </div>
+  <div class="subtab-page" id="st-pf4-pf40">
+    <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf40',this.value)"/></div>
+    <div class="fault-list" id="fault-list-pf40"></div>
+  </div>
+  <div class="subtab-page" id="st-pf4-pf400">
+    <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf400',this.value)"/></div>
+    <div class="fault-list" id="fault-list-pf400"></div>
+  </div>
+  <div class="pb"></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     DEMAIS PAGES: copiadas do código principal
+     (PF525, PF527, PF700, PF755, PF7000, Comiss, Glossário, Sobre)
+     Mantidas identicamente — o JS é onde está a integração real
+═══════════════════════════════════ -->
+
+<!-- PAGE: PF 520/523/525 -->
+<div class="page" id="page-pf525">
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 520 / 523 / 525</div><div class="sec-desc">Série 520 — Banco completo de falhas</div></div>
+  <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf525',this.value)"/></div>
+  <div class="fault-list" id="fault-list-pf525"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: PF 527 -->
+<div class="page" id="page-pf527">
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 527</div><div class="sec-desc">Série 527 — Banco completo de falhas</div></div>
+  <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf527',this.value)"/></div>
+  <div class="fault-list" id="fault-list-pf527"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: PF 700 -->
+<div class="page" id="page-pf700">
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 700</div><div class="sec-desc">PF 700 — Banco completo de falhas</div></div>
+  <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf700',this.value)"/></div>
+  <div class="fault-list" id="fault-list-pf700"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: PF 750/755 -->
+<div class="page" id="page-pf755">
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 750 / 755</div><div class="sec-desc">Série 750 — Banco completo de falhas</div></div>
+  <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf755',this.value)"/></div>
+  <div class="fault-list" id="fault-list-pf755"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: PF 7000 MV -->
+<div class="page" id="page-pf7000">
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 7000 MV</div><div class="sec-desc">Inversor de Média Tensão 2.4kV–6.6kV</div></div>
+  <div class="ip-info-box" style="margin:12px">⚡ <strong>MÉDIA TENSÃO:</strong> Topologia CSI-PWM • SGCTs/SCRs • Carcaças A, B e C Frame</div>
+  <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf7000',this.value)"/></div>
+  <div class="fault-list" id="fault-list-pf7000"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: COMISSIONAMENTO -->
+<div class="page" id="page-comiss">
+  <div class="sec-head"><div class="sec-title">🚀 Comissionamento</div><div class="sec-desc">Passo a passo para colocada em operação</div></div>
+  <div style="padding:12px 12px 0">
+    <div class="chip-row" id="comissChips">
+      <div class="chip" onclick="selectComiss('pf4',this)">PF 4/40</div>
+      <div class="chip active" onclick="selectComiss('pf525',this)">PF 520/523/525</div>
+      <div class="chip" onclick="selectComiss('pf527',this)">PF 527</div>
+      <div class="chip" onclick="selectComiss('pf700',this)">PF 700</div>
+      <div class="chip" onclick="selectComiss('pf755',this)">PF 750/755</div>
+      <div class="chip" onclick="selectComiss('pf7000',this)">⚡ PF 7000 MV</div>
+    </div>
+  </div>
+  <div class="steps-list" id="comiss-steps"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: GLOSSÁRIO -->
+<div class="page" id="page-glossario">
+  <div class="sec-head"><div class="sec-title">📖 Glossário Técnico</div><div class="sec-desc">Significado dos termos e parâmetros</div></div>
+  <div style="padding:12px">
+    <div style="position:relative;margin-bottom:12px"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px;pointer-events:none">🔍</span><input class="fault-search" placeholder="Buscar termo..." oninput="filterGlossario(this.value)" style="width:100%;padding-left:38px"/></div>
+    <div id="glossario-list"></div>
+  </div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: SOBRE -->
+<div class="page" id="page-sobre">
+  <div class="sec-head"><div class="sec-title">👨‍🔧 Sobre</div><div class="sec-desc">Desenvolvedor e objetivo do app</div></div>
+  <div style="padding:16px">
+    <div class="card" style="overflow:visible">
+      <div style="background:linear-gradient(135deg,#0a1628,#0d1f3c);padding:24px 16px;text-align:center;border-radius:8px 8px 0 0">
+        <div style="font-family:var(--head);font-size:22px;font-weight:900;letter-spacing:2px;color:var(--accent)">JAMIS COSTA</div>
+        <div style="font-family:var(--head);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-top:4px">Técnico em Automação</div>
+        <div style="margin-top:12px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-blue">Allen-Bradley</span>
+          <span class="badge badge-green">PowerFlex</span>
+          <span class="badge badge-blue">CCW</span>
+          <span class="badge badge-warn">EtherNet/IP</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p style="font-size:14px;line-height:1.8">Guia de campo para técnicos — diagnóstico IA, bancos de falhas PF4 ao PF7000, comissionamento e glossário em um único app.</p>
+        <div class="warn-box" style="margin-top:10px">⚠️ Ferramenta de apoio. Consulte sempre os manuais oficiais Rockwell para decisões críticas de segurança.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pb"></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     JAVASCRIPT INTEGRADO
+═══════════════════════════════════ -->
+<script>
+// ══ BANCOS DE FALHAS ═══════════════════════════════════════
+const FAULTS = {
+  // ── PF4 (do Técnico Delta) ──
+  pf4: [
+    {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Interlock aberto','Entrada auxiliar configurada como proteção'],actions:['Verificar entrada auxiliar','Verificar fiação do intertravamento']},
+    {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de fase / tensão de alimentação','Fusível queimado'],actions:['Verificar alimentação trifásica','Verificar fusíveis']},
+    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Queda momentânea na rede'],actions:['Verificar tensão da rede com multímetro','Verificar estabilidade da alimentação']},
+    {code:'F5',name:'OverVoltage',type:'auto',causes:['Regeneração ou tensão alta','Desaceleração muito rápida'],actions:['Aumentar tempo de desaceleração','Verificar tensão de entrada']},
+  ],
+  // ── PF40/40P (do Técnico Delta) ──
+  pf40: [
+    {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Interlock de segurança aberto','Sinal externo de trip'],actions:['Verificar fiação auxiliar','Verificar CLP/intertravamento']},
+    {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de tensão DC bus <85%','Falta de fase'],actions:['Checar fusíveis e fases','Verificar contator de entrada']},
+    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Transformador subdimensionado'],actions:['Medir tensão AC com multímetro','Verificar qualidade da rede']},
+    {code:'F5',name:'OverVoltage',type:'auto',causes:['Desaceleração rápida ou regeneração','Tensão CA acima do nominal'],actions:['Aumentar Decel Time','Adicionar resistor de frenagem','Verificar tensão de entrada']},
+    {code:'F6',name:'Motor Stalled',type:'manual',causes:['Motor travado ou sobrecarregado','Carga mecânica excessiva'],actions:['Reduzir carga / checar mecânica','Aumentar tempo de aceleração','Verificar rolamentos']},
+    {code:'F7',name:'Motor Overload',type:'manual',causes:['Sobrecarga térmica','Corrente nominal configurada errada'],actions:['Verificar P033 Motor NP Amps','Reduzir carga','Verificar ventilação do motor']},
+    {code:'F13',name:'Ground Fault',type:'manual',causes:['Fuga de corrente para terra','Isolamento do motor comprometido'],actions:['Medir isolamento do motor com Megôhmetro','Verificar cabos de saída']},
+    {code:'F38',name:'Phase U to Gnd',type:'manual',causes:['Curto fase-terra U','Cabo danificado'],actions:['Verificar cabos e motor','Medir isolamento fase U']},
+    {code:'F63',name:'SW OverCurrent',type:'manual',causes:['Corrente acima do limite de software','Aceleração muito rápida'],actions:['Ajustar A098 SW Current Trip','Aumentar tempo de aceleração']},
+  ],
+  // ── PF400 (do Técnico Delta) ──
+  pf400: [
+    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Queda na rede'],actions:['Verificar entrada','Verificar fusíveis']},
+    {code:'F5',name:'OverVoltage',type:'auto',causes:['Regeneração','Desaceleração brusca'],actions:['Adicionar resistor de frenagem','Aumentar tempo de desaceleração']},
+    {code:'F15',name:'Load Loss',type:'auto',causes:['Cinto quebrado ou perda de carga','Motor desconectado'],actions:['Verificar transmissão mecânica','Verificar conexão do motor']},
+  ],
+  // ── PF525 ──
+  pf525: [
+    {code:'F002',name:'Auxiliary Input',type:'manual',causes:['Entrada auxiliar aberta (borne DI)','CLP enviou sinal de trip externo','Parâmetro de intertravamento ativo'],actions:['Verifique borne de entrada auxiliar','Verifique lógica do CLP','Verifique parâmetro A410']},
+    {code:'F003',name:'Power Loss',type:'auto',causes:['Queda de tensão na alimentação CA','Tensão abaixo do mínimo','Mau contato no terminal'],actions:['Monitore tensão de entrada','Verifique cabos e fusíveis','Meça nos bornes L1/L2/L3']},
+    {code:'F004',name:'UnderVoltage',type:'auto',causes:['Tensão muito baixa','Afundamento momentâneo','Transformador subdimensionado'],actions:['Verifique tensão CA','Aumente tempo de aceleração','Verifique capacitores']},
+    {code:'F005',name:'OverVoltage',type:'auto',causes:['Desaceleração rápida (regeneração)','Alta tensão na linha CA','Carga de alta inércia'],actions:['Aumente tempo de desaceleração (P042)','Adicione resistor de frenagem','Habilite P041 [DC Bus Reg]']},
+    {code:'F006',name:'Motor Stalled',type:'manual',causes:['Motor travado mecanicamente','Carga excessiva na partida'],actions:['Verifique carga mecânica','Aumente tempo de aceleração (P041)','Verifique A484 [Current Limit]']},
+    {code:'F007',name:'Motor Overload',type:'manual',causes:['Sobrecarga prolongada','Ciclo de trabalho excessivo','Corrente nominal mal configurada'],actions:['Reduza carga','Verifique P036 [Motor NP Amps]','Verifique temperatura do motor']},
+    {code:'F008',name:'Heatsink OvrTemp',type:'auto',causes:['Ventilação bloqueada','Temperatura ambiente alta','Ventilador com defeito'],actions:['Limpe filtros e passagens de ar','Verifique ventilador interno','Reduza frequência PWM']},
+    {code:'F012',name:'HW OverCurrent',type:'manual',causes:['Curto-circuito na saída','Motor com enrolamento danificado'],actions:['Desconecte motor e teste','Meça resistência entre fases','Substitua drive se persistir']},
+    {code:'F013',name:'Ground Fault',type:'manual',causes:['Fuga para terra','Cabo com isolamento danificado'],actions:['Inspecione isolamento','Meça IR com Megôhmetro','Desconecte motor e teste isolado']},
+    {code:'F059',name:'Safety Open',type:'manual',causes:['Entradas de segurança (Safety 1/2) abertas','Cabo desconectado'],actions:['Verifique bornes Safety 1 e Safety 2','Jumper se não utilizado']},
+    {code:'F071',name:'DSI Net Loss',type:'auto',causes:['Perda de comunicação Modbus/DSI','Cabo desconectado'],actions:['Verifique cablagem DSI','Cicle energia','Verifique mestre Modbus']},
+    {code:'F073',name:'Embedded ENet Loss',type:'auto',causes:['Adaptador EtherNet/IP perdeu conexão','Cabo Ethernet danificado'],actions:['Verifique cabo Ethernet','Verifique IP do drive','Verifique controlador CLP']},
+    {code:'F100',name:'Parameter Storage',type:'manual',causes:['Armazenamento corrompido','Falha na EEPROM'],actions:['Use P053 para reset de fábrica','Reprogramar parâmetros','Restaurar via CCW']},
+  ],
+  // ── PF527 ──
+  pf527: [
+    {code:'F004',name:'UnderVoltage',type:'auto',causes:['Tensão abaixo do limite','Queda momentânea na rede'],actions:['Monitore tensão','Ajuste P033/P034','Verifique alimentação']},
+    {code:'F005',name:'OverVoltage',type:'auto',causes:['Regeneração excessiva','Tensão CA alta','Desaceleração rápida'],actions:['Aumente tempo de decel','Adicione resistor de frenagem','Habilite DC Bus Regulator']},
+    {code:'F007',name:'Motor Overload',type:'manual',causes:['Sobrecarga térmica do motor','Corrente nominal errada'],actions:['Reduza carga','Verifique parâmetros do motor']},
+    {code:'F008',name:'Heatsink OvrTemp',type:'auto',causes:['Ventilação bloqueada','Temperatura ambiente alta'],actions:['Limpe filtros','Melhore ventilação']},
+  ],
+  // ── PF700 ──
+  pf700: [
+    {code:'F002',name:'Auxiliary Input',type:'manual',causes:['Entrada auxiliar aberta','CLP enviou trip externo'],actions:['Verifique borne auxiliar','Verifique lógica do CLP','Confirme A410']},
+    {code:'F003',name:'Power Loss',type:'auto',causes:['Queda de tensão CA','Tensão abaixo do mínimo'],actions:['Monitore tensão de entrada','Verifique cabos e fusíveis']},
+    {code:'F004',name:'UnderVoltage',type:'auto',causes:['Barramento DC abaixo do mínimo (~375V para 460V)','Fusível queimado'],actions:['Monitore tensão CA','Verifique fusíveis','Meça tensão DC no barramento']},
+    {code:'F005',name:'OverVoltage',type:'auto',causes:['Barramento DC excedeu ~810V para 460V','Desaceleração brusca'],actions:['Aumente tempo de desaceleração P042','Verifique resistor de frenagem','Monitore tensão CA']},
+    {code:'F007',name:'Motor Overload',type:'manual',causes:['Proteção I²t disparada','Corrente nominal configurada errada'],actions:['Reduza carga','Corrija P036 (Motor NP Amps)','Inspecione motor','Verifique A531 [Overload Mode]']},
+    {code:'F008',name:'Heatsink OvrTemp',type:'auto',causes:['Temperatura do dissipador acima de 100°C','Ventilador com falha'],actions:['Limpe ventilador','Limpe filtros e passagens de ar','Reduza frequência PWM (A437)']},
+    {code:'F012',name:'HW OverCurrent',type:'manual',causes:['Corrente excedeu limite de hardware','Curto nos terminais U/V/W'],actions:['Desconecte motor — se persistir, substitua drive','Meça resistência de isolamento','Inspecione cabos']},
+    {code:'F013',name:'Ground Fault',type:'manual',causes:['Corrente de fuga para terra','Cabo com isolamento comprometido'],actions:['Meça IR com Megôhmetro ≥ 500V DC','Substitua cabo danificado','Inspecione motor']},
+    {code:'F029',name:'Analog Loss',type:'auto',causes:['Sinal 4-20mA perdido (<1mA)','Fio rompido','Transmissor sem alimentação'],actions:['Verifique sinal no borne com multímetro','Inspecione cabeamento','Verifique alimentação do transmissor']},
+    {code:'F038',name:'Phase Loss Input',type:'manual',causes:['Perda de fase na alimentação','Fusível queimado em uma fase'],actions:['Meça tensão CA entre L1-L2, L2-L3, L1-L3','Verifique fusíveis individualmente']},
+    {code:'F059',name:'Safety Open',type:'manual',causes:['Circuito STO aberto','Emergência pressionada'],actions:['Verifique terminais S1, S2','Reposicione dispositivo de segurança']},
+    {code:'F081',name:'Port 1 Net Loss',type:'auto',causes:['Perda de comunicação no adaptador de rede','Cabo desconectado'],actions:['Verifique cabo de rede','Verifique controlador em modo Run','Verifique timeout']},
+    {code:'F100',name:'Encoder Loss',type:'manual',causes:['Sinal do encoder perdido','Cabo danificado'],actions:['Verifique cabos do encoder','Meça tensão de alimentação','Substitua encoder se necessário']},
+  ],
+  // ── PF755 ──
+  pf755: [
+    {code:'3',name:'Power Loss',type:'auto',causes:['Queda de energia CA','Tensão abaixo do mínimo por >0.5s'],actions:['Monitore tensão CA','Verifique fusíveis e disjuntores']},
+    {code:'4',name:'UnderVoltage',type:'auto',causes:['Barramento DC abaixo do mínimo','Queda momentânea na rede'],actions:['Verifique tensão CA','Meça tensão DC no barramento','Verifique capacitores']},
+    {code:'5',name:'OverVoltage',type:'auto',causes:['Barramento DC acima de 810V (460V)','Desaceleração rápida com carga inercial'],actions:['Aumente tempo de desaceleração','Verifique resistor de frenagem','Habilite controle de bus (Param 380)']},
+    {code:'7',name:'Motor Overload',type:'manual',causes:['Proteção I²t disparada','Parâmetros de placa incorretos'],actions:['Reduza carga','Corrija Motor NP Amps (Port 0:P39)','Inspecione ventilação do motor']},
+    {code:'12',name:'HW OverCurrent',type:'manual',causes:['Corrente excedeu limite de hardware','Curto nos terminais U/V/W'],actions:['Desconecte motor — se persistir, problema é no drive','Meça resistência de isolamento','Verifique IGBTs']},
+    {code:'13',name:'Ground Fault',type:'manual',causes:['Fuga de corrente para terra','Cabo com isolamento danificado'],actions:['Meça IR com Megôhmetro ≥ 500V DC','Substitua cabo danificado','Instale filtro dU/dt']},
+    {code:'59',name:'Safety Open',type:'manual',causes:['Circuito STO aberto','Módulo de segurança atuado'],actions:['Verifique terminais STO (S1, S2)','Confirme que emergência foi resolvida']},
+    {code:'73',name:'Embedded ENet Loss',type:'auto',causes:['Perda de comunicação EtherNet/IP','Cabo desconectado','IP incorreto'],actions:['Verifique cabo Ethernet e LEDs','Verifique controlador em modo Run','Confirme IP, subnet, gateway']},
+    {code:'100',name:'Heatsink OvrTemp',type:'auto',causes:['Temperatura do dissipador acima de 95-100°C','Ventilador bloqueado'],actions:['Verifique ventilador — Param 935','Limpe passagens de ar','Reduza frequência PWM']},
+    {code:'105',name:'Fan Speed Low',type:'auto',causes:['Ventilador abaixo da velocidade mínima','Rolamento desgastado'],actions:['Verifique Param 935 InHSFan Speed','Limpe pás','Substitua ventilador']},
+  ],
+  // ── PF7000 ──
+  pf7000: [
+    {code:'1',name:'External 1',type:'manual',causes:['Entrada de falha externa 1 ativada','Contato de proteção externo aberto'],actions:['Verifique dispositivo externo na entrada XIO','Consulte diagrama elétrico']},
+    {code:'34',name:'DC Link Overtemp',type:'auto',causes:['Temperatura do indutor DC alta','Ventilação insuficiente'],actions:['Verifique ventilador do conversor','Verifique fluxo de ar']},
+    {code:'37',name:'Auxiliary Protection',type:'manual',causes:['Proteção auxiliar acionada','Relé de proteção externo atuado'],actions:['Verifique relé de proteção externo','Verifique sinal no XIO']},
+    {code:'52',name:'Control 56V Loss',type:'manual',causes:['Perda da tensão de controle 56Vdc','Fonte AC/DC com defeito'],actions:['Verifique fonte AC/DC','Meça tensão no barramento']},
+    {code:'113',name:'DC Link Overcurrent',type:'manual',causes:['Corrente do DC Link excedeu limite','HECS com defeito'],actions:['Verifique HECS do DC Link','Verifique resistor de burden']},
+    {code:'114',name:'Ground Overcurrent',type:'manual',causes:['Corrente de terra excessiva','Fuga para terra no motor'],actions:['Megue motor e cabos','Verifique GFCT']},
+    {code:'144',name:'Drive Overload',type:'manual',causes:['Sobrecarga no drive','Corrente DC excessiva prolongada'],actions:['Reduza carga','Verifique dimensionamento']},
+    {code:'155',name:'Current Sensor',type:'manual',causes:['Falha no sensor de corrente','HECS ou CT com defeito'],actions:['Verifique P764 para código específico','Verifique HECS line, DC e motor']},
+    {code:'176',name:'Converter Air Flow',type:'auto',causes:['Fluxo de ar do conversor baixo','Filtros entupidos'],actions:['Verifique ventilador','Limpe filtros','Verifique P319']},
+    {code:'456',name:'DAN Comm Loss',type:'auto',causes:['Perda de comunicação DAN','Falha em drive paralelo'],actions:['Verifique cabo RS485','Verifique conversor MOXA']},
+  ],
+};
+
+// ══ COMISSIONAMENTO ═══════════════════════════════════════
+const COMISS = {
+  pf4: [
+    {title:'1. Verificação — PF 4/40',body:'✓ Tensão de alimentação correta (110V ou 220V monofásico/trifásico)<br>✓ Cabos de entrada e saída apertados<br>✓ Terra (PE) conectado<br>✓ Motor desacoplado para primeiro teste'},
+    {title:'2. Parâmetros do motor',body:'Configure P033 (Volts), P034 (Hz=60), P035 (RPM), P036 (Amps) conforme placa do motor'},
+    {title:'3. Rampas e teste',body:'P041 = Accel Time (5-30s)<br>P042 = Decel Time (5-30s)<br>Teste em Local com 10Hz, depois aumente gradualmente'},
+  ],
+  pf525: [
+    {title:'1. Verificação antes de energizar',body:'✓ Tensão de alimentação correta (nameplate)<br>✓ Cabos L1/L2/L3 fixos<br>✓ Cabos U/V/W fixos<br>✓ Terra (PE) conectado<br>✓ Motor desacoplado para primeiro teste'},
+    {title:'2. Energizar e verificar display',body:'Ligue e verifique:<br>✓ Display mostra 0.00 Hz<br>✓ Nenhuma falha<br>✓ LED verde'},
+    {title:'3. Configurar dados do motor',body:'P033=Volts, P034=Hz(60), P035=RPM, P036=Amps, P037=kW — tudo conforme placa do motor'},
+    {title:'4. Rampas e controle',body:'P041=Accel Time (5-30s), P042=Decel Time (5-30s), P043=Min Speed (0Hz), P044=Max Speed (60Hz)'},
+    {title:'5. Teste sem carga',body:'1. Local → 10Hz → Start<br>2. Observe corrente (b003)<br>3. Aumente até 60Hz<br>4. Verifique sentido de rotação<br>5. Stop e verifique desaceleração'},
+  ],
+  pf527: [
+    {title:'1. Pré-energização PF 527',body:'✓ PF527 é controlado via rede (EtherNet/IP ou Logix)<br>✓ Configure IP antes de conectar ao controlador'},
+    {title:'2. Dados do motor e rede',body:'Configure P033-P037 do motor e A548-A556 para EtherNet/IP. No Studio 5000/CCW adicione o drive.'},
+  ],
+  pf700: [
+    {title:'1. Pré-energização PF 700',body:'✓ Drive de médio porte — verifique ventilação<br>✓ Tensão trifásica<br>✓ Aterramento correto'},
+    {title:'2. Dados do motor',body:'P031=Volts, P032=Hz, P033=Amps, P034=RPM, P035=kW'},
+    {title:'3. Autotuning',body:'P070 [Autotune]: 1=Static Tune (parado), 2=Rotate Tune (girando). Execute com motor desacoplado.'},
+  ],
+  pf755: [
+    {title:'1. Pré-energização PF 755',body:'✓ Siga procedimentos de segurança elétrica<br>✓ Verifique ventilação e espaçamento<br>✓ Instale resistor de frenagem se necessário'},
+    {title:'2. Dados do motor (Port 0)',body:'P26=Amps, P27=Volts, P28=Hz, P29=RPM, P30=kW'},
+    {title:'3. Autotuning',body:'P70: 2=Calc Motor Params, 3=Rotate Tune. Execute com motor desacoplado.'},
+  ],
+  pf7000: [
+    {title:'1. ⚠️ SEGURANÇA MV — OBRIGATÓRIO',body:'<div class="danger-box">🔴 PERIGO DE MORTE: 2.400V a 6.600V. Apenas pessoal qualificado.</div><br>LOTO obrigatório. EPIs: luvas isolantes MV, viseira anti-arco, vestimenta AR/FR, calçado dielétrico.'},
+    {title:'2. Verificação pré-energização',body:'✓ Cabos MV de entrada/saída<br>✓ Fibras ópticas internas conectadas<br>✓ Ventiladores OK<br>✓ Tensão de controle LV (120V CA)'},
+    {title:'3. Primeira energização LV',body:'Apenas controle (LV). IHM deve iniciar. Verificar alarms. LEDs SPGDB: Verde=OK, Vermelho=falha.'},
+    {title:'4. Parâmetros do motor MV',body:'P3=Hz, P4=Volts, P5=Amps, P6=RPM, P8=kW, P10=Motor Type, P11=Poles'},
+    {title:'5. Gating Test (com LV, sem MV)',body:'Menu → Diagnostic → Gating Test. SCR Test (retificador) ou SGCT Test (inversor). LED verde=OK.'},
+    {title:'6. Energização MV e primeiro run',body:'Área isolada. Feche disjuntor MV. Aguarde Ready to Start. Parta em 10% da nominal. Monitore corrente.'},
+  ],
+};
+
+// ══ GLOSSÁRIO ═══════════════════════════════════════
+const GLOSSARIO = [
+  {t:'Accel Time',s:'P041',p:'Tempo de Aceleração',d:'Tempo em segundos para ir de 0 Hz até a frequência máxima.'},
+  {t:'Boost Voltage',s:'A489',p:'Tensão de Boost',d:'Tensão extra em baixas frequências para torque na partida.'},
+  {t:'CCW',s:'',p:'Connected Components Workbench',d:'Software gratuito Rockwell para configuração de inversores PowerFlex.'},
+  {t:'Current Limit',s:'A484',p:'Limite de Corrente',d:'Corrente máxima de saída permitida pelo inversor.'},
+  {t:'DC Bus',s:'',p:'Barramento DC',d:'Estágio intermediário onde CA é retificada para CC antes de ser invertida.'},
+  {t:'EtherNet/IP',s:'',p:'Ethernet Industrial Protocol',d:'Protocolo de comunicação industrial baseado em Ethernet padrão.'},
+  {t:'Ground Fault',s:'F013',p:'Falta à Terra',d:'Corrente detectada fluindo para o terra. Indica isolamento comprometido.'},
+  {t:'IGBT',s:'',p:'Transistor Bipolar de Porta Isolada',d:'Componente de potência que gera a saída CA variável.'},
+  {t:'Motor NP Amps',s:'P036',p:'Corrente Nominal do Motor',d:'Corrente de placa do motor. Crítico para proteção de sobrecarga.'},
+  {t:'Motor NP Hz',s:'P034',p:'Frequência Nominal',d:'Frequência de trabalho. No Brasil = 60 Hz.'},
+  {t:'PWM',s:'',p:'Modulação por Largura de Pulso',d:'Técnica para gerar tensão variável para o motor.'},
+  {t:'STO',s:'',p:'Safe Torque Off',d:'Função de segurança que elimina torque sem desligar o inversor.'},
+  {t:'VFD',s:'',p:'Inversor de Frequência',d:'Variable Frequency Drive. Controla velocidade de motores CA.'},
+];
+
+// ══ ESTADO ═══════════════════════════════════════
+let stream=null,capturedImageBase64=null,faultHistory=[];
+try{faultHistory=JSON.parse(localStorage.getItem('fhist')||'[]')}catch(e){faultHistory=[]}
+
+// ══ TABS ═══════════════════════════════════════
+function showTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+  event.target.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function showSubTab(drive,tab,btn){
+  const prefix=`st-${drive}-`;
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll(`#subtabs-${drive} .subtab-btn`).forEach(b=>b.classList.remove('active'));
+  document.getElementById(`st-${drive}-${tab}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══ MÉTODO DIAGNÓSTICO ═══════════════════════════════════════
+function setMethod(m){
+  document.getElementById('btn-camera-method').classList.toggle('active',m==='camera');
+  document.getElementById('btn-code-method').classList.toggle('active',m==='code');
+  document.getElementById('cameraArea').classList.toggle('show',m==='camera');
+  document.getElementById('codeArea').classList.toggle('show',m==='code');
+  if(m!=='camera'&&stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+}
+
+// ══ CÂMERA ═══════════════════════════════════════
+async function startCamera(){
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280}}});
+    const v=document.getElementById('camera-preview');v.srcObject=stream;v.style.display='block';
+    document.getElementById('btnStartCam').style.display='none';
+    document.getElementById('btnCapture').style.display='block';
+  }catch(e){alert('Câmera não disponível. Use a galeria.')}
+}
+function capturePhoto(){
+  const v=document.getElementById('camera-preview'),c=document.getElementById('camera-canvas');
+  c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
+  capturedImageBase64=c.toDataURL('image/jpeg',.85).split(',')[1];
+  document.getElementById('captured-img').src='data:image/jpeg;base64,'+capturedImageBase64;
+  document.getElementById('captured-img').style.display='block';v.style.display='none';
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  document.getElementById('btnCapture').style.display='none';
+  document.getElementById('btnRetake').style.display='block';
+  document.getElementById('btnAnalyzeCam').disabled=false;
+}
+function retakePhoto(){capturedImageBase64=null;document.getElementById('captured-img').style.display='none';document.getElementById('btnRetake').style.display='none';document.getElementById('btnAnalyzeCam').disabled=true;startCamera()}
+function handleFile(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{capturedImageBase64=ev.target.result.split(',')[1];document.getElementById('captured-img').src=ev.target.result;document.getElementById('captured-img').style.display='block';document.getElementById('camera-preview').style.display='none';document.getElementById('btnStartCam').style.display='none';document.getElementById('btnCapture').style.display='none';document.getElementById('btnRetake').style.display='block';document.getElementById('btnAnalyzeCam').disabled=false};reader.readAsDataURL(file)}
+
+// ══ MAPEAMENTO DE DRIVE ═══════════════════════════════════════
+function getDriveKey(driveStr){
+  if(!driveStr)return null;const d=driveStr.toUpperCase();
+  if(d.includes('7000'))return'pf7000';if(d.includes('755')||d.includes('750'))return'pf755';
+  if(d.includes('700'))return'pf700';if(d.includes('527'))return'pf527';
+  if(d.includes('525')||d.includes('523')||d.includes('520'))return'pf525';
+  if(d.includes('400'))return'pf400';if(d.includes('40'))return'pf40';
+  if(d.includes('4'))return'pf4';return null;
+}
+function normalizeCode(c){if(!c)return'';c=c.toString().toUpperCase().trim();c=c.replace(/^F0*/,'');if(c.match(/^0+\d/))c=c.replace(/^0+/,'');return c}
+function searchLocalFault(code,driveKey){
+  const target=normalizeCode(code);if(!target)return null;
+  const keys=driveKey?[driveKey,...Object.keys(FAULTS).filter(k=>k!==driveKey)]:Object.keys(FAULTS);
+  for(const key of keys){const found=(FAULTS[key]||[]).find(f=>normalizeCode(f.code)===target);if(found)return{fault:found,driveKey:key}}
+  return null;
+}
+
+// ══ CHAMADA IA (proxy Cloudflare → Gemini) ═══════════════════
+async function callClaude(userMessage,imageData){
+  const parts=[];
+  if(imageData)parts.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:imageData}});
+  parts.push({type:'text',text:userMessage});
+  const res=await fetch('https://powerflex-api-proxy.jamiscosta81.workers.dev',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'gemini-2.5-flash',max_tokens:4096,messages:[{role:'user',content:parts}]})
+  });
+  if(!res.ok){const err=await res.text().catch(()=>'');throw new Error(`Proxy ${res.status}: ${err.slice(0,150)}`)}
+  const data=await res.json();
+  const txt=(data.content||[]).find(c=>c.type==='text')?.text||'';
+  if(!txt)throw new Error('Resposta vazia do serviço de IA');return txt;
+}
+function extractJSON(txt){
+  if(!txt)throw new Error('Resposta vazia');
+  let clean=txt.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
+  try{return JSON.parse(clean)}catch(_){}
+  const first=clean.indexOf('{');if(first===-1)return _jf(clean);
+  const last=clean.lastIndexOf('}');if(last>first)try{return JSON.parse(clean.slice(first,last+1))}catch(_){}
+  return _jf(clean);
+}
+function _jf(t){return{code:'?',name:'Diagnóstico IA',type:'manual',confidence:30,confidence_reason:'Resposta não estruturada — confira manualmente',description:t.slice(0,400),causes:['Veja descrição acima'],actions:['⚠️ CONFIRME no manual técnico Rockwell antes de executar qualquer ação'],source:'ia'}}
+
+// ══ DRIVELABELS GLOBAL ═══════════════════════════════════════
+const DRIVE_LABELS={pf4:'PF 4',pf40:'PF 40/40P',pf400:'PF 400',pf525:'PF 520/523/525',pf527:'PF 527',pf700:'PF 700',pf755:'PF 750/755',pf7000:'PF 7000 MV'};
+
+// ══ PROMPT DE SISTEMA — REGRAS DE FIDELIDADE ═══════════════
+const SYSTEM_RULES = `REGRAS ABSOLUTAS QUE VOCÊ DEVE SEGUIR:
+1. NUNCA invente números de parâmetros. Se não tem certeza do número exato do parâmetro para o modelo específico, diga "consulte o manual do modelo específico para o número exato".
+2. NUNCA invente valores de tensão, corrente ou temperatura que não sejam dos manuais oficiais Rockwell/Allen-Bradley.
+3. Se não conseguir identificar a falha com certeza, diga explicitamente "não foi possível identificar com certeza" e dê confidence baixa.
+4. Diferencie CLARAMENTE entre modelos: parâmetros do PF525 são DIFERENTES do PF755. Não misture.
+5. Cada ação DEVE ser verificável pelo técnico — nunca dê ação vaga como "verifique o sistema".
+6. Se a foto estiver borrada, escura ou ilegível, diga isso. NÃO adivinhe o código.
+7. O campo "confidence" deve refletir sua REAL certeza: 90-100=certeza alta baseada em documentação conhecida, 70-89=provável mas confirme no manual, 50-69=possível mas incerto, abaixo de 50=baixa certeza.
+8. O campo "confidence_reason" deve explicar POR QUE a confiança é aquele valor (ex: "código F005 é bem documentado para este modelo" ou "não tenho certeza se este parâmetro existe neste modelo específico").
+9. Se o técnico não informou o modelo do inversor, a confiança NUNCA pode ser acima de 70 porque parâmetros variam entre modelos.
+10. NUNCA recomende "aumentar Motor NP Amps" acima do valor da placa — isso é PERIGOSO e desprotege o motor.`;
+
+// ══ VALIDAÇÃO PÓS-IA — verifica coerência ═══════════════════
+function validateIAResult(parsed, driveKey) {
+  const warnings = [];
+  // 1. Verifica se confidence existe e é número
+  if (typeof parsed.confidence !== 'number' || parsed.confidence < 0 || parsed.confidence > 100) {
+    parsed.confidence = 50;
+    parsed.confidence_reason = 'Confiança não informada pela IA — trate como incerto';
+    warnings.push('IA não forneceu nível de confiança — assumindo 50%');
+  }
+  // 2. Verifica se o código faz sentido para o drive
+  if (driveKey && parsed.code) {
+    const localCheck = searchLocalFault(parsed.code, driveKey);
+    if (localCheck && localCheck.fault.name.toLowerCase() !== (parsed.name||'').toLowerCase()) {
+      warnings.push(`Banco local indica que ${parsed.code} = "${localCheck.fault.name}", mas IA disse "${parsed.name}". Verifique.`);
+      if (parsed.confidence > 70) parsed.confidence = 65;
+    }
+  }
+  // 3. Verifica ações perigosas
+  const allActions = (parsed.actions || []).join(' ').toLowerCase();
+  if (allActions.includes('aument') && allActions.includes('motor np amps') && allActions.includes('placa')) {
+    warnings.push('⚠️ CUIDADO: NUNCA aumente Motor NP Amps acima da placa do motor — desprotege o motor');
+  }
+  // 4. Detecta se IA parece ter inventado parâmetros (padrão suspeito)
+  const paramMatches = allActions.match(/[Pp]\d{3,4}/g) || [];
+  if (paramMatches.length > 8 && parsed.confidence < 80) {
+    warnings.push('IA listou muitos parâmetros com confiança baixa — confirme cada número no manual');
+  }
+  // 5. Sem modelo informado = incerteza
+  if (!driveKey && parsed.confidence > 70) {
+    parsed.confidence = Math.min(parsed.confidence, 65);
+    warnings.push('Modelo do inversor não informado — parâmetros podem variar entre modelos');
+  }
+  parsed._warnings = warnings;
+  return parsed;
+}
+
+// ══ ANÁLISE IA PRINCIPAL (com fidelidade reforçada) ═══════════
+async function analyzeWithAI(method){
+  const drive=method==='camera'?document.getElementById('driveSelectCam').value:document.getElementById('driveSelectCode').value;
+  const code=method==='code'?document.getElementById('faultCodeInput').value.trim():'';
+  if(method==='camera'&&!capturedImageBase64){alert('Capture ou selecione uma foto primeiro.');return}
+  if(method==='code'&&!code){alert('Digite o código da falha.');return}
+  setLoadingState(true);document.getElementById('resultArea').classList.remove('show');
+
+  // MODO CÓDIGO: busca local PRIORITÁRIA (dados verificados)
+  if(method==='code'){
+    const driveKey=getDriveKey(drive);
+    const local=searchLocalFault(code,driveKey);
+    if(local){
+      const f=local.fault;
+      setLoadingState(false);
+      renderResult({
+        code:f.code, name:f.name, type:f.type,
+        driveLabel:DRIVE_LABELS[local.driveKey]||'',
+        confidence:95,
+        confidence_reason:'Dados do banco local verificado — baseado em documentação oficial Rockwell',
+        description:`Falha <strong>${f.code}</strong> — encontrada no banco local verificado (${DRIVE_LABELS[local.driveKey]||''}).`,
+        causes:f.causes, actions:f.actions, source:'local', _warnings:[]
+      });
+      addToHistory(code,drive);
+      enrichWithIA(f,DRIVE_LABELS[local.driveKey]||'',local.driveKey);
+      return;
+    }
+  }
+
+  // MODO CÂMERA ou código não encontrado localmente: chama IA
+  try{
+    const driveCtx=drive?`PowerFlex ${drive}`:'PowerFlex (modelo não especificado)';
+    const driveKey=getDriveKey(drive);
+    let prompt;
+    if(method==='camera'){
+      prompt=`${SYSTEM_RULES}
+
+Você é engenheiro sênior Rockwell Automation. Analise a foto do display deste inversor ${driveCtx}.
+
+INSTRUÇÕES CRÍTICAS PARA A FOTO:
+- Se a foto está BORRADA, ESCURA ou ILEGÍVEL: diga isso, dê confidence abaixo de 40 e NÃO adivinhe o código.
+- Se consegue ler parcialmente: indique o que leu e o que não conseguiu, e ajuste confidence.
+- Se consegue ler claramente: identifique o código e dê diagnóstico com confidence adequada.
+
+Retorne SOMENTE JSON válido:
+{"code":"CÓDIGO LIDO ou ? se ilegível","name":"nome oficial da falha conforme manual Rockwell","type":"auto ou manual","confidence":NÚMERO de 0 a 100,"confidence_reason":"explique por que esse nível de confiança — ex: foto clara e código reconhecido = alta, foto borrada = baixa","description":"o que este código significa tecnicamente — baseado na documentação oficial","causes":["causa 1 verificada","causa 2 verificada","causa 3 verificada"],"actions":["1. SEGURANÇA: ação específica com EPIs","2. MEDIÇÃO: instrumento + borne + valor esperado","3. VERIFICAÇÃO: parâmetro específico DESTE modelo","4. CORREÇÃO: ação concreta","5. VALIDAÇÃO: como confirmar que resolveu"]}`;
+    } else {
+      prompt=`${SYSTEM_RULES}
+
+Você é engenheiro sênior Rockwell Automation. Inversor ${driveCtx} apresentando falha "${code}".
+
+INSTRUÇÕES CRÍTICAS:
+- Use SOMENTE informações que você tem CERTEZA que são corretas para este modelo específico.
+- Se o código "${code}" não é um código de falha real que você conhece para ${driveCtx}, diga isso explicitamente e dê confidence baixa.
+- Números de parâmetros VARIAM entre modelos — use os corretos para ${driveCtx} ou indique "confirme no manual".
+
+Retorne SOMENTE JSON válido:
+{"code":"${code}","name":"nome OFICIAL da falha conforme publicação Rockwell","type":"auto ou manual","confidence":NÚMERO de 0 a 100,"confidence_reason":"explique: este código é documentado para este modelo? os parâmetros citados são confirmados?","description":"descrição técnica precisa — o que o drive detectou, qual proteção atuou","causes":["causa 1 — mecanismo técnico real","causa 2 — como diferenciá-la da primeira","causa 3 — erro comum de instalação/parâmetro"],"actions":["1. SEGURANÇA: EPI necessário, estado do drive","2. LEITURA: o que verificar no display, LEDs, parâmetros de diagnóstico","3. MEDIÇÃO: instrumento + pontos de medição + valor normal vs falha","4. VERIFICAÇÃO DE PARÂMETROS: [Pxxx Nome]=valor — SOMENTE parâmetros que você tem certeza para este modelo","5. CORREÇÃO: ação corretiva específica","6. VALIDAÇÃO: como confirmar resolução antes de liberar"]}`;
+    }
+
+    const txt=await callClaude(prompt,method==='camera'?capturedImageBase64:null);
+    let parsed=extractJSON(txt);
+    parsed.source='ia';
+    parsed.driveLabel=drive||'';
+    // Validação pós-IA
+    parsed=validateIAResult(parsed, driveKey);
+    setLoadingState(false);
+    renderResult(parsed);
+    addToHistory(parsed.code||code,drive);
+  }catch(err){
+    setLoadingState(false);
+    renderResult({
+      code:method==='code'?code:'?', name:'Erro na consulta', type:'manual',
+      confidence:0, confidence_reason:'Serviço de IA não respondeu',
+      description:`Não foi possível completar o diagnóstico: ${err.message||'Verifique sua conexão.'}`,
+      causes:['Sem conexão com internet','Serviço de IA temporariamente indisponível'],
+      actions:['Consulte as abas de banco de falhas do modelo correspondente','Verifique conexão e tente novamente','Consulte o manual técnico Rockwell (Pub. 520-TD001, 700-TD001, 750-PM001)'],
+      source:'erro', _warnings:[]
+    });
+  }
+}
+
+// ══ ENRIQUECIMENTO IA (com controle de fidelidade) ═══════════
+async function enrichWithIA(fault,driveLabel,driveKey){
+  await new Promise(r=>setTimeout(r,500));
+  try{
+    const prompt=`${SYSTEM_RULES}
+
+Falha ${fault.code} (${fault.name}) em ${driveLabel}. O técnico já tem as causas e ações básicas do banco local.
+
+Forneça orientação ADICIONAL de campo. ATENÇÃO:
+- SOMENTE informações que você tem CERTEZA para o modelo ${driveLabel}.
+- Se não tem certeza de um número de parâmetro, escreva "confirme no manual do ${driveLabel}".
+- Prefira orientações PRÁTICAS (como medir, onde medir, o que esperar) do que listas de parâmetros que podem estar errados.
+- O campo confidence deve refletir sua certeza REAL sobre as informações fornecidas.
+
+Retorne SOMENTE JSON válido:
+{"confidence":NÚMERO 0-100,"confidence_reason":"por que este nível","severity":"ALTA/MÉDIA/BAIXA — consequência real se ignorar","rootcause":"sequência prática de eliminação: meça X entre borne A e B, se ler > Y descarta hipótese 1","detailed_actions":["1. ação prática detalhada","2. ação com instrumento e valor","3. ação de correção"],"tips":"dica REAL de campo — algo que acontece na prática e manual não cobre","prevention":"como evitar recorrência — ação concreta"}`;
+
+    const txt=await callClaude(prompt);
+    let extra=extractJSON(txt);
+    const body=document.getElementById('resultBody');
+    if(!body)return;
+
+    // Valida confiança do enriquecimento
+    const conf=typeof extra.confidence==='number'?extra.confidence:50;
+
+    let html='<div style="margin-top:14px;border-top:2px solid var(--border);padding-top:14px">';
+
+    // Badge de confiança do enriquecimento
+    const confColor=conf>=80?'var(--success)':conf>=60?'var(--warn)':'var(--danger)';
+    const confLabel=conf>=80?'ALTA CONFIANÇA':conf>=60?'CONFIANÇA MODERADA':'BAIXA CONFIANÇA';
+    html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <span style="font-family:var(--head);font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase">🤖 Análise IA Aprofundada</span>
+      <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:${confColor};background:${confColor}22;border:1px solid ${confColor}44;padding:2px 8px;border-radius:4px">${confLabel} ${conf}%</span>
+    </div>`;
+
+    // Aviso se confiança baixa
+    if(conf<60){
+      html+=`<div class="warn-box" style="margin-bottom:12px">⚠️ <strong>ATENÇÃO:</strong> Confiança abaixo de 60%. ${extra.confidence_reason||'Confirme todas as informações abaixo no manual oficial Rockwell antes de executar.'}</div>`;
+    }
+
+    if(extra.severity){
+      const sv=extra.severity.toLowerCase();
+      const col=sv.includes('alta')?'var(--danger)':sv.includes('média')||sv.includes('media')?'var(--warn)':'var(--success)';
+      html+=`<div class="result-section"><div class="result-section-title">⚠ Severidade</div><p style="font-size:13px;line-height:1.6"><span style="font-family:var(--mono);font-size:11px;font-weight:700;color:${col};background:${col}22;padding:2px 10px;border-radius:4px;margin-right:8px">${extra.severity.split('—')[0].trim().toUpperCase()}</span>${extra.severity.includes('—')?extra.severity.split('—').slice(1).join('—').trim():''}</p></div>`;
+    }
+    if(extra.rootcause){
+      html+=`<div class="result-section"><div class="result-section-title">🔬 Análise de Causa Raiz</div><p style="font-size:13px;line-height:1.7">${extra.rootcause}</p></div>`;
+    }
+    const da=extra.detailed_actions||[];
+    if(da.length){
+      html+='<div class="result-section"><div class="result-section-title">🔧 Procedimento Detalhado de Campo</div>';
+      da.forEach((a,i)=>{
+        let cleanA=a.replace(/^\d+\.\s*/,'');
+        // Destaca parâmetros e valores
+        cleanA=cleanA
+          .replace(/\[([Pp]\d{2,4}[^\]]*)\]/g,'<span style="font-family:var(--mono);font-size:12px;color:var(--accent2);background:rgba(0,170,255,.1);padding:1px 5px;border-radius:3px">$1</span>')
+          .replace(/(\d+(?:\.\d+)?)\s*(V|A|mA|kΩ|MΩ|Ω|°C|Hz|RPM)/g,'<span style="font-family:var(--mono);color:var(--accent2)">$1 $2</span>');
+        html+=`<div class="action-item"><span class="action-step">${i+1}</span><span style="line-height:1.6">${cleanA}</span></div>`;
+      });
+      html+='</div>';
+    }
+    if(extra.tips){
+      html+=`<div class="result-section"><div class="result-section-title">💡 Dica de Campo</div><div style="background:rgba(0,255,204,.05);border:1px solid rgba(0,255,204,.2);border-radius:8px;padding:12px;font-size:13px;line-height:1.7">${extra.tips}</div></div>`;
+    }
+    if(extra.prevention){
+      html+=`<div class="result-section"><div class="result-section-title">🛡 Prevenção</div><p style="font-size:13px;line-height:1.7">${extra.prevention}</p></div>`;
+    }
+
+    // Disclaimer final SEMPRE
+    html+=`<div style="margin-top:14px;padding:10px 12px;background:rgba(255,170,0,.06);border:1px solid rgba(255,170,0,.2);border-radius:8px;font-size:11px;line-height:1.6;color:var(--warn)">
+      ⚠️ <strong>AVISO:</strong> As informações acima foram geradas por IA e podem conter imprecisões. Confirme SEMPRE os números de parâmetros e valores no manual oficial Rockwell do seu modelo específico antes de executar. Em caso de dúvida, consulte o suporte técnico Rockwell Automation.
+    </div>`;
+
+    html+='</div>';
+    body.insertAdjacentHTML('beforeend',html);
+  }catch(e){console.warn('enrichWithIA:',e.message)}
+}
+
+// ══ LOADING ═══════════════════════════════════════
+function setLoadingState(show){
+  const la=document.getElementById('loadingArea'),ov=document.getElementById('loadingOverlay'),ci=document.getElementById('captured-img');
+  if(ov){const has=ci&&ci.style.display!=='none'&&ci.src;if(show&&has){ov.style.display='flex';if(la)la.style.display='none';return}else ov.style.display='none'}
+  if(la)la.style.display=show?'block':'none';
+}
+
+// ══ RENDER RESULTADO (com confiança e avisos) ═══════════════
+function renderResult(d){
+  document.getElementById('resFaultCode').textContent=d.code||'–';
+  // Badge de fonte
+  let badge='';
+  if(d.source==='local')badge='<span style="display:inline-block;font-family:var(--mono);font-size:9px;background:rgba(0,204,102,.15);color:var(--success);border:1px solid rgba(0,204,102,.3);padding:2px 7px;border-radius:4px;margin-left:8px;vertical-align:middle">📚 VERIFICADO</span>';
+  else if(d.source==='ia')badge='<span style="display:inline-block;font-family:var(--mono);font-size:9px;background:rgba(0,170,255,.15);color:var(--accent);border:1px solid rgba(0,170,255,.3);padding:2px 7px;border-radius:4px;margin-left:8px;vertical-align:middle">🤖 IA</span>';
+  else if(d.source==='erro')badge='<span style="display:inline-block;font-family:var(--mono);font-size:9px;background:rgba(255,51,85,.15);color:var(--danger);border:1px solid rgba(255,51,85,.3);padding:2px 7px;border-radius:4px;margin-left:8px;vertical-align:middle">⚠ ERRO</span>';
+  document.getElementById('resFaultName').innerHTML=(d.name||'–')+badge;
+  document.getElementById('resFaultType').innerHTML=d.type==='auto'?'<span class="type-tag type-auto">⟳ Auto-reset</span>':'<span class="type-tag type-manual">⚠ Reset manual</span>';
+
+  let body='';
+
+  // ── BARRA DE CONFIANÇA ──
+  if(typeof d.confidence==='number'){
+    const conf=d.confidence;
+    const confColor=conf>=80?'var(--success)':conf>=60?'var(--warn)':'var(--danger)';
+    const confIcon=conf>=80?'🟢':conf>=60?'🟡':'🔴';
+    const confText=conf>=90?'ALTA CONFIANÇA':conf>=70?'CONFIANÇA BOA':conf>=50?'CONFIANÇA MODERADA':'BAIXA CONFIANÇA';
+    body+=`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;margin-bottom:8px;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px">${confIcon}</span>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-family:var(--mono);font-size:13px;font-weight:700;color:${confColor}">${conf}%</span>
+          <span style="font-family:var(--head);font-size:11px;letter-spacing:1px;color:${confColor}">${confText}</span>
+        </div>
+        <div style="width:100%;height:4px;background:var(--bg3);border-radius:2px;margin-top:4px;overflow:hidden">
+          <div style="width:${conf}%;height:100%;background:${confColor};border-radius:2px;transition:width .5s"></div>
+        </div>
+        ${d.confidence_reason?`<div style="font-size:10px;color:var(--text2);margin-top:4px;line-height:1.4">${d.confidence_reason}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  // ── AVISOS DE VALIDAÇÃO ──
+  if(d._warnings&&d._warnings.length){
+    body+=`<div style="margin-bottom:10px">`;
+    d._warnings.forEach(w=>{
+      body+=`<div style="background:rgba(255,170,0,.06);border:1px solid rgba(255,170,0,.2);border-radius:6px;padding:8px 10px;margin-bottom:4px;font-size:11px;line-height:1.5;color:var(--warn)">⚠️ ${w}</div>`;
+    });
+    body+=`</div>`;
+  }
+
+  // ── AVISO SE IA COM CONFIANÇA BAIXA ──
+  if(d.source==='ia'&&typeof d.confidence==='number'&&d.confidence<60){
+    body+=`<div class="danger-box" style="margin-bottom:12px">🔴 <strong>ATENÇÃO:</strong> Confiança abaixo de 60%. As informações abaixo podem conter imprecisões. <strong>CONFIRME no manual oficial Rockwell</strong> do seu modelo antes de executar qualquer ação.</div>`;
+  }
+
+  if(d.driveLabel)body+=`<div style="font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:8px">${d.driveLabel}</div>`;
+  if(d.description)body+=`<div class="result-section"><p style="font-size:14px;line-height:1.7">${d.description}</p></div>`;
+  if(d.causes?.length){body+='<div class="result-section"><div class="result-section-title">🔎 Possíveis Causas</div>';d.causes.forEach((c,i)=>{body+=`<div class="cause-item"><span class="cause-num">C${i+1}</span><span>${c}</span></div>`});body+='</div>'}
+  if(d.actions?.length){
+    body+='<div class="result-section"><div class="result-section-title">✅ Ações Recomendadas</div>';
+    d.actions.forEach((a,i)=>{
+      let cleanA=a.replace(/^\d+\.\s*/,'');
+      // Destaca parâmetros e valores
+      cleanA=cleanA
+        .replace(/\[([Pp]\d{2,4}[^\]]*)\]/g,'<span style="font-family:var(--mono);font-size:12px;color:var(--accent2);background:rgba(0,170,255,.1);padding:1px 5px;border-radius:3px">$1</span>')
+        .replace(/(\d+(?:\.\d+)?)\s*(V|A|mA|kΩ|MΩ|Ω|°C|Hz|RPM)/g,'<span style="font-family:var(--mono);color:var(--accent2)">$1 $2</span>');
+      body+=`<div class="action-item"><span class="action-step">${i+1}</span><span style="line-height:1.6">${cleanA}</span></div>`;
+    });
+    if(d.source==='local')body+='<div style="text-align:center;padding:8px 0;font-size:11px;color:var(--text2);font-style:italic">⏳ Análise IA detalhada carregando abaixo...</div>';
+    body+='</div>';
+  }
+
+  // ── DISCLAIMER para resultados de IA ──
+  if(d.source==='ia'){
+    body+=`<div style="margin-top:12px;padding:10px 12px;background:rgba(255,170,0,.06);border:1px solid rgba(255,170,0,.2);border-radius:8px;font-size:11px;line-height:1.6;color:var(--warn)">
+      ⚠️ <strong>AVISO:</strong> Diagnóstico gerado por IA. Confirme números de parâmetros e valores no manual oficial do seu modelo (Pub. Rockwell) antes de executar. Em dúvida, consulte suporte Rockwell.
+    </div>`;
+  }
+
+  document.getElementById('resultBody').innerHTML=body;
+  document.getElementById('resultArea').classList.add('show');
+  document.getElementById('resultArea').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ══ HISTÓRICO ═══════════════════════════════════════
+function addToHistory(code,drive){if(!code||code==='–'||code==='?')return;const entry=drive?`${code} (${drive})`:code;faultHistory=[entry,...faultHistory.filter(h=>h!==entry)].slice(0,8);try{localStorage.setItem('fhist',JSON.stringify(faultHistory))}catch(e){}renderHistory()}
+function renderHistory(){const bar=document.getElementById('historyBar'),chips=document.getElementById('historyChips');if(!bar||!chips)return;if(!faultHistory.length){bar.style.display='none';return}bar.style.display='block';chips.innerHTML=faultHistory.map(h=>`<div class="history-chip" onclick="loadHistory('${h}')">${h}</div>`).join('')}
+function loadHistory(entry){const parts=entry.match(/^(\S+)\s*(?:\((.+)\))?$/);if(!parts)return;document.getElementById('faultCodeInput').value=parts[1];if(parts[2]){const sel=document.getElementById('driveSelectCode');for(let o of sel.options)if(o.value===parts[2])sel.value=o.value}setMethod('code');analyzeWithAI('code')}
+renderHistory();
+
+// ══ BANCO DE FALHAS — RENDER ═══════════════════════════════
+function renderFaults(driveKey,filter=''){
+  const list=document.getElementById('fault-list-'+driveKey);if(!list)return;
+  const faults=FAULTS[driveKey]||[];const f=filter.toLowerCase();
+  const filtered=f?faults.filter(x=>x.code.toLowerCase().includes(f)||x.name.toLowerCase().includes(f)||x.causes.join(' ').toLowerCase().includes(f)):faults;
+  if(!filtered.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2);font-family:var(--head);letter-spacing:2px">NENHUMA FALHA ENCONTRADA</div>';return}
+  list.innerHTML=filtered.map(fault=>`
+    <div class="fault-card" id="fc-${driveKey}-${fault.code}">
+      <div class="fault-card-head" onclick="document.getElementById('fc-${driveKey}-${fault.code}').classList.toggle('open')">
+        <span class="fault-code-tag">${fault.code}</span>
+        <span class="fault-name-text">${fault.name}</span>
+        <span class="badge ${fault.type==='auto'?'badge-green':'badge-warn'}">${fault.type==='auto'?'AUTO':'MANUAL'}</span>
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="fault-card-body">
+        <div class="fault-section"><div class="fault-section-lbl">🔎 Possíveis Causas</div><ul>${fault.causes.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+        <div class="fault-section"><div class="fault-section-lbl">✅ Ações</div><ul>${fault.actions.map(a=>`<li>${a}</li>`).join('')}</ul></div>
+      </div>
+    </div>`).join('');
+}
+function filterFaults(drive,val){renderFaults(drive,val)}
+
+// Render all fault lists on load
+['pf4','pf40','pf400','pf525','pf527','pf700','pf755','pf7000'].forEach(d=>renderFaults(d));
+
+// ══ COMISSIONAMENTO ═══════════════════════════════════════
+function selectComiss(key,el){document.querySelectorAll('#comissChips .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderComiss(key)}
+function renderComiss(key){
+  const steps=COMISS[key]||[];
+  document.getElementById('comiss-steps').innerHTML=steps.map((s,i)=>`
+    <div class="step-card" id="sc-${key}-${i}">
+      <div class="step-head" onclick="document.getElementById('sc-${key}-${i}').classList.toggle('open')">
+        <div class="step-num">${i+1}</div><div class="step-title">${s.title}</div><span class="fault-chevron">▼</span>
+      </div>
+      <div class="step-body">${s.body}</div>
+    </div>`).join('');
+}
+renderComiss('pf525');
+
+// ══ GLOSSÁRIO ═══════════════════════════════════════
+function renderGlossario(filter){
+  const list=document.getElementById('glossario-list');if(!list)return;
+  const f=(filter||'').toLowerCase();
+  const filtered=f?GLOSSARIO.filter(g=>g.t.toLowerCase().includes(f)||g.p.toLowerCase().includes(f)||g.d.toLowerCase().includes(f)):GLOSSARIO;
+  if(!filtered.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">NENHUM TERMO ENCONTRADO</div>';return}
+  list.innerHTML=filtered.map(g=>`
+    <div class="fault-card" style="margin-bottom:6px">
+      <div class="fault-card-head" onclick="this.parentElement.classList.toggle('open')">
+        <div style="flex:1"><div style="font-family:var(--head);font-size:15px;font-weight:700">${g.t}</div><div style="font-size:12px;color:var(--accent2);margin-top:2px">${g.p}</div></div>
+        ${g.s?'<span class="badge badge-warn">'+g.s+'</span>':''}
+        <span class="fault-chevron">▼</span>
+      </div>
+      <div class="fault-card-body" style="font-size:13px;line-height:1.7">${g.d}</div>
+    </div>`).join('');
+}
+function filterGlossario(v){renderGlossario(v)}
+renderGlossario();
+</script>
+</body>
+</html>
