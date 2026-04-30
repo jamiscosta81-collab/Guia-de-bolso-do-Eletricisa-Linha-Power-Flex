@@ -162,9 +162,17 @@ ol.ip-ol li{color:var(--text)}
 .pb{height:20px}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .ccw-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,255,204,.1);border:1px solid rgba(0,255,204,.3);color:var(--accent2);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;margin-bottom:12px}
+.toast-container{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:90%;max-width:380px}
+.toast{padding:12px 16px;border-radius:10px;font-family:var(--head);font-size:13px;font-weight:500;letter-spacing:.5px;line-height:1.4;text-align:center;animation:toastIn .3s ease,toastOut .3s ease 2.7s forwards;pointer-events:auto;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.toast-warn{background:rgba(255,170,0,.15);border:1px solid rgba(255,170,0,.35);color:var(--warn)}
+.toast-info{background:rgba(0,170,255,.15);border:1px solid rgba(0,170,255,.35);color:var(--accent)}
+.toast-danger{background:rgba(255,51,85,.15);border:1px solid rgba(255,51,85,.35);color:var(--danger)}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(-10px)}}
 </style>
 </head>
 <body>
+<div class="toast-container" id="toastContainer"></div>
 
 <!-- HEADER -->
 <div class="header">
@@ -172,21 +180,22 @@ ol.ip-ol li{color:var(--text)}
     <div class="header-logo">POWER<span>FLEX</span></div>
     <div class="header-sub">Field Guide — Técnico</div>
   </div>
-  <div class="header-badge">AI v2.0</div>
+  <div class="header-badge">AI v3.0</div>
 </div>
 
 <!-- TABS -->
 <div class="tabs-nav" id="tabsNav">
-  <button class="tab-btn active" onclick="showTab('diag')">🔍 Diagnóstico</button>
-  <button class="tab-btn" onclick="showTab('pf4')">⚡ PF 4/40/400</button>
-  <button class="tab-btn" onclick="showTab('pf525')">⚡ PF 520/523/525</button>
-  <button class="tab-btn" onclick="showTab('pf527')">⚡ PF 527</button>
-  <button class="tab-btn" onclick="showTab('pf700')">⚡ PF 700</button>
-  <button class="tab-btn" onclick="showTab('pf755')">⚡ PF 750/755</button>
-  <button class="tab-btn" onclick="showTab('pf7000')">⚡ PF 7000 MV</button>
-  <button class="tab-btn" onclick="showTab('comiss')">🚀 Comissionamento</button>
-  <button class="tab-btn" onclick="showTab('glossario')">📖 Glossário</button>
-  <button class="tab-btn" onclick="showTab('sobre')">👨‍🔧 Sobre</button>
+  <button class="tab-btn active" onclick="showTab('diag',this)">🔍 Diagnóstico</button>
+  <button class="tab-btn" onclick="showTab('pf4',this)">⚡ PF 4/40/400</button>
+  <button class="tab-btn" onclick="showTab('pf70',this)">⚡ PF 70</button>
+  <button class="tab-btn" onclick="showTab('pf525',this)">⚡ PF 520/523/525</button>
+  <button class="tab-btn" onclick="showTab('pf527',this)">⚡ PF 527</button>
+  <button class="tab-btn" onclick="showTab('pf700',this)">⚡ PF 700</button>
+  <button class="tab-btn" onclick="showTab('pf755',this)">⚡ PF 750/755</button>
+  <button class="tab-btn" onclick="showTab('pf7000',this)">⚡ PF 7000 MV</button>
+  <button class="tab-btn" onclick="showTab('comiss',this)">🚀 Comissionamento</button>
+  <button class="tab-btn" onclick="showTab('glossario',this)">📖 Glossário</button>
+  <button class="tab-btn" onclick="showTab('sobre',this)">👨‍🔧 Sobre</button>
 </div>
 
 <!-- ═══════════════════════════════════
@@ -229,6 +238,7 @@ ol.ip-ol li{color:var(--text)}
           <option value="PF4">PowerFlex 4</option>
           <option value="PF40">PowerFlex 40/40P</option>
           <option value="PF400">PowerFlex 400</option>
+          <option value="PF70">PowerFlex 70</option>
           <option value="PF520">PowerFlex 520</option>
           <option value="PF523">PowerFlex 523</option>
           <option value="PF525">PowerFlex 525</option>
@@ -240,6 +250,7 @@ ol.ip-ol li{color:var(--text)}
         </select>
       </div>
       <button class="analyze-btn" id="btnAnalyzeCam" onclick="analyzeWithAI('camera')" disabled>🤖 Analisar com IA</button>
+      <button class="cam-btn cam-btn-secondary" onclick="resetDiag()" style="width:100%">↺ Limpar / Nova consulta</button>
     </div>
     <!-- CÓDIGO -->
     <div class="code-input-area" id="codeArea">
@@ -250,6 +261,7 @@ ol.ip-ol li{color:var(--text)}
           <option value="PF4">PF 4</option>
           <option value="PF40">PF 40/40P</option>
           <option value="PF400">PF 400</option>
+          <option value="PF70">PF 70</option>
           <option value="PF520">PF 520</option>
           <option value="PF523">PF 523</option>
           <option value="PF525">PF 525</option>
@@ -261,8 +273,11 @@ ol.ip-ol li{color:var(--text)}
         </select>
       </div>
       <button class="analyze-btn" onclick="analyzeWithAI('code')">🤖 Consultar Diagnóstico</button>
+      <button class="cam-btn cam-btn-secondary" onclick="resetDiag()" style="width:100%">↺ Limpar</button>
     </div>
   </div>
+  <!-- Indicador online/offline -->
+  <div id="netStatus" style="display:none;margin:0 12px 8px;padding:8px 10px;border-radius:6px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;text-align:center"></div>
   <div class="history-bar" id="historyBar" style="display:none">
     <div class="history-label">⏱ Consultas Recentes</div>
     <div class="history-chips" id="historyChips"></div>
@@ -314,6 +329,15 @@ ol.ip-ol li{color:var(--text)}
      Mantidas identicamente — o JS é onde está a integração real
 ═══════════════════════════════════ -->
 
+<!-- PAGE: PF 70 -->
+<div class="page" id="page-pf70">
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 70</div><div class="sec-desc">Série 70 — Médio porte legacy (comum no Brasil)</div></div>
+  <div class="ip-info-box" style="margin:12px">📘 <strong>PF70:</strong> Pub. Rockwell 20A-UM001 / 20A-RM001. Códigos compatíveis em parte com PF700.</div>
+  <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf70',this.value)"/></div>
+  <div class="fault-list" id="fault-list-pf70"></div>
+  <div class="pb"></div>
+</div>
+
 <!-- PAGE: PF 520/523/525 -->
 <div class="page" id="page-pf525">
   <div class="sec-head"><div class="sec-title">⚡ PowerFlex 520 / 523 / 525</div><div class="sec-desc">Série 520 — Banco completo de falhas</div></div>
@@ -361,6 +385,7 @@ ol.ip-ol li{color:var(--text)}
   <div style="padding:12px 12px 0">
     <div class="chip-row" id="comissChips">
       <div class="chip" onclick="selectComiss('pf4',this)">PF 4/40</div>
+      <div class="chip" onclick="selectComiss('pf70',this)">PF 70</div>
       <div class="chip active" onclick="selectComiss('pf525',this)">PF 520/523/525</div>
       <div class="chip" onclick="selectComiss('pf527',this)">PF 527</div>
       <div class="chip" onclick="selectComiss('pf700',this)">PF 700</div>
@@ -399,6 +424,12 @@ ol.ip-ol li{color:var(--text)}
       </div>
       <div class="card-body">
         <p style="font-size:14px;line-height:1.8">Guia de campo para técnicos — diagnóstico IA, bancos de falhas PF4 ao PF7000, comissionamento e glossário em um único app.</p>
+        <div style="margin-top:12px;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:12px;line-height:1.8;color:var(--text2)">
+          <div style="display:flex;justify-content:space-between"><span>Versão</span><span style="color:var(--accent);font-family:var(--mono);font-weight:700">v3.0</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Atualizado</span><span style="color:var(--text);font-family:var(--mono)">Abril 2026</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Modelos</span><span style="color:var(--text);font-family:var(--mono)">PF4, 40, 400, 70, 525, 527, 700, 755, 7000</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Falhas no banco local</span><span style="color:var(--accent2);font-family:var(--mono);font-weight:700" id="faultCountSobre">–</span></div>
+        </div>
         <div class="warn-box" style="margin-top:10px">⚠️ Ferramenta de apoio. Consulte sempre os manuais oficiais Rockwell para decisões críticas de segurança.</div>
       </div>
     </div>
@@ -411,31 +442,115 @@ ol.ip-ol li{color:var(--text)}
 ═══════════════════════════════════ -->
 <script>
 // ══ BANCOS DE FALHAS ═══════════════════════════════════════
+// Fontes: Rockwell Pub. 22A/22B/22C-UM001 (PF4/40/400), 20A-UM001 (PF70),
+// PFLEX-RM001 (PF700), 520-UM001 (PF520-525), 750-PM001 (PF750/755),
+// 7000A-IN/7000-UM150 (PF7000 MV)
 const FAULTS = {
-  // ── PF4 (do Técnico Delta) ──
+  // ── PF4 ──
   pf4: [
     {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Interlock aberto','Entrada auxiliar configurada como proteção'],actions:['Verificar entrada auxiliar','Verificar fiação do intertravamento']},
     {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de fase / tensão de alimentação','Fusível queimado'],actions:['Verificar alimentação trifásica','Verificar fusíveis']},
     {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Queda momentânea na rede'],actions:['Verificar tensão da rede com multímetro','Verificar estabilidade da alimentação']},
     {code:'F5',name:'OverVoltage',type:'auto',causes:['Regeneração ou tensão alta','Desaceleração muito rápida'],actions:['Aumentar tempo de desaceleração','Verificar tensão de entrada']},
+    {code:'F6',name:'Motor Stalled',type:'manual',causes:['Motor travado mecanicamente','Aceleração muito rápida'],actions:['Verificar carga mecânica','Aumentar Accel Time','Verificar Current Limit']},
+    {code:'F7',name:'Motor Overload',type:'manual',causes:['I²t do motor disparou','Corrente nominal mal configurada'],actions:['Reduzir carga','Verificar P033 [Motor NP Amps]','Verificar ventilação do motor']},
+    {code:'F8',name:'Heatsink OvrTemp',type:'auto',causes:['Dissipador acima do limite','Ventilação obstruída'],actions:['Limpar passagens de ar','Verificar temperatura ambiente','Reduzir carga']},
+    {code:'F12',name:'HW OverCurrent',type:'manual',causes:['Curto na saída U/V/W','IGBT danificado'],actions:['Desconectar motor e testar','Medir isolamento entre fases','Substituir drive se persistir']},
+    {code:'F13',name:'Ground Fault',type:'manual',causes:['Fuga de corrente para terra','Isolamento do motor comprometido'],actions:['Megôhmetro no motor (≥500V CC)','Verificar cabos de saída']},
+    {code:'F33',name:'Auto Rstrt Tries',type:'manual',causes:['Drive excedeu nº de tentativas de auto-reset','Falha persistente não resolvida'],actions:['Identificar falha raiz antes de resetar','Aumentar A092 [Auto Rstrt Tries] após resolver causa']},
+    {code:'F38',name:'Phase U to Gnd',type:'manual',causes:['Curto fase U para terra','Cabo U danificado'],actions:['Megôhmetro fase U → terra','Inspecionar cabo de saída']},
+    {code:'F39',name:'Phase V to Gnd',type:'manual',causes:['Curto fase V para terra','Cabo V danificado'],actions:['Megôhmetro fase V → terra','Inspecionar cabo de saída']},
+    {code:'F40',name:'Phase W to Gnd',type:'manual',causes:['Curto fase W para terra','Cabo W danificado'],actions:['Megôhmetro fase W → terra','Inspecionar cabo de saída']},
+    {code:'F41',name:'Phase UV Short',type:'manual',causes:['Curto entre fases U-V','Enrolamento do motor danificado'],actions:['Medir resistência U-V','Inspecionar motor']},
+    {code:'F42',name:'Phase UW Short',type:'manual',causes:['Curto entre fases U-W','Enrolamento do motor danificado'],actions:['Medir resistência U-W','Inspecionar motor']},
+    {code:'F43',name:'Phase VW Short',type:'manual',causes:['Curto entre fases V-W','Enrolamento do motor danificado'],actions:['Medir resistência V-W','Inspecionar motor']},
+    {code:'F48',name:'Params Defaulted',type:'manual',causes:['Parâmetros voltaram a fábrica','Reset feito ou EEPROM corrompida'],actions:['Reprogramar parâmetros do motor','Restaurar backup via CCW']},
+    {code:'F63',name:'SW OverCurrent',type:'manual',causes:['Corrente acima do limite por software','Aceleração agressiva'],actions:['Aumentar Accel Time','Ajustar A089 [SW Current Trip]']},
+    {code:'F64',name:'Drive Overload',type:'manual',causes:['I²t do drive disparou','Sobrecarga prolongada'],actions:['Reduzir carga / ciclo de trabalho','Avaliar redimensionamento']},
+    {code:'F70',name:'Power Unit',type:'manual',causes:['Falha interna no estágio de potência'],actions:['Cicle energia','Substituir drive se persistir']},
+    {code:'F71',name:'Net Loss',type:'auto',causes:['Perda de comunicação Modbus/DSI','Cabo desconectado'],actions:['Verificar cabo de rede','Verificar timeout no mestre']},
+    {code:'F81',name:'Comm Loss',type:'auto',causes:['Perda de comunicação com adaptador','Cabo desconectado'],actions:['Verificar cabo','Verificar configuração do adaptador']},
+    {code:'F100',name:'Parameter Checksum',type:'manual',causes:['Checksum de parâmetros inválido','EEPROM corrompida'],actions:['Reset de fábrica via P053','Reprogramar e salvar parâmetros']},
+    {code:'F122',name:'I/O Board Fail',type:'manual',causes:['Falha na placa de I/O'],actions:['Cicle energia','Substituir drive se persistir']},
   ],
-  // ── PF40/40P (do Técnico Delta) ──
+  // ── PF40/40P ──
   pf40: [
     {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Interlock de segurança aberto','Sinal externo de trip'],actions:['Verificar fiação auxiliar','Verificar CLP/intertravamento']},
     {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de tensão DC bus <85%','Falta de fase'],actions:['Checar fusíveis e fases','Verificar contator de entrada']},
-    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Transformador subdimensionado'],actions:['Medir tensão AC com multímetro','Verificar qualidade da rede']},
+    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Transformador subdimensionado'],actions:['Medir tensão CA com multímetro','Verificar qualidade da rede']},
     {code:'F5',name:'OverVoltage',type:'auto',causes:['Desaceleração rápida ou regeneração','Tensão CA acima do nominal'],actions:['Aumentar Decel Time','Adicionar resistor de frenagem','Verificar tensão de entrada']},
     {code:'F6',name:'Motor Stalled',type:'manual',causes:['Motor travado ou sobrecarregado','Carga mecânica excessiva'],actions:['Reduzir carga / checar mecânica','Aumentar tempo de aceleração','Verificar rolamentos']},
     {code:'F7',name:'Motor Overload',type:'manual',causes:['Sobrecarga térmica','Corrente nominal configurada errada'],actions:['Verificar P033 Motor NP Amps','Reduzir carga','Verificar ventilação do motor']},
+    {code:'F8',name:'Heatsink OvrTemp',type:'auto',causes:['Dissipador quente','Filtro/ventilação obstruída'],actions:['Limpar passagens de ar','Verificar ventilador','Reduzir frequência PWM (A084)']},
+    {code:'F12',name:'HW OverCurrent',type:'manual',causes:['Curto na saída','IGBT danificado'],actions:['Desconectar motor e testar','Medir isolamento U/V/W']},
     {code:'F13',name:'Ground Fault',type:'manual',causes:['Fuga de corrente para terra','Isolamento do motor comprometido'],actions:['Medir isolamento do motor com Megôhmetro','Verificar cabos de saída']},
+    {code:'F33',name:'Auto Rstrt Tries',type:'manual',causes:['Excedeu tentativas de auto-reset'],actions:['Identificar e corrigir causa raiz','Configurar A092 / A093 conforme aplicação']},
     {code:'F38',name:'Phase U to Gnd',type:'manual',causes:['Curto fase-terra U','Cabo danificado'],actions:['Verificar cabos e motor','Medir isolamento fase U']},
+    {code:'F39',name:'Phase V to Gnd',type:'manual',causes:['Curto fase-terra V','Cabo danificado'],actions:['Verificar cabos e motor','Medir isolamento fase V']},
+    {code:'F40',name:'Phase W to Gnd',type:'manual',causes:['Curto fase-terra W','Cabo danificado'],actions:['Verificar cabos e motor','Medir isolamento fase W']},
+    {code:'F41',name:'Phase UV Short',type:'manual',causes:['Curto U-V','Motor danificado'],actions:['Medir resistência U-V','Inspecionar motor']},
+    {code:'F42',name:'Phase UW Short',type:'manual',causes:['Curto U-W','Motor danificado'],actions:['Medir resistência U-W','Inspecionar motor']},
+    {code:'F43',name:'Phase VW Short',type:'manual',causes:['Curto V-W','Motor danificado'],actions:['Medir resistência V-W','Inspecionar motor']},
+    {code:'F48',name:'Params Defaulted',type:'manual',causes:['Parâmetros voltaram aos defaults','Reset feito'],actions:['Reprogramar dados do motor','Restaurar backup via CCW']},
     {code:'F63',name:'SW OverCurrent',type:'manual',causes:['Corrente acima do limite de software','Aceleração muito rápida'],actions:['Ajustar A098 SW Current Trip','Aumentar tempo de aceleração']},
+    {code:'F64',name:'Drive Overload',type:'manual',causes:['I²t do drive disparou'],actions:['Reduzir ciclo de trabalho','Avaliar redimensionamento']},
+    {code:'F70',name:'Power Unit',type:'manual',causes:['Falha no estágio de potência'],actions:['Cicle energia','Substituir drive se persistir']},
+    {code:'F71',name:'Net Loss DSI',type:'auto',causes:['Perda de comunicação DSI/Modbus'],actions:['Verificar cabo de rede','Verificar mestre Modbus']},
+    {code:'F81',name:'Comm Loss',type:'auto',causes:['Perda de comunicação com adaptador'],actions:['Verificar cabo','Verificar configuração da rede']},
+    {code:'F100',name:'Parameter Checksum',type:'manual',causes:['EEPROM corrompida'],actions:['Reset de fábrica P053','Reprogramar parâmetros']},
+    {code:'F122',name:'I/O Board Fail',type:'manual',causes:['Falha na placa de I/O'],actions:['Cicle energia','Substituir drive']},
   ],
-  // ── PF400 (do Técnico Delta) ──
+  // ── PF400 ──
   pf400: [
+    {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Interlock aberto','Entrada auxiliar como proteção'],actions:['Verificar entrada auxiliar','Verificar fiação']},
+    {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de tensão CA','Fusível queimado'],actions:['Verificar alimentação','Verificar fusíveis']},
     {code:'F4',name:'UnderVoltage',type:'auto',causes:['Tensão de entrada baixa','Queda na rede'],actions:['Verificar entrada','Verificar fusíveis']},
     {code:'F5',name:'OverVoltage',type:'auto',causes:['Regeneração','Desaceleração brusca'],actions:['Adicionar resistor de frenagem','Aumentar tempo de desaceleração']},
-    {code:'F15',name:'Load Loss',type:'auto',causes:['Cinto quebrado ou perda de carga','Motor desconectado'],actions:['Verificar transmissão mecânica','Verificar conexão do motor']},
+    {code:'F6',name:'Motor Stalled',type:'manual',causes:['Motor travado','Carga excessiva'],actions:['Verificar mecânica','Aumentar Accel Time']},
+    {code:'F7',name:'Motor Overload',type:'manual',causes:['Sobrecarga térmica I²t'],actions:['Reduzir carga','Verificar Motor NP Amps']},
+    {code:'F8',name:'Heatsink OvrTemp',type:'auto',causes:['Dissipador quente','Ventilação obstruída'],actions:['Limpar filtros e ventiladores','Reduzir frequência PWM']},
+    {code:'F12',name:'HW OverCurrent',type:'manual',causes:['Curto na saída','IGBT comprometido'],actions:['Desconectar motor e testar','Medir isolamento']},
+    {code:'F13',name:'Ground Fault',type:'manual',causes:['Fuga para terra'],actions:['Megôhmetro motor e cabos','Substituir cabo se necessário']},
+    {code:'F15',name:'Load Loss',type:'auto',causes:['Cinto/correia quebrada ou perda de carga','Motor desconectado'],actions:['Verificar transmissão mecânica','Verificar conexão do motor']},
+    {code:'F33',name:'Auto Rstrt Tries',type:'manual',causes:['Excedeu tentativas de auto-reset'],actions:['Resolver falha raiz','Ajustar parâmetros de auto-restart']},
+    {code:'F38',name:'Phase U-Gnd',type:'manual',causes:['Curto fase U-terra'],actions:['Megôhmetro fase U','Inspecionar cabo']},
+    {code:'F39',name:'Phase V-Gnd',type:'manual',causes:['Curto fase V-terra'],actions:['Megôhmetro fase V','Inspecionar cabo']},
+    {code:'F40',name:'Phase W-Gnd',type:'manual',causes:['Curto fase W-terra'],actions:['Megôhmetro fase W','Inspecionar cabo']},
+    {code:'F48',name:'Params Defaulted',type:'manual',causes:['Defaults restaurados'],actions:['Reprogramar parâmetros do motor']},
+    {code:'F63',name:'SW OverCurrent',type:'manual',causes:['Sobrecorrente por software'],actions:['Ajustar limite SW Current Trip','Reduzir aceleração']},
+    {code:'F64',name:'Drive Overload',type:'manual',causes:['I²t do drive'],actions:['Reduzir carga','Redimensionar drive']},
+    {code:'F71',name:'Net Loss',type:'auto',causes:['Perda de comunicação serial'],actions:['Verificar cabo','Verificar mestre']},
+    {code:'F100',name:'Parameter Checksum',type:'manual',causes:['EEPROM corrompida'],actions:['Reset de fábrica','Reprogramar']},
+  ],
+  // ── PF70 (legacy comum no Brasil — base similar ao PF700) ──
+  pf70: [
+    {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Interlock auxiliar aberto','Trip externo do CLP'],actions:['Verificar borne auxiliar','Verificar lógica do CLP']},
+    {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de tensão CA','Falta de fase momentânea'],actions:['Monitorar tensão de entrada','Verificar fusíveis']},
+    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Barramento DC abaixo do mínimo','Tensão CA baixa'],actions:['Medir tensão CA','Verificar capacitores do bus']},
+    {code:'F5',name:'OverVoltage',type:'auto',causes:['Regeneração excessiva','Desaceleração brusca'],actions:['Aumentar Decel Time','Adicionar resistor de frenagem']},
+    {code:'F7',name:'Motor Overload',type:'manual',causes:['I²t do motor disparou','Motor NP Amps incorreto'],actions:['Reduzir carga','Verificar parâmetro Motor NP Amps','Inspecionar ventilação do motor']},
+    {code:'F8',name:'Heatsink OvrTemp',type:'auto',causes:['Dissipador quente','Ventilador com falha'],actions:['Verificar ventilador','Limpar filtros','Verificar temperatura ambiente']},
+    {code:'F12',name:'HW OverCurrent',type:'manual',causes:['Curto na saída','IGBT danificado'],actions:['Desconectar motor — se persistir, drive avariado','Medir isolamento']},
+    {code:'F13',name:'Ground Fault',type:'manual',causes:['Fuga para terra'],actions:['Megôhmetro ≥ 500V CC','Substituir cabo se necessário']},
+    {code:'F15',name:'Load Loss',type:'auto',causes:['Carga abaixo do esperado','Acoplamento quebrado'],actions:['Verificar acoplamento','Verificar parâmetro de detecção de perda de carga']},
+    {code:'F17',name:'Input Phase Loss',type:'manual',causes:['Perda de fase na entrada','Fusível queimado'],actions:['Medir tensão L1-L2, L2-L3, L1-L3','Verificar fusíveis individuais']},
+    {code:'F24',name:'Decel Inhibit',type:'manual',causes:['Drive não consegue desacelerar dentro dos limites','Falta de capacidade de absorção'],actions:['Aumentar Decel Time','Adicionar resistor de frenagem']},
+    {code:'F25',name:'Overspeed Limit',type:'manual',causes:['Velocidade excedeu limite','Carga regenerativa empurrando o motor'],actions:['Verificar parâmetros de velocidade máxima','Verificar dimensionamento']},
+    {code:'F29',name:'Analog Loss',type:'auto',causes:['Sinal 4-20mA perdido','Cabo do transmissor rompido'],actions:['Medir sinal no borne','Verificar transmissor']},
+    {code:'F33',name:'Auto Rstrt Tries',type:'manual',causes:['Excedeu tentativas','Falha não resolvida'],actions:['Resolver causa raiz','Ajustar A174 / A175']},
+    {code:'F35',name:'Brake Resistor OL',type:'manual',causes:['Resistor de frenagem em sobrecarga','Frenagens muito frequentes'],actions:['Verificar resistor','Reavaliar ciclo de frenagem']},
+    {code:'F38',name:'Phase U to Gnd',type:'manual',causes:['Curto fase U-terra'],actions:['Megôhmetro fase U']},
+    {code:'F39',name:'Phase V to Gnd',type:'manual',causes:['Curto fase V-terra'],actions:['Megôhmetro fase V']},
+    {code:'F40',name:'Phase W to Gnd',type:'manual',causes:['Curto fase W-terra'],actions:['Megôhmetro fase W']},
+    {code:'F50',name:'Encoder Loss',type:'manual',causes:['Sinal de encoder perdido','Cabo danificado'],actions:['Verificar cabo do encoder','Medir alimentação do encoder']},
+    {code:'F58',name:'Inverter Overload',type:'manual',causes:['Sobrecarga prolongada do inversor'],actions:['Reduzir carga','Avaliar redimensionamento']},
+    {code:'F63',name:'SW OverCurrent',type:'manual',causes:['Sobrecorrente por software'],actions:['Aumentar Accel Time','Ajustar SW Current Trip']},
+    {code:'F70',name:'Power Unit',type:'manual',causes:['Falha no estágio de potência'],actions:['Cicle energia','Inspeção interna por técnico habilitado']},
+    {code:'F75',name:'Drive Powerup',type:'manual',causes:['Falha durante inicialização do drive'],actions:['Cicle energia','Verificar tensões internas']},
+    {code:'F79',name:'Excessive Load',type:'manual',causes:['Carga excessiva detectada durante autotune'],actions:['Verificar carga','Repetir autotune com motor desacoplado']},
+    {code:'F81',name:'Comm Loss',type:'auto',causes:['Perda de comunicação com adaptador de rede'],actions:['Verificar cabo de rede','Verificar timeout do controlador']},
+    {code:'F100',name:'NV Mem Init',type:'manual',causes:['Memória não-volátil corrompida'],actions:['Reset de fábrica','Reprogramar parâmetros']},
+    {code:'F102',name:'Reflective Wave',type:'auto',causes:['Detectada onda refletida no cabo do motor','Cabo do motor longo demais'],actions:['Reduzir comprimento do cabo','Instalar filtro dV/dt ou senoidal','Reduzir frequência PWM']},
   ],
   // ── PF525 ──
   pf525: [
@@ -448,46 +563,90 @@ const FAULTS = {
     {code:'F008',name:'Heatsink OvrTemp',type:'auto',causes:['Ventilação bloqueada','Temperatura ambiente alta','Ventilador com defeito'],actions:['Limpe filtros e passagens de ar','Verifique ventilador interno','Reduza frequência PWM']},
     {code:'F012',name:'HW OverCurrent',type:'manual',causes:['Curto-circuito na saída','Motor com enrolamento danificado'],actions:['Desconecte motor e teste','Meça resistência entre fases','Substitua drive se persistir']},
     {code:'F013',name:'Ground Fault',type:'manual',causes:['Fuga para terra','Cabo com isolamento danificado'],actions:['Inspecione isolamento','Meça IR com Megôhmetro','Desconecte motor e teste isolado']},
+    {code:'F015',name:'Load Loss',type:'auto',causes:['Carga abaixo do limite','Acoplamento mecânico rompido'],actions:['Verifique acoplamento mecânico','Verifique A452 [Load Loss Level]']},
+    {code:'F029',name:'Analog Input Loss',type:'auto',causes:['Sinal 4-20mA <1mA','Transmissor desconectado'],actions:['Medir sinal no borne com multímetro','Verificar transmissor e fonte de 24V']},
+    {code:'F033',name:'Auto Rstrt Tries',type:'manual',causes:['Excedeu nº de tentativas de auto-reset','Falha persistente'],actions:['Identificar e corrigir falha raiz','Ajustar A092/A093']},
+    {code:'F048',name:'Params Defaulted',type:'manual',causes:['Parâmetros voltaram aos defaults','Reset executado'],actions:['Reprogramar parâmetros do motor','Restaurar backup CCW']},
     {code:'F059',name:'Safety Open',type:'manual',causes:['Entradas de segurança (Safety 1/2) abertas','Cabo desconectado'],actions:['Verifique bornes Safety 1 e Safety 2','Jumper se não utilizado']},
+    {code:'F063',name:'SW OverCurrent',type:'manual',causes:['Corrente acima do limite de software','Aceleração agressiva'],actions:['Ajustar A486 [SW Current Trip]','Aumentar P041 Accel Time']},
+    {code:'F064',name:'Drive Overload',type:'manual',causes:['I²t do drive disparou'],actions:['Reduzir ciclo de trabalho','Avaliar redimensionamento']},
+    {code:'F070',name:'Power Unit',type:'manual',causes:['Falha no estágio de potência'],actions:['Cicle energia','Substituir drive se persistir']},
     {code:'F071',name:'DSI Net Loss',type:'auto',causes:['Perda de comunicação Modbus/DSI','Cabo desconectado'],actions:['Verifique cablagem DSI','Cicle energia','Verifique mestre Modbus']},
     {code:'F073',name:'Embedded ENet Loss',type:'auto',causes:['Adaptador EtherNet/IP perdeu conexão','Cabo Ethernet danificado'],actions:['Verifique cabo Ethernet','Verifique IP do drive','Verifique controlador CLP']},
+    {code:'F081',name:'Comm Loss',type:'auto',causes:['Perda de comunicação com adaptador'],actions:['Verifique cabo','Verifique configuração da rede']},
+    {code:'F091',name:'EN Loss',type:'auto',causes:['Perda de Ethernet','Cabo desconectado'],actions:['Verifique LEDs do adaptador','Verifique IP/subnet']},
     {code:'F100',name:'Parameter Storage',type:'manual',causes:['Armazenamento corrompido','Falha na EEPROM'],actions:['Use P053 para reset de fábrica','Reprogramar parâmetros','Restaurar via CCW']},
+    {code:'F111',name:'Drive Hardware',type:'manual',causes:['Falha de hardware interna'],actions:['Cicle energia','Verificar firmware','Substituir se persistir']},
   ],
   // ── PF527 ──
   pf527: [
+    {code:'F002',name:'Auxiliary Input',type:'manual',causes:['Entrada auxiliar aberta','Trip externo do CLP'],actions:['Verificar borne auxiliar','Verificar lógica do controlador']},
+    {code:'F003',name:'Power Loss',type:'auto',causes:['Queda de tensão CA'],actions:['Verificar alimentação','Verificar fusíveis']},
     {code:'F004',name:'UnderVoltage',type:'auto',causes:['Tensão abaixo do limite','Queda momentânea na rede'],actions:['Monitore tensão','Ajuste P033/P034','Verifique alimentação']},
     {code:'F005',name:'OverVoltage',type:'auto',causes:['Regeneração excessiva','Tensão CA alta','Desaceleração rápida'],actions:['Aumente tempo de decel','Adicione resistor de frenagem','Habilite DC Bus Regulator']},
+    {code:'F006',name:'Motor Stalled',type:'manual',causes:['Motor travado','Carga excessiva'],actions:['Verificar mecânica','Aumentar Accel Time']},
     {code:'F007',name:'Motor Overload',type:'manual',causes:['Sobrecarga térmica do motor','Corrente nominal errada'],actions:['Reduza carga','Verifique parâmetros do motor']},
     {code:'F008',name:'Heatsink OvrTemp',type:'auto',causes:['Ventilação bloqueada','Temperatura ambiente alta'],actions:['Limpe filtros','Melhore ventilação']},
+    {code:'F012',name:'HW OverCurrent',type:'manual',causes:['Curto na saída','IGBT comprometido'],actions:['Desconectar motor e testar','Medir isolamento']},
+    {code:'F013',name:'Ground Fault',type:'manual',causes:['Fuga para terra'],actions:['Megôhmetro no motor','Inspecionar cabo']},
+    {code:'F029',name:'Analog Input Loss',type:'auto',causes:['Sinal 4-20mA perdido'],actions:['Medir sinal','Verificar transmissor']},
+    {code:'F059',name:'Safety Open',type:'manual',causes:['STO aberto','Botão de emergência atuado'],actions:['Verificar bornes Safety','Reposicionar emergência']},
+    {code:'F073',name:'Embedded ENet Loss',type:'auto',causes:['EtherNet/IP perdeu conexão (PF527 é network-only)','Cabo desconectado'],actions:['Verificar cabo Ethernet','Verificar IP e CLP em Run','Verificar timeout']},
+    {code:'F100',name:'Parameter Storage',type:'manual',causes:['EEPROM corrompida'],actions:['Reset de fábrica','Reprogramar via CCW/Studio 5000']},
   ],
   // ── PF700 ──
   pf700: [
-    {code:'F002',name:'Auxiliary Input',type:'manual',causes:['Entrada auxiliar aberta','CLP enviou trip externo'],actions:['Verifique borne auxiliar','Verifique lógica do CLP','Confirme A410']},
-    {code:'F003',name:'Power Loss',type:'auto',causes:['Queda de tensão CA','Tensão abaixo do mínimo'],actions:['Monitore tensão de entrada','Verifique cabos e fusíveis']},
-    {code:'F004',name:'UnderVoltage',type:'auto',causes:['Barramento DC abaixo do mínimo (~375V para 460V)','Fusível queimado'],actions:['Monitore tensão CA','Verifique fusíveis','Meça tensão DC no barramento']},
-    {code:'F005',name:'OverVoltage',type:'auto',causes:['Barramento DC excedeu ~810V para 460V','Desaceleração brusca'],actions:['Aumente tempo de desaceleração P042','Verifique resistor de frenagem','Monitore tensão CA']},
-    {code:'F007',name:'Motor Overload',type:'manual',causes:['Proteção I²t disparada','Corrente nominal configurada errada'],actions:['Reduza carga','Corrija P036 (Motor NP Amps)','Inspecione motor','Verifique A531 [Overload Mode]']},
-    {code:'F008',name:'Heatsink OvrTemp',type:'auto',causes:['Temperatura do dissipador acima de 100°C','Ventilador com falha'],actions:['Limpe ventilador','Limpe filtros e passagens de ar','Reduza frequência PWM (A437)']},
-    {code:'F012',name:'HW OverCurrent',type:'manual',causes:['Corrente excedeu limite de hardware','Curto nos terminais U/V/W'],actions:['Desconecte motor — se persistir, substitua drive','Meça resistência de isolamento','Inspecione cabos']},
-    {code:'F013',name:'Ground Fault',type:'manual',causes:['Corrente de fuga para terra','Cabo com isolamento comprometido'],actions:['Meça IR com Megôhmetro ≥ 500V DC','Substitua cabo danificado','Inspecione motor']},
-    {code:'F029',name:'Analog Loss',type:'auto',causes:['Sinal 4-20mA perdido (<1mA)','Fio rompido','Transmissor sem alimentação'],actions:['Verifique sinal no borne com multímetro','Inspecione cabeamento','Verifique alimentação do transmissor']},
-    {code:'F038',name:'Phase Loss Input',type:'manual',causes:['Perda de fase na alimentação','Fusível queimado em uma fase'],actions:['Meça tensão CA entre L1-L2, L2-L3, L1-L3','Verifique fusíveis individualmente']},
-    {code:'F059',name:'Safety Open',type:'manual',causes:['Circuito STO aberto','Emergência pressionada'],actions:['Verifique terminais S1, S2','Reposicione dispositivo de segurança']},
-    {code:'F081',name:'Port 1 Net Loss',type:'auto',causes:['Perda de comunicação no adaptador de rede','Cabo desconectado'],actions:['Verifique cabo de rede','Verifique controlador em modo Run','Verifique timeout']},
+    {code:'F2',name:'Auxiliary Input',type:'manual',causes:['Entrada auxiliar aberta','CLP enviou trip externo'],actions:['Verifique borne auxiliar','Verifique lógica do CLP','Confirme A410']},
+    {code:'F3',name:'Power Loss',type:'auto',causes:['Queda de tensão CA','Tensão abaixo do mínimo'],actions:['Monitore tensão de entrada','Verifique cabos e fusíveis']},
+    {code:'F4',name:'UnderVoltage',type:'auto',causes:['Barramento DC abaixo do mínimo (~375V para 460V)','Fusível queimado'],actions:['Monitore tensão CA','Verifique fusíveis','Meça tensão DC no barramento']},
+    {code:'F5',name:'OverVoltage',type:'auto',causes:['Barramento DC excedeu ~810V para 460V','Desaceleração brusca'],actions:['Aumente tempo de desaceleração P042','Verifique resistor de frenagem','Monitore tensão CA']},
+    {code:'F7',name:'Motor Overload',type:'manual',causes:['Proteção I²t disparada','Corrente nominal configurada errada'],actions:['Reduza carga','Corrija P036 (Motor NP Amps)','Inspecione motor','Verifique A531 [Overload Mode]']},
+    {code:'F8',name:'Heatsink OvrTemp',type:'auto',causes:['Temperatura do dissipador acima de 100°C','Ventilador com falha'],actions:['Limpe ventilador','Limpe filtros e passagens de ar','Reduza frequência PWM (A437)']},
+    {code:'F12',name:'HW OverCurrent',type:'manual',causes:['Corrente excedeu limite de hardware','Curto nos terminais U/V/W'],actions:['Desconecte motor — se persistir, substitua drive','Meça resistência de isolamento','Inspecione cabos']},
+    {code:'F13',name:'Ground Fault',type:'manual',causes:['Corrente de fuga para terra','Cabo com isolamento comprometido'],actions:['Meça IR com Megôhmetro ≥ 500V DC','Substitua cabo danificado','Inspecione motor']},
+    {code:'F15',name:'Load Loss',type:'auto',causes:['Carga abaixo do limite','Correia/acoplamento rompido'],actions:['Verificar mecânica','Verificar parâmetro de detecção']},
+    {code:'F17',name:'Input Phase Loss',type:'manual',causes:['Perda de fase de entrada'],actions:['Medir L1-L2, L2-L3, L1-L3','Verificar fusíveis']},
+    {code:'F24',name:'Decel Inhibit',type:'manual',causes:['Não consegue desacelerar dentro do tempo','Bus DC iria subir demais'],actions:['Aumentar Decel Time','Resistor de frenagem']},
+    {code:'F29',name:'Analog Loss',type:'auto',causes:['Sinal 4-20mA perdido (<1mA)','Fio rompido','Transmissor sem alimentação'],actions:['Verifique sinal no borne com multímetro','Inspecione cabeamento','Verifique alimentação do transmissor']},
+    {code:'F33',name:'Auto Rstrt Tries',type:'manual',causes:['Excedeu tentativas de auto-reset'],actions:['Resolver falha raiz antes de resetar']},
+    {code:'F38',name:'Phase Loss Input',type:'manual',causes:['Perda de fase na alimentação','Fusível queimado em uma fase'],actions:['Meça tensão CA entre L1-L2, L2-L3, L1-L3','Verifique fusíveis individualmente']},
+    {code:'F41',name:'Phase UV Short',type:'manual',causes:['Curto U-V','Motor danificado'],actions:['Medir resistência U-V','Inspecionar motor']},
+    {code:'F48',name:'Params Defaulted',type:'manual',causes:['Reset feito','EEPROM voltou ao default'],actions:['Reprogramar parâmetros','Restaurar backup CCW/HIM']},
+    {code:'F59',name:'Safety Open',type:'manual',causes:['Circuito STO aberto','Emergência pressionada'],actions:['Verifique terminais S1, S2','Reposicione dispositivo de segurança']},
+    {code:'F63',name:'SW OverCurrent',type:'manual',causes:['Sobrecorrente software','Aceleração rápida'],actions:['Ajustar limite SW','Aumentar Accel Time']},
+    {code:'F64',name:'Drive Overload',type:'manual',causes:['I²t do drive disparou'],actions:['Reduzir carga','Avaliar redimensionamento']},
+    {code:'F70',name:'Power Unit',type:'manual',causes:['Falha no estágio de potência'],actions:['Cicle energia','Inspeção interna']},
+    {code:'F79',name:'Excessive Load (Tune)',type:'manual',causes:['Carga excessiva detectada durante autotune'],actions:['Repetir autotune com motor desacoplado','Verificar carga']},
+    {code:'F81',name:'Port 1 Net Loss',type:'auto',causes:['Perda de comunicação no adaptador de rede','Cabo desconectado'],actions:['Verifique cabo de rede','Verifique controlador em modo Run','Verifique timeout']},
     {code:'F100',name:'Encoder Loss',type:'manual',causes:['Sinal do encoder perdido','Cabo danificado'],actions:['Verifique cabos do encoder','Meça tensão de alimentação','Substitua encoder se necessário']},
+    {code:'F102',name:'Reflective Wave',type:'auto',causes:['Onda refletida detectada','Cabo do motor longo'],actions:['Reduzir cabo do motor','Filtro dV/dt ou senoidal']},
   ],
   // ── PF755 ──
   pf755: [
+    {code:'2',name:'Auxiliary Input',type:'manual',causes:['Entrada auxiliar aberta','Trip externo'],actions:['Verificar borne configurado como Aux Fault','Verificar CLP']},
     {code:'3',name:'Power Loss',type:'auto',causes:['Queda de energia CA','Tensão abaixo do mínimo por >0.5s'],actions:['Monitore tensão CA','Verifique fusíveis e disjuntores']},
     {code:'4',name:'UnderVoltage',type:'auto',causes:['Barramento DC abaixo do mínimo','Queda momentânea na rede'],actions:['Verifique tensão CA','Meça tensão DC no barramento','Verifique capacitores']},
     {code:'5',name:'OverVoltage',type:'auto',causes:['Barramento DC acima de 810V (460V)','Desaceleração rápida com carga inercial'],actions:['Aumente tempo de desaceleração','Verifique resistor de frenagem','Habilite controle de bus (Param 380)']},
+    {code:'6',name:'Motor Stall',type:'manual',causes:['Motor travado','Carga excessiva na partida'],actions:['Verificar mecânica','Aumentar Accel Time','Verificar Current Limit']},
     {code:'7',name:'Motor Overload',type:'manual',causes:['Proteção I²t disparada','Parâmetros de placa incorretos'],actions:['Reduza carga','Corrija Motor NP Amps (Port 0:P39)','Inspecione ventilação do motor']},
+    {code:'8',name:'Heatsink OvrTemp',type:'auto',causes:['Dissipador acima do limite','Ventilação bloqueada'],actions:['Limpar filtros','Verificar ventilador','Reduzir PWM']},
     {code:'12',name:'HW OverCurrent',type:'manual',causes:['Corrente excedeu limite de hardware','Curto nos terminais U/V/W'],actions:['Desconecte motor — se persistir, problema é no drive','Meça resistência de isolamento','Verifique IGBTs']},
     {code:'13',name:'Ground Fault',type:'manual',causes:['Fuga de corrente para terra','Cabo com isolamento danificado'],actions:['Meça IR com Megôhmetro ≥ 500V DC','Substitua cabo danificado','Instale filtro dU/dt']},
+    {code:'17',name:'Input Phase Loss',type:'manual',causes:['Perda de fase na entrada'],actions:['Medir L1-L2, L2-L3, L1-L3','Verificar fusíveis']},
+    {code:'24',name:'Decel Inhibit',type:'manual',causes:['Não desacelera no tempo definido','DC bus iria estourar'],actions:['Aumentar Decel Time','Resistor de frenagem','Habilitar bus regulator']},
+    {code:'29',name:'Analog In Loss',type:'auto',causes:['Sinal 4-20mA perdido'],actions:['Medir sinal no borne','Verificar transmissor']},
+    {code:'33',name:'Auto Restart Retries',type:'manual',causes:['Excedeu tentativas de auto-reset'],actions:['Resolver falha raiz antes de resetar']},
+    {code:'38',name:'Phase Loss Input',type:'manual',causes:['Perda de fase na alimentação'],actions:['Medir tensão entre fases','Verificar fusíveis']},
+    {code:'48',name:'Params Defaulted',type:'manual',causes:['Defaults restaurados'],actions:['Reprogramar via Studio 5000/HIM','Restaurar backup']},
     {code:'59',name:'Safety Open',type:'manual',causes:['Circuito STO aberto','Módulo de segurança atuado'],actions:['Verifique terminais STO (S1, S2)','Confirme que emergência foi resolvida']},
+    {code:'64',name:'Drive Overload',type:'manual',causes:['I²t do drive disparou'],actions:['Reduzir carga','Avaliar redimensionamento']},
     {code:'73',name:'Embedded ENet Loss',type:'auto',causes:['Perda de comunicação EtherNet/IP','Cabo desconectado','IP incorreto'],actions:['Verifique cabo Ethernet e LEDs','Verifique controlador em modo Run','Confirme IP, subnet, gateway']},
-    {code:'100',name:'Heatsink OvrTemp',type:'auto',causes:['Temperatura do dissipador acima de 95-100°C','Ventilador bloqueado'],actions:['Verifique ventilador — Param 935','Limpe passagens de ar','Reduza frequência PWM']},
+    {code:'81',name:'Port 1 DPI Loss',type:'auto',causes:['Perda de comunicação no Port 1','Adaptador desconectado'],actions:['Verificar adaptador no Port 1','Verificar cabo']},
+    {code:'100',name:'NV Mem Init',type:'manual',causes:['Memória não-volátil corrompida'],actions:['Reset de fábrica','Reprogramar parâmetros']},
     {code:'105',name:'Fan Speed Low',type:'auto',causes:['Ventilador abaixo da velocidade mínima','Rolamento desgastado'],actions:['Verifique Param 935 InHSFan Speed','Limpe pás','Substitua ventilador']},
+    {code:'109',name:'SW Encoder Loss',type:'manual',causes:['Encoder perdido detectado por software'],actions:['Verificar cabos do encoder','Verificar alimentação']},
+    {code:'121',name:'Proc Watchdog',type:'manual',causes:['Watchdog do processador disparou','Falha de firmware'],actions:['Cicle energia','Atualizar firmware']},
+    {code:'122',name:'I/O Comm Loss',type:'manual',causes:['Perda de comunicação com módulo de I/O da Option Card'],actions:['Verificar cartão opcional','Cicle energia']},
   ],
   // ── PF7000 ──
   pf7000: [
@@ -510,6 +669,13 @@ const COMISS = {
     {title:'1. Verificação — PF 4/40',body:'✓ Tensão de alimentação correta (110V ou 220V monofásico/trifásico)<br>✓ Cabos de entrada e saída apertados<br>✓ Terra (PE) conectado<br>✓ Motor desacoplado para primeiro teste'},
     {title:'2. Parâmetros do motor',body:'Configure P033 (Volts), P034 (Hz=60), P035 (RPM), P036 (Amps) conforme placa do motor'},
     {title:'3. Rampas e teste',body:'P041 = Accel Time (5-30s)<br>P042 = Decel Time (5-30s)<br>Teste em Local com 10Hz, depois aumente gradualmente'},
+  ],
+  pf70: [
+    {title:'1. Pré-energização PF 70',body:'✓ Drive de médio porte legacy — verificar ventilação<br>✓ Tensão trifásica conforme nameplate (200-240V ou 380-480V)<br>✓ Aterramento correto no borne PE<br>✓ Motor desacoplado para primeiro teste<br>✓ Verifique espaçamento de montagem (mín. 25mm lateral)'},
+    {title:'2. Dados do motor',body:'P031=Volts, P032=Hz (60), P033=Amps (placa), P034=RPM, P035=kW<br>⚠️ Atenção: parâmetros diferem do PF700 — confirme na Pub. 20A-UM001'},
+    {title:'3. Rampas e limites',body:'P036=Accel Time (5-30s)<br>P037=Decel Time (5-30s)<br>A174=Auto Restart Tries (0=desligado)<br>A098=SW Current Trip'},
+    {title:'4. Autotune',body:'A095 [Autotune]: 1=Static Tune (parado), 2=Rotate Tune (girando). Execute com motor desacoplado. Aguarde "Done".'},
+    {title:'5. Primeiro run',body:'1. Local → Start em 10Hz<br>2. Observe corrente (parâmetro de diagnóstico)<br>3. Aumente gradualmente até 60Hz<br>4. Verifique sentido de rotação — inverta 2 fases se necessário<br>5. Stop e verifique desaceleração normal'},
   ],
   pf525: [
     {title:'1. Verificação antes de energizar',body:'✓ Tensão de alimentação correta (nameplate)<br>✓ Cabos L1/L2/L3 fixos<br>✓ Cabos U/V/W fixos<br>✓ Terra (PE) conectado<br>✓ Motor desacoplado para primeiro teste'},
@@ -545,31 +711,65 @@ const COMISS = {
 // ══ GLOSSÁRIO ═══════════════════════════════════════
 const GLOSSARIO = [
   {t:'Accel Time',s:'P041',p:'Tempo de Aceleração',d:'Tempo em segundos para ir de 0 Hz até a frequência máxima.'},
+  {t:'Auto Restart',s:'A092',p:'Reinício Automático',d:'Número de tentativas que o drive faz para religar automaticamente após falha auto-reset.'},
   {t:'Boost Voltage',s:'A489',p:'Tensão de Boost',d:'Tensão extra em baixas frequências para torque na partida.'},
+  {t:'Brake Resistor',s:'',p:'Resistor de Frenagem',d:'Componente externo que dissipa energia regenerativa durante desaceleração.'},
   {t:'CCW',s:'',p:'Connected Components Workbench',d:'Software gratuito Rockwell para configuração de inversores PowerFlex.'},
   {t:'Current Limit',s:'A484',p:'Limite de Corrente',d:'Corrente máxima de saída permitida pelo inversor.'},
   {t:'DC Bus',s:'',p:'Barramento DC',d:'Estágio intermediário onde CA é retificada para CC antes de ser invertida.'},
+  {t:'DC Bus Reg',s:'P041',p:'Regulador de Bus DC',d:'Função que reduz automaticamente a desaceleração para evitar sobretensão no barramento DC.'},
+  {t:'Decel Time',s:'P042',p:'Tempo de Desaceleração',d:'Tempo em segundos para ir da frequência máxima até 0 Hz.'},
   {t:'EtherNet/IP',s:'',p:'Ethernet Industrial Protocol',d:'Protocolo de comunicação industrial baseado em Ethernet padrão.'},
   {t:'Ground Fault',s:'F013',p:'Falta à Terra',d:'Corrente detectada fluindo para o terra. Indica isolamento comprometido.'},
+  {t:'HIM',s:'',p:'Human Interface Module',d:'Módulo de interface com display e teclado para operação e programação do drive (PF700/755).'},
+  {t:'I²t',s:'',p:'Proteção Térmica (I quadrado t)',d:'Método de proteção que calcula o acúmulo térmico (corrente² × tempo). Protege motor e drive contra sobrecarga.'},
   {t:'IGBT',s:'',p:'Transistor Bipolar de Porta Isolada',d:'Componente de potência que gera a saída CA variável.'},
-  {t:'Motor NP Amps',s:'P036',p:'Corrente Nominal do Motor',d:'Corrente de placa do motor. Crítico para proteção de sobrecarga.'},
+  {t:'IR',s:'',p:'Resistência de Isolamento',d:'Medida com Megôhmetro — indica a qualidade do isolamento. Valor mín. típico: 10 MΩ.'},
+  {t:'LOTO',s:'',p:'Lock Out / Tag Out',d:'Procedimento de segurança: bloqueio e etiquetagem de fontes de energia antes de manutenção.'},
+  {t:'Megôhmetro',s:'',p:'Medidor de Isolamento',d:'Instrumento que mede resistência de isolamento aplicando alta tensão CC (normalmente 500V ou 1000V).'},
+  {t:'Motor NP Amps',s:'P036',p:'Corrente Nominal do Motor',d:'Corrente de placa do motor. Crítico para proteção de sobrecarga. NUNCA configurar acima do valor real da placa.'},
   {t:'Motor NP Hz',s:'P034',p:'Frequência Nominal',d:'Frequência de trabalho. No Brasil = 60 Hz.'},
-  {t:'PWM',s:'',p:'Modulação por Largura de Pulso',d:'Técnica para gerar tensão variável para o motor.'},
+  {t:'Motor NP Volts',s:'P033',p:'Tensão Nominal do Motor',d:'Tensão de placa do motor — inserir valor exato para proteção correta.'},
+  {t:'PWM',s:'',p:'Modulação por Largura de Pulso',d:'Técnica para gerar tensão variável para o motor. Frequências mais altas = motor mais silencioso, mas drive esquenta mais.'},
+  {t:'SGCT',s:'',p:'Symmetrical Gate Comm. Thyristor',d:'Componente de potência usado no inversor do PF 7000 MV.'},
   {t:'STO',s:'',p:'Safe Torque Off',d:'Função de segurança que elimina torque sem desligar o inversor.'},
+  {t:'Studio 5000',s:'',p:'Ambiente de Engenharia Rockwell',d:'Software para programação de CLPs e configuração de drives PF750/755 via EtherNet/IP.'},
   {t:'VFD',s:'',p:'Inversor de Frequência',d:'Variable Frequency Drive. Controla velocidade de motores CA.'},
+  {t:'dV/dt',s:'',p:'Filtro de dV/dt',d:'Filtro na saída do drive que reduz picos de tensão causados pela comutação PWM. Protege o isolamento do motor.'},
 ];
 
 // ══ ESTADO ═══════════════════════════════════════
 let stream=null,capturedImageBase64=null,faultHistory=[];
 try{faultHistory=JSON.parse(localStorage.getItem('fhist')||'[]')}catch(e){faultHistory=[]}
 
+// ══ TOAST NOTIFICATION ═══════════════════════════
+function showToast(msg,type='info'){
+  const c=document.getElementById('toastContainer');if(!c)return;
+  const t=document.createElement('div');
+  t.className='toast toast-'+type;
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>{try{c.removeChild(t)}catch(e){}},3200);
+}
+
 // ══ TABS ═══════════════════════════════════════
-function showTab(id){
+function showTab(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  event.target.classList.add('active');
-  event.target.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  const page=document.getElementById('page-'+id);
+  if(!page){console.warn('Tab not found:',id);return}
+  page.classList.add('active');
+  // Resolve botão: parâmetro explícito ou busca pelo onclick
+  let target=btn;
+  if(!target){
+    target=Array.from(document.querySelectorAll('.tab-btn')).find(b=>(b.getAttribute('onclick')||'').includes("'"+id+"'"));
+  }
+  if(target){
+    target.classList.add('active');
+    try{target.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}catch(e){}
+  }
+  // Scroll para o topo da página ao trocar de aba
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function showSubTab(drive,tab,btn){
@@ -596,7 +796,7 @@ async function startCamera(){
     const v=document.getElementById('camera-preview');v.srcObject=stream;v.style.display='block';
     document.getElementById('btnStartCam').style.display='none';
     document.getElementById('btnCapture').style.display='block';
-  }catch(e){alert('Câmera não disponível. Use a galeria.')}
+  }catch(e){showToast('📷 Câmera não disponível. Use a galeria.','warn')}
 }
 function capturePhoto(){
   const v=document.getElementById('camera-preview'),c=document.getElementById('camera-canvas');
@@ -614,14 +814,29 @@ function handleFile(e){const file=e.target.files[0];if(!file)return;const reader
 
 // ══ MAPEAMENTO DE DRIVE ═══════════════════════════════════════
 function getDriveKey(driveStr){
-  if(!driveStr)return null;const d=driveStr.toUpperCase();
-  if(d.includes('7000'))return'pf7000';if(d.includes('755')||d.includes('750'))return'pf755';
-  if(d.includes('700'))return'pf700';if(d.includes('527'))return'pf527';
+  if(!driveStr)return null;
+  const d=driveStr.toString().toUpperCase().replace(/\s+/g,'');
+  if(d.includes('7000'))return'pf7000';
+  if(d.includes('755')||d.includes('753')||d.includes('750'))return'pf755';
+  if(d.includes('700'))return'pf700';
+  if(d.includes('527'))return'pf527';
   if(d.includes('525')||d.includes('523')||d.includes('520'))return'pf525';
-  if(d.includes('400'))return'pf400';if(d.includes('40'))return'pf40';
-  if(d.includes('4'))return'pf4';return null;
+  if(d.includes('400'))return'pf400';
+  if(d.includes('40'))return'pf40';
+  // PF70 vem antes de PF4 — caso contrário "PF70" cairia em PF4
+  if(d.includes('70'))return'pf70';
+  if(d.includes('4'))return'pf4';
+  return null;
 }
-function normalizeCode(c){if(!c)return'';c=c.toString().toUpperCase().trim();c=c.replace(/^F0*/,'');if(c.match(/^0+\d/))c=c.replace(/^0+/,'');return c}
+function normalizeCode(c){
+  if(c==null)return'';
+  c=c.toString().toUpperCase().trim();
+  if(!c)return'';
+  // Remove prefixo F e zeros à esquerda. Ex: "F005" → "5", "005" → "5", "F" → ""
+  c=c.replace(/^F0*/,'');
+  c=c.replace(/^0+(\d)/,'$1');
+  return c;
+}
 function searchLocalFault(code,driveKey){
   const target=normalizeCode(code);if(!target)return null;
   const keys=driveKey?[driveKey,...Object.keys(FAULTS).filter(k=>k!==driveKey)]:Object.keys(FAULTS);
@@ -654,7 +869,7 @@ function extractJSON(txt){
 function _jf(t){return{code:'?',name:'Diagnóstico IA',type:'manual',confidence:30,confidence_reason:'Resposta não estruturada — confira manualmente',description:t.slice(0,400),causes:['Veja descrição acima'],actions:['⚠️ CONFIRME no manual técnico Rockwell antes de executar qualquer ação'],source:'ia'}}
 
 // ══ DRIVELABELS GLOBAL ═══════════════════════════════════════
-const DRIVE_LABELS={pf4:'PF 4',pf40:'PF 40/40P',pf400:'PF 400',pf525:'PF 520/523/525',pf527:'PF 527',pf700:'PF 700',pf755:'PF 750/755',pf7000:'PF 7000 MV'};
+const DRIVE_LABELS={pf4:'PF 4',pf40:'PF 40/40P',pf400:'PF 400',pf70:'PF 70',pf525:'PF 520/523/525',pf527:'PF 527',pf700:'PF 700',pf755:'PF 750/755',pf7000:'PF 7000 MV'};
 
 // ══ PROMPT DE SISTEMA — REGRAS DE FIDELIDADE ═══════════════
 const SYSTEM_RULES = `REGRAS ABSOLUTAS QUE VOCÊ DEVE SEGUIR:
@@ -709,8 +924,34 @@ function validateIAResult(parsed, driveKey) {
 async function analyzeWithAI(method){
   const drive=method==='camera'?document.getElementById('driveSelectCam').value:document.getElementById('driveSelectCode').value;
   const code=method==='code'?document.getElementById('faultCodeInput').value.trim():'';
-  if(method==='camera'&&!capturedImageBase64){alert('Capture ou selecione uma foto primeiro.');return}
-  if(method==='code'&&!code){alert('Digite o código da falha.');return}
+  if(method==='camera'&&!capturedImageBase64){showToast('📷 Capture ou selecione uma foto primeiro.','warn');return}
+  if(method==='code'&&!code){showToast('⌨️ Digite o código da falha.','warn');return}
+
+  // Aviso se inversor não selecionado (não bloqueia, mas avisa)
+  if(!drive){showToast('💡 Dica: selecione o modelo do inversor para resultado mais preciso.','info')}
+
+  // Check offline antes de chamar IA
+  if(!navigator.onLine && method==='code'){
+    const driveKey=getDriveKey(drive);
+    const local=searchLocalFault(code,driveKey);
+    if(local){
+      const f=local.fault;
+      renderResult({
+        code:f.code, name:f.name, type:f.type,
+        driveLabel:DRIVE_LABELS[local.driveKey]||'',
+        confidence:95,
+        confidence_reason:'Banco local verificado (modo offline)',
+        description:`Falha <strong>${f.code}</strong> — banco local (${DRIVE_LABELS[local.driveKey]||''}). Sem internet — IA indisponível.`,
+        causes:f.causes, actions:f.actions, source:'local', _warnings:['Sem internet — enriquecimento IA indisponível']
+      });
+      addToHistory(code,drive);
+      return;
+    } else {
+      showToast('⚠️ Sem conexão. Código não encontrado no banco local. Tente quando estiver online.','danger');
+      return;
+    }
+  }
+
   setLoadingState(true);document.getElementById('resultArea').classList.remove('show');
 
   // MODO CÓDIGO: busca local PRIORITÁRIA (dados verificados)
@@ -950,10 +1191,88 @@ function renderResult(d){
 }
 
 // ══ HISTÓRICO ═══════════════════════════════════════
-function addToHistory(code,drive){if(!code||code==='–'||code==='?')return;const entry=drive?`${code} (${drive})`:code;faultHistory=[entry,...faultHistory.filter(h=>h!==entry)].slice(0,8);try{localStorage.setItem('fhist',JSON.stringify(faultHistory))}catch(e){}renderHistory()}
-function renderHistory(){const bar=document.getElementById('historyBar'),chips=document.getElementById('historyChips');if(!bar||!chips)return;if(!faultHistory.length){bar.style.display='none';return}bar.style.display='block';chips.innerHTML=faultHistory.map(h=>`<div class="history-chip" onclick="loadHistory('${h}')">${h}</div>`).join('')}
-function loadHistory(entry){const parts=entry.match(/^(\S+)\s*(?:\((.+)\))?$/);if(!parts)return;document.getElementById('faultCodeInput').value=parts[1];if(parts[2]){const sel=document.getElementById('driveSelectCode');for(let o of sel.options)if(o.value===parts[2])sel.value=o.value}setMethod('code');analyzeWithAI('code')}
+function addToHistory(code,drive){
+  if(!code||code==='–'||code==='?')return;
+  const entry=drive?`${code} (${drive})`:code;
+  faultHistory=[entry,...faultHistory.filter(h=>h!==entry)].slice(0,8);
+  try{localStorage.setItem('fhist',JSON.stringify(faultHistory))}catch(e){}
+  renderHistory();
+}
+function renderHistory(){
+  const bar=document.getElementById('historyBar'),chips=document.getElementById('historyChips');
+  if(!bar||!chips)return;
+  if(!faultHistory.length){bar.style.display='none';return}
+  bar.style.display='block';
+  chips.innerHTML='';
+  faultHistory.forEach((h,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='history-chip';
+    chip.textContent=h;
+    chip.setAttribute('data-idx',idx);
+    chip.addEventListener('click',()=>loadHistory(h));
+    chips.appendChild(chip);
+  });
+}
+function loadHistory(entry){
+  const parts=entry.match(/^(\S+)\s*(?:\((.+)\))?$/);
+  if(!parts)return;
+  document.getElementById('faultCodeInput').value=parts[1];
+  if(parts[2]){
+    // Restaura tanto o select da câmera quanto o de código
+    ['driveSelectCode','driveSelectCam'].forEach(selId=>{
+      const sel=document.getElementById(selId);
+      if(!sel)return;
+      for(let o of sel.options){if(o.value===parts[2]){sel.value=o.value;break}}
+    });
+  }
+  setMethod('code');
+  analyzeWithAI('code');
+}
 renderHistory();
+
+// ══ RESET / LIMPAR DIAGNÓSTICO ═══════════════════════════
+function resetDiag(){
+  // Limpa imagem
+  capturedImageBase64=null;
+  const ci=document.getElementById('captured-img');if(ci){ci.style.display='none';ci.src=''}
+  const cp=document.getElementById('camera-preview');if(cp){cp.style.display='none'}
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  // Restaura botões câmera
+  const bs=document.getElementById('btnStartCam');if(bs)bs.style.display='block';
+  const bc=document.getElementById('btnCapture');if(bc)bc.style.display='none';
+  const br=document.getElementById('btnRetake');if(br)br.style.display='none';
+  const ba=document.getElementById('btnAnalyzeCam');if(ba)ba.disabled=true;
+  // Limpa input de código
+  const fi=document.getElementById('faultCodeInput');if(fi)fi.value='';
+  // Limpa seleção de inversor
+  const ds1=document.getElementById('driveSelectCam');if(ds1)ds1.value='';
+  const ds2=document.getElementById('driveSelectCode');if(ds2)ds2.value='';
+  // Esconde resultado
+  const ra=document.getElementById('resultArea');if(ra)ra.classList.remove('show');
+  const la=document.getElementById('loadingArea');if(la)la.style.display='none';
+  // Limpa file input
+  const fIn=document.getElementById('fileInput');if(fIn)fIn.value='';
+  // Scroll pro topo
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══ INDICADOR ONLINE / OFFLINE ═══════════════════════════
+function updateNetStatus(){
+  const el=document.getElementById('netStatus');
+  if(!el)return;
+  if(!navigator.onLine){
+    el.style.display='block';
+    el.style.background='rgba(255,51,85,.1)';
+    el.style.border='1px solid rgba(255,51,85,.3)';
+    el.style.color='var(--danger)';
+    el.textContent='⚠ OFFLINE — Diagnóstico IA indisponível. Consulte os bancos locais.';
+  } else {
+    el.style.display='none';
+  }
+}
+window.addEventListener('online',updateNetStatus);
+window.addEventListener('offline',updateNetStatus);
+updateNetStatus();
 
 // ══ BANCO DE FALHAS — RENDER ═══════════════════════════════
 function renderFaults(driveKey,filter=''){
@@ -978,7 +1297,7 @@ function renderFaults(driveKey,filter=''){
 function filterFaults(drive,val){renderFaults(drive,val)}
 
 // Render all fault lists on load
-['pf4','pf40','pf400','pf525','pf527','pf700','pf755','pf7000'].forEach(d=>renderFaults(d));
+['pf4','pf40','pf400','pf70','pf525','pf527','pf700','pf755','pf7000'].forEach(d=>renderFaults(d));
 
 // ══ COMISSIONAMENTO ═══════════════════════════════════════
 function selectComiss(key,el){document.querySelectorAll('#comissChips .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderComiss(key)}
@@ -998,7 +1317,7 @@ renderComiss('pf525');
 function renderGlossario(filter){
   const list=document.getElementById('glossario-list');if(!list)return;
   const f=(filter||'').toLowerCase();
-  const filtered=f?GLOSSARIO.filter(g=>g.t.toLowerCase().includes(f)||g.p.toLowerCase().includes(f)||g.d.toLowerCase().includes(f)):GLOSSARIO;
+  const filtered=f?GLOSSARIO.filter(g=>g.t.toLowerCase().includes(f)||g.p.toLowerCase().includes(f)||g.d.toLowerCase().includes(f)||(g.s&&g.s.toLowerCase().includes(f))):GLOSSARIO;
   if(!filtered.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2)">NENHUM TERMO ENCONTRADO</div>';return}
   list.innerHTML=filtered.map(g=>`
     <div class="fault-card" style="margin-bottom:6px">
@@ -1012,6 +1331,15 @@ function renderGlossario(filter){
 }
 function filterGlossario(v){renderGlossario(v)}
 renderGlossario();
+
+// ══ CONTAGEM DE FALHAS NO SOBRE ═══════════════════════════
+(function(){
+  const el=document.getElementById('faultCountSobre');
+  if(!el)return;
+  let total=0;
+  Object.values(FAULTS).forEach(arr=>{total+=arr.length});
+  el.textContent=total+' falhas';
+})();
 </script>
 </body>
 </html>
