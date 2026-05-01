@@ -180,7 +180,7 @@ ol.ip-ol li{color:var(--text)}
     <div class="header-logo">POWER<span>FLEX</span></div>
     <div class="header-sub">Field Guide — Técnico</div>
   </div>
-  <div class="header-badge">AI v3.0</div>
+  <div class="header-badge">AI v3.1</div>
 </div>
 
 <!-- TABS -->
@@ -191,9 +191,10 @@ ol.ip-ol li{color:var(--text)}
   <button class="tab-btn" onclick="showTab('pf525',this)">⚡ PF 520/523/525</button>
   <button class="tab-btn" onclick="showTab('pf527',this)">⚡ PF 527</button>
   <button class="tab-btn" onclick="showTab('pf700',this)">⚡ PF 700</button>
-  <button class="tab-btn" onclick="showTab('pf755',this)">⚡ PF 750/755</button>
+  <button class="tab-btn" onclick="showTab('pf755',this)">⚡ PF 750/753/755</button>
   <button class="tab-btn" onclick="showTab('pf7000',this)">⚡ PF 7000 MV</button>
   <button class="tab-btn" onclick="showTab('comiss',this)">🚀 Comissionamento</button>
+  <button class="tab-btn" onclick="showTab('testefrio',this)">🔧 Teste a Frio</button>
   <button class="tab-btn" onclick="showTab('glossario',this)">📖 Glossário</button>
   <button class="tab-btn" onclick="showTab('sobre',this)">👨‍🔧 Sobre</button>
 </div>
@@ -245,6 +246,7 @@ ol.ip-ol li{color:var(--text)}
           <option value="PF527">PowerFlex 527</option>
           <option value="PF700">PowerFlex 700</option>
           <option value="PF750">PowerFlex 750</option>
+          <option value="PF753">PowerFlex 753</option>
           <option value="PF755">PowerFlex 755</option>
           <option value="PF7000">PowerFlex 7000 MV</option>
         </select>
@@ -268,6 +270,7 @@ ol.ip-ol li{color:var(--text)}
           <option value="PF527">PF 527</option>
           <option value="PF700">PF 700</option>
           <option value="PF750">PF 750</option>
+          <option value="PF753">PF 753</option>
           <option value="PF755">PF 755</option>
           <option value="PF7000">PF 7000 MV</option>
         </select>
@@ -364,7 +367,7 @@ ol.ip-ol li{color:var(--text)}
 
 <!-- PAGE: PF 750/755 -->
 <div class="page" id="page-pf755">
-  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 750 / 755</div><div class="sec-desc">Série 750 — Banco completo de falhas</div></div>
+  <div class="sec-head"><div class="sec-title">⚡ PowerFlex 750 / 753 / 755</div><div class="sec-desc">Série 750 — Banco completo de falhas (mesma plataforma)</div></div>
   <div class="fault-search-wrap"><span class="search-icon">🔍</span><input class="fault-search" placeholder="Buscar código ou descrição..." oninput="filterFaults('pf755',this.value)"/></div>
   <div class="fault-list" id="fault-list-pf755"></div>
   <div class="pb"></div>
@@ -389,11 +392,36 @@ ol.ip-ol li{color:var(--text)}
       <div class="chip active" onclick="selectComiss('pf525',this)">PF 520/523/525</div>
       <div class="chip" onclick="selectComiss('pf527',this)">PF 527</div>
       <div class="chip" onclick="selectComiss('pf700',this)">PF 700</div>
-      <div class="chip" onclick="selectComiss('pf755',this)">PF 750/755</div>
+      <div class="chip" onclick="selectComiss('pf755',this)">PF 750/753/755</div>
       <div class="chip" onclick="selectComiss('pf7000',this)">⚡ PF 7000 MV</div>
     </div>
   </div>
   <div class="steps-list" id="comiss-steps"></div>
+  <div class="pb"></div>
+</div>
+
+<!-- PAGE: TESTE A FRIO -->
+<div class="page" id="page-testefrio">
+  <div class="sec-head">
+    <div class="sec-title">🔧 Teste a Frio — Multímetro</div>
+    <div class="sec-desc">Procedimentos com drive desenergizado (LOTO aplicado)</div>
+  </div>
+  <div class="danger-box" style="margin:12px">
+    🔴 <strong>OBRIGATÓRIO:</strong> LOTO aplicado. Confirme 0V no barramento DC antes de tocar em QUALQUER borne de potência. Tempo mínimo de descarga dos capacitores: <strong>5 min (PF4–525)</strong> / <strong>10 min (PF700–755)</strong> / <strong>15 min (PF7000 MV)</strong>.
+  </div>
+  <div style="padding:12px 12px 0">
+    <div class="chip-row" id="tfChips">
+      <div class="chip active" onclick="selectTesteFrio('seguranca',this)">🔒 Segurança</div>
+      <div class="chip" onclick="selectTesteFrio('retificador',this)">⚡ Retificador</div>
+      <div class="chip" onclick="selectTesteFrio('igbt',this)">⚡ IGBT/Inversor</div>
+      <div class="chip" onclick="selectTesteFrio('motor',this)">🔌 Motor</div>
+      <div class="chip" onclick="selectTesteFrio('isolamento',this)">📏 Isolamento</div>
+      <div class="chip" onclick="selectTesteFrio('capacitor',this)">🔋 Bus DC</div>
+      <div class="chip" onclick="selectTesteFrio('controle',this)">🖥 Controle</div>
+      <div class="chip" onclick="selectTesteFrio('ventilador',this)">🌀 Ventilador</div>
+    </div>
+  </div>
+  <div class="steps-list" id="tf-steps"></div>
   <div class="pb"></div>
 </div>
 
@@ -425,7 +453,7 @@ ol.ip-ol li{color:var(--text)}
       <div class="card-body">
         <p style="font-size:14px;line-height:1.8">Guia de campo para técnicos — diagnóstico IA, bancos de falhas PF4 ao PF7000, comissionamento e glossário em um único app.</p>
         <div style="margin-top:12px;padding:10px 12px;background:var(--bg3);border-radius:8px;font-size:12px;line-height:1.8;color:var(--text2)">
-          <div style="display:flex;justify-content:space-between"><span>Versão</span><span style="color:var(--accent);font-family:var(--mono);font-weight:700">v3.0</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Versão</span><span style="color:var(--accent);font-family:var(--mono);font-weight:700">v3.1</span></div>
           <div style="display:flex;justify-content:space-between"><span>Atualizado</span><span style="color:var(--text);font-family:var(--mono)">Abril 2026</span></div>
           <div style="display:flex;justify-content:space-between"><span>Modelos</span><span style="color:var(--text);font-family:var(--mono)">PF4, 40, 400, 70, 525, 527, 700, 755, 7000</span></div>
           <div style="display:flex;justify-content:space-between"><span>Falhas no banco local</span><span style="color:var(--accent2);font-family:var(--mono);font-weight:700" id="faultCountSobre">–</span></div>
@@ -443,7 +471,7 @@ ol.ip-ol li{color:var(--text)}
 <script>
 // ══ BANCOS DE FALHAS ═══════════════════════════════════════
 // Fontes: Rockwell Pub. 22A/22B/22C-UM001 (PF4/40/400), 20A-UM001 (PF70),
-// PFLEX-RM001 (PF700), 520-UM001 (PF520-525), 750-PM001 (PF750/755),
+// PFLEX-RM001 (PF700), 520-UM001 (PF520-525), 750-PM001 (PF750/753/755),
 // 7000A-IN/7000-UM150 (PF7000 MV)
 const FAULTS = {
   // ── PF4 ──
@@ -694,7 +722,7 @@ const COMISS = {
     {title:'3. Autotuning',body:'P070 [Autotune]: 1=Static Tune (parado), 2=Rotate Tune (girando). Execute com motor desacoplado.'},
   ],
   pf755: [
-    {title:'1. Pré-energização PF 755',body:'✓ Siga procedimentos de segurança elétrica<br>✓ Verifique ventilação e espaçamento<br>✓ Instale resistor de frenagem se necessário'},
+    {title:'1. Pré-energização PF 750/753/755',body:'✓ Siga procedimentos de segurança elétrica<br>✓ Verifique ventilação e espaçamento<br>✓ Instale resistor de frenagem se necessário<br>✓ PF753 e PF755 compartilham a mesma plataforma — códigos e parâmetros são iguais'},
     {title:'2. Dados do motor (Port 0)',body:'P26=Amps, P27=Volts, P28=Hz, P29=RPM, P30=kW'},
     {title:'3. Autotuning',body:'P70: 2=Calc Motor Params, 3=Rotate Tune. Execute com motor desacoplado.'},
   ],
@@ -733,7 +761,7 @@ const GLOSSARIO = [
   {t:'PWM',s:'',p:'Modulação por Largura de Pulso',d:'Técnica para gerar tensão variável para o motor. Frequências mais altas = motor mais silencioso, mas drive esquenta mais.'},
   {t:'SGCT',s:'',p:'Symmetrical Gate Comm. Thyristor',d:'Componente de potência usado no inversor do PF 7000 MV.'},
   {t:'STO',s:'',p:'Safe Torque Off',d:'Função de segurança que elimina torque sem desligar o inversor.'},
-  {t:'Studio 5000',s:'',p:'Ambiente de Engenharia Rockwell',d:'Software para programação de CLPs e configuração de drives PF750/755 via EtherNet/IP.'},
+  {t:'Studio 5000',s:'',p:'Ambiente de Engenharia Rockwell',d:'Software para programação de CLPs e configuração de drives PF750/753/755 via EtherNet/IP.'},
   {t:'VFD',s:'',p:'Inversor de Frequência',d:'Variable Frequency Drive. Controla velocidade de motores CA.'},
   {t:'dV/dt',s:'',p:'Filtro de dV/dt',d:'Filtro na saída do drive que reduz picos de tensão causados pela comutação PWM. Protege o isolamento do motor.'},
 ];
@@ -869,53 +897,117 @@ function extractJSON(txt){
 function _jf(t){return{code:'?',name:'Diagnóstico IA',type:'manual',confidence:30,confidence_reason:'Resposta não estruturada — confira manualmente',description:t.slice(0,400),causes:['Veja descrição acima'],actions:['⚠️ CONFIRME no manual técnico Rockwell antes de executar qualquer ação'],source:'ia'}}
 
 // ══ DRIVELABELS GLOBAL ═══════════════════════════════════════
-const DRIVE_LABELS={pf4:'PF 4',pf40:'PF 40/40P',pf400:'PF 400',pf70:'PF 70',pf525:'PF 520/523/525',pf527:'PF 527',pf700:'PF 700',pf755:'PF 750/755',pf7000:'PF 7000 MV'};
+const DRIVE_LABELS={pf4:'PF 4',pf40:'PF 40/40P',pf400:'PF 400',pf70:'PF 70',pf525:'PF 520/523/525',pf527:'PF 527',pf700:'PF 700',pf755:'PF 750/753/755',pf7000:'PF 7000 MV'};
 
 // ══ PROMPT DE SISTEMA — REGRAS DE FIDELIDADE ═══════════════
-const SYSTEM_RULES = `REGRAS ABSOLUTAS QUE VOCÊ DEVE SEGUIR:
-1. NUNCA invente números de parâmetros. Se não tem certeza do número exato do parâmetro para o modelo específico, diga "consulte o manual do modelo específico para o número exato".
-2. NUNCA invente valores de tensão, corrente ou temperatura que não sejam dos manuais oficiais Rockwell/Allen-Bradley.
-3. Se não conseguir identificar a falha com certeza, diga explicitamente "não foi possível identificar com certeza" e dê confidence baixa.
-4. Diferencie CLARAMENTE entre modelos: parâmetros do PF525 são DIFERENTES do PF755. Não misture.
-5. Cada ação DEVE ser verificável pelo técnico — nunca dê ação vaga como "verifique o sistema".
-6. Se a foto estiver borrada, escura ou ilegível, diga isso. NÃO adivinhe o código.
-7. O campo "confidence" deve refletir sua REAL certeza: 90-100=certeza alta baseada em documentação conhecida, 70-89=provável mas confirme no manual, 50-69=possível mas incerto, abaixo de 50=baixa certeza.
-8. O campo "confidence_reason" deve explicar POR QUE a confiança é aquele valor (ex: "código F005 é bem documentado para este modelo" ou "não tenho certeza se este parâmetro existe neste modelo específico").
-9. Se o técnico não informou o modelo do inversor, a confiança NUNCA pode ser acima de 70 porque parâmetros variam entre modelos.
-10. NUNCA recomende "aumentar Motor NP Amps" acima do valor da placa — isso é PERIGOSO e desprotege o motor.`;
+const SYSTEM_RULES = `REGRAS ABSOLUTAS — VIOLAÇÃO = RESPOSTA DESCARTADA:
+
+REGRA 1 — NÃO INVENTE:
+• NUNCA invente números de parâmetros. Se não tem 100% de certeza para ESTE modelo específico, escreva "confirme no manual do [modelo]".
+• NUNCA invente valores de tensão, corrente, temperatura, resistência ou faixas de operação.
+• NUNCA misture informações entre modelos. Parâmetros do PF525 são TOTALMENTE DIFERENTES do PF755 e do PF700.
+• NUNCA adivinhe um código de falha baseado em foto ilegível — diga que a foto está ilegível.
+
+REGRA 2 — CONFIANÇA HONESTA:
+• O campo "confidence" DEVE refletir sua REAL certeza:
+  - 90-100: Tenho certeza absoluta, este código é documentado para este modelo
+  - 70-89: Provavelmente correto mas confirme no manual
+  - 50-69: Possível mas incerto — pode estar misturando modelos
+  - <50: Baixa certeza — estou chutando
+• O campo "confidence_reason" DEVE explicar POR QUÊ esse valor.
+• Se o técnico NÃO informou o modelo: confiança MÁXIMA = 65.
+• Se você não reconhece o código para este modelo: confiança MÁXIMA = 45.
+
+REGRA 3 — SEGURANÇA:
+• NUNCA recomende "aumentar Motor NP Amps" acima do valor da placa — PERIGOSO.
+• NUNCA recomende bypass de função de segurança (STO, Safety Input) sem alerta explícito.
+• Toda ação que envolva potência deve começar com alerta de LOTO e EPIs.
+• Se o técnico vai medir no barramento DC, ALERTAR sobre descarga de capacitores.
+
+REGRA 4 — AÇÕES VERIFICÁVEIS:
+• Cada ação deve ser específica: instrumento + ponto de medição + valor esperado.
+• NUNCA dê ação vaga como "verifique o sistema", "confira a instalação", "entre em contato com suporte".
+• Se não sabe a ação específica, diga "este procedimento requer consulta ao manual oficial Rockwell [publicação número]".
+
+REGRA 5 — FORMATO DO JSON:
+• Retorne SOMENTE o JSON, sem texto antes nem depois.
+• Não use markdown (sem backticks, sem comentários).
+• Se não conseguir montar o JSON, retorne {"code":"?","name":"Não identificado","confidence":10,"confidence_reason":"Não foi possível processar","causes":["Consulte o manual"],"actions":["Consulte o manual técnico Rockwell"],"type":"manual"}.`;
 
 // ══ VALIDAÇÃO PÓS-IA — verifica coerência ═══════════════════
 function validateIAResult(parsed, driveKey) {
   const warnings = [];
-  // 1. Verifica se confidence existe e é número
+
+  // 1. Confiança obrigatória
   if (typeof parsed.confidence !== 'number' || parsed.confidence < 0 || parsed.confidence > 100) {
-    parsed.confidence = 50;
-    parsed.confidence_reason = 'Confiança não informada pela IA — trate como incerto';
-    warnings.push('IA não forneceu nível de confiança — assumindo 50%');
+    parsed.confidence = 40;
+    parsed.confidence_reason = 'IA não informou nível de confiança — trate como incerto';
+    warnings.push('⚠️ IA não forneceu confiança — assumindo 40%');
   }
-  // 2. Verifica se o código faz sentido para o drive
-  if (driveKey && parsed.code) {
-    const localCheck = searchLocalFault(parsed.code, driveKey);
-    if (localCheck && localCheck.fault.name.toLowerCase() !== (parsed.name||'').toLowerCase()) {
-      warnings.push(`Banco local indica que ${parsed.code} = "${localCheck.fault.name}", mas IA disse "${parsed.name}". Verifique.`);
-      if (parsed.confidence > 70) parsed.confidence = 65;
+
+  // 2. Sem modelo informado = teto de confiança 65
+  if (!driveKey) {
+    if (parsed.confidence > 65) {
+      parsed.confidence = 65;
+      parsed.confidence_reason = (parsed.confidence_reason || '') + ' [Rebaixado: modelo não informado]';
     }
-  }
-  // 3. Verifica ações perigosas
-  const allActions = (parsed.actions || []).join(' ').toLowerCase();
-  if (allActions.includes('aument') && allActions.includes('motor np amps') && allActions.includes('placa')) {
-    warnings.push('⚠️ CUIDADO: NUNCA aumente Motor NP Amps acima da placa do motor — desprotege o motor');
-  }
-  // 4. Detecta se IA parece ter inventado parâmetros (padrão suspeito)
-  const paramMatches = allActions.match(/[Pp]\d{3,4}/g) || [];
-  if (paramMatches.length > 8 && parsed.confidence < 80) {
-    warnings.push('IA listou muitos parâmetros com confiança baixa — confirme cada número no manual');
-  }
-  // 5. Sem modelo informado = incerteza
-  if (!driveKey && parsed.confidence > 70) {
-    parsed.confidence = Math.min(parsed.confidence, 65);
     warnings.push('Modelo do inversor não informado — parâmetros podem variar entre modelos');
   }
+
+  // 3. Verifica se código faz sentido para o drive no banco local
+  if (driveKey && parsed.code) {
+    const localCheck = searchLocalFault(parsed.code, driveKey);
+    if (localCheck) {
+      // Código existe no banco local — confrontar nome
+      if (localCheck.fault.name.toLowerCase() !== (parsed.name||'').toLowerCase()) {
+        warnings.push(`Banco local verificado indica que ${parsed.code} = "${localCheck.fault.name}", mas IA disse "${parsed.name}". Possível confusão de modelo.`);
+        if (parsed.confidence > 60) parsed.confidence = 55;
+      }
+    } else {
+      // Código NÃO existe no banco local — IA pode estar inventando
+      if (parsed.confidence > 75) {
+        parsed.confidence = Math.min(parsed.confidence, 70);
+        warnings.push('Código não encontrado no banco local verificado — confira se este código existe para este modelo no manual Rockwell.');
+      }
+    }
+  }
+
+  // 4. Ações perigosas: Motor NP Amps acima da placa
+  const allText = [(parsed.actions||[]).join(' '), (parsed.causes||[]).join(' '), parsed.description||''].join(' ').toLowerCase();
+  if (allText.includes('aument') && allText.includes('motor np') && !allText.includes('nunca')) {
+    warnings.push('🔴 CUIDADO: NUNCA aumente Motor NP Amps acima da placa do motor — desprotege o motor contra sobrecarga');
+    parsed.confidence = Math.min(parsed.confidence, 50);
+  }
+
+  // 5. Ações perigosas: bypass de segurança
+  if (allText.includes('jumper') && (allText.includes('safety') || allText.includes('sto') || allText.includes('segurança'))) {
+    warnings.push('⚠️ Jumperear funções de segurança (STO/Safety) só é aceitável para teste temporário. NUNCA deixe em produção sem a proteção ativa.');
+  }
+
+  // 6. Detecta excesso de parâmetros com confiança moderada (padrão de alucinação)
+  const paramMatches = allText.match(/[Pp]\d{3,4}/g) || [];
+  if (paramMatches.length > 6 && parsed.confidence < 80) {
+    warnings.push('IA listou muitos parâmetros com confiança moderada — confirme CADA número no manual antes de usar. Risco de parâmetros de outro modelo.');
+    if (parsed.confidence > 60) parsed.confidence = 55;
+  }
+
+  // 7. Detecta valores absolutos suspeitos sem qualificação
+  const absValues = allText.match(/\d{3,4}\s*(?:v|V|volts)/g) || [];
+  if (absValues.length > 3 && parsed.confidence < 85) {
+    warnings.push('Vários valores de tensão citados — confirme que são do seu modelo e classe de tensão.');
+  }
+
+  // 8. Se IA diz que não reconhece o código mas dá confiança > 50
+  if ((parsed.name||'').toLowerCase().includes('não identificad') || (parsed.name||'').toLowerCase().includes('desconhecid')) {
+    if (parsed.confidence > 50) parsed.confidence = 30;
+  }
+
+  // 9. Descrição muito curta = resposta pobre
+  if ((parsed.description||'').length < 20 && parsed.confidence > 60) {
+    parsed.confidence = Math.min(parsed.confidence, 55);
+    warnings.push('Descrição muito breve — IA pode não ter informação suficiente sobre esta falha.');
+  }
+
   parsed._warnings = warnings;
   return parsed;
 }
@@ -1034,16 +1126,18 @@ async function enrichWithIA(fault,driveLabel,driveKey){
   try{
     const prompt=`${SYSTEM_RULES}
 
-Falha ${fault.code} (${fault.name}) em ${driveLabel}. O técnico já tem as causas e ações básicas do banco local.
+Falha ${fault.code} (${fault.name}) em ${driveLabel}. O técnico já tem as causas e ações básicas do banco local verificado.
 
-Forneça orientação ADICIONAL de campo. ATENÇÃO:
-- SOMENTE informações que você tem CERTEZA para o modelo ${driveLabel}.
-- Se não tem certeza de um número de parâmetro, escreva "confirme no manual do ${driveLabel}".
-- Prefira orientações PRÁTICAS (como medir, onde medir, o que esperar) do que listas de parâmetros que podem estar errados.
-- O campo confidence deve refletir sua certeza REAL sobre as informações fornecidas.
+Forneça SOMENTE orientação ADICIONAL e PRÁTICA de campo. ATENÇÃO CRÍTICA:
+- SOMENTE informações que você tem ABSOLUTA CERTEZA para o modelo ${driveLabel}. Se não tem certeza, NÃO inclua.
+- Se não tem certeza de um número de parâmetro para ESTE modelo, escreva "confirme no manual Rockwell do ${driveLabel}".
+- PREFIRA orientações PRÁTICAS (como medir, onde medir, instrumento, valor esperado, o que fazer se diferente).
+- NÃO repita informações que o banco local já forneceu.
+- NÃO invente dicas de campo — apenas coisas que REALMENTE acontecem com frequência em instalações industriais.
+- Se não tem informação adicional relevante para dar, retorne confidence baixa e diga isso honestamente.
 
 Retorne SOMENTE JSON válido:
-{"confidence":NÚMERO 0-100,"confidence_reason":"por que este nível","severity":"ALTA/MÉDIA/BAIXA — consequência real se ignorar","rootcause":"sequência prática de eliminação: meça X entre borne A e B, se ler > Y descarta hipótese 1","detailed_actions":["1. ação prática detalhada","2. ação com instrumento e valor","3. ação de correção"],"tips":"dica REAL de campo — algo que acontece na prática e manual não cobre","prevention":"como evitar recorrência — ação concreta"}`;
+{"confidence":NÚMERO 0-100,"confidence_reason":"justificativa honesta","severity":"ALTA/MÉDIA/BAIXA — consequência REAL se ignorar a falha","rootcause":"sequência PRÁTICA de eliminação: meça X entre borne A e B com [instrumento], se ler > Y descarta hipótese 1","detailed_actions":["1. MEDIÇÃO: instrumento + ponto + valor esperado","2. VERIFICAÇÃO: parâmetro específico DESTE modelo ou diga confirme no manual","3. CORREÇÃO: ação concreta"],"tips":"dica de campo REAL que manual não cobre — se não tem, deixe vazio","prevention":"como evitar recorrência — ação concreta de manutenção preventiva"}`;
 
     const txt=await callClaude(prompt);
     let extra=extractJSON(txt);
@@ -1051,7 +1145,16 @@ Retorne SOMENTE JSON válido:
     if(!body)return;
 
     // Valida confiança do enriquecimento
-    const conf=typeof extra.confidence==='number'?extra.confidence:50;
+    let conf=typeof extra.confidence==='number'?extra.confidence:40;
+    // Sem modelo = teto
+    if(!driveKey && conf>65) conf=65;
+    // Detecta excesso de parâmetros (sinal de alucinação)
+    const enrichText = JSON.stringify(extra).toLowerCase();
+    const paramCount = (enrichText.match(/[Pp]\d{3,4}/g)||[]).length;
+    if(paramCount > 5 && conf < 80){
+      conf = Math.min(conf, 55);
+      extra.confidence_reason = (extra.confidence_reason||'') + ' [Alerta: muitos parâmetros listados — confirme cada um no manual]';
+    }
 
     let html='<div style="margin-top:14px;border-top:2px solid var(--border);padding-top:14px">';
 
@@ -1312,6 +1415,74 @@ function renderComiss(key){
     </div>`).join('');
 }
 renderComiss('pf525');
+
+// ══ TESTE A FRIO — DADOS ═══════════════════════════════════
+const TESTE_FRIO = {
+  seguranca: [
+    {title:'1. LOTO — Bloqueio e Etiquetagem',body:'<div class="danger-box" style="margin-bottom:10px">🔴 <strong>OBRIGATÓRIO antes de qualquer teste a frio.</strong></div>1. Desligar disjuntor/contator de entrada do drive<br>2. Aplicar cadeado no dispositivo de seccionamento<br>3. Colocar etiqueta "NÃO OPERE — MANUTENÇÃO"<br>4. Tentar religar para confirmar eficácia do bloqueio<br>5. EPIs mínimos: luva isolante BT, óculos, calçado dielétrico'},
+    {title:'2. Descarga dos capacitores do barramento DC',body:'<strong>🔴 PERIGO:</strong> Capacitores mantêm carga letal mesmo com drive desligado.<br><br><strong>Tempos mínimos de espera:</strong><br>• PF4 / PF40 / PF400 / PF525 / PF527: <strong>5 minutos</strong><br>• PF70 / PF700: <strong>5–10 minutos</strong><br>• PF750 / PF753 / PF755: <strong>10 minutos</strong><br>• PF7000 MV: <strong>15 minutos</strong> (verificar com voltímetro MV após procedimento de aterramento)<br><br><strong>Confirmação com multímetro:</strong><br>• Multímetro em Vcc, escala 1000V<br>• Medir entre bornes DC+ e DC− (ou PA/PB no PF755)<br>• Valor esperado: <strong>< 5V DC</strong><br>• Se > 5V: aguardar mais ou verificar circuito de descarga (resistor de pré-carga)'},
+    {title:'3. Inspeção visual obrigatória',body:'Antes de qualquer medição:<br>• Componentes queimados, escurecidos ou com cheiro<br>• Capacitores estufados ou com vazamento<br>• Sinais de arco (marcas pretas nos bornes)<br>• Parafusos de potência soltos<br>• Cabos com isolamento danificado<br>• Ventilador com pás quebradas ou eixo travado<br>• Placas com corrosão ou componentes soldados a frio'},
+  ],
+  retificador: [
+    {title:'1. O que é o retificador de entrada',body:'O estágio de entrada do drive converte CA em CC. É composto por <strong>6 diodos</strong> (ponte retificadora trifásica) ou, em drives maiores, SCRs.<br><br>Borne de entrada: <strong>L1, L2, L3</strong> (ou R, S, T)<br>Saída: <strong>DC+</strong> e <strong>DC−</strong> (barramento)'},
+    {title:'2. Instrumento e configuração',body:'<strong>Multímetro digital</strong> na escala de <strong>diodo (🔊)</strong><br>⚠️ NÃO use escala de resistência (Ω) — não aplica tensão suficiente para polarizar o diodo.<br><br>O display mostrará a queda de tensão do diodo:<br>• <span style="color:var(--success);font-weight:700">OK: 0.3V a 0.7V</span> (polarização direta)<br>• <span style="color:var(--success);font-weight:700">OK: OL / ∞</span> (polarização reversa)<br>• <span style="color:var(--danger);font-weight:700">FALHA: 0.000V</span> (curto-circuito)<br>• <span style="color:var(--danger);font-weight:700">FALHA: OL em ambas direções</span> (aberto)'},
+    {title:'3. Procedimento — Diodos superiores (DC+)',body:'Ponta <strong>VERMELHA (+)</strong> fixa no borne <strong>DC+</strong>.<br>Ponta <strong>PRETA (−)</strong> toca cada entrada:<br><br><table class="param-table"><tr><th>Medição</th><th>Esperado</th></tr><tr><td>DC+ → L1</td><td>0.3–0.7V</td></tr><tr><td>DC+ → L2</td><td>0.3–0.7V</td></tr><tr><td>DC+ → L3</td><td>0.3–0.7V</td></tr></table><br>Inverter pontas: <strong>PRETA em DC+, VERMELHA em L1/L2/L3</strong> → deve ler <strong>OL</strong> (bloqueado).'},
+    {title:'4. Procedimento — Diodos inferiores (DC−)',body:'Ponta <strong>PRETA (−)</strong> fixa no borne <strong>DC−</strong>.<br>Ponta <strong>VERMELHA (+)</strong> toca cada entrada:<br><br><table class="param-table"><tr><th>Medição</th><th>Esperado</th></tr><tr><td>L1 → DC−</td><td>0.3–0.7V</td></tr><tr><td>L2 → DC−</td><td>0.3–0.7V</td></tr><tr><td>L3 → DC−</td><td>0.3–0.7V</td></tr></table><br>Inverter pontas: <strong>VERMELHA em DC−, PRETA em L1/L2/L3</strong> → deve ler <strong>OL</strong> (bloqueado).'},
+    {title:'5. Diagnóstico de falha',body:'<table class="param-table"><tr><th>Resultado</th><th>Significado</th><th>Ação</th></tr><tr><td>0.000V ambas direções</td><td>Diodo em curto</td><td>Substituir ponte retificadora ou drive</td></tr><tr><td>OL ambas direções</td><td>Diodo aberto</td><td>Substituir ponte retificadora</td></tr><tr><td>Valores diferentes entre fases</td><td>Ponte desbalanceada</td><td>Indica degradação — substituir</td></tr><tr><td>Todos 0.3–0.7V direto / OL reverso</td><td>✅ OK</td><td>Retificador saudável</td></tr></table>'},
+  ],
+  igbt: [
+    {title:'1. O que são os IGBTs do inversor',body:'O estágio de saída converte CC (barramento DC) em CA variável para o motor. Composto por <strong>6 IGBTs</strong> com diodos antiparalelos.<br><br>Bornes de saída: <strong>U, V, W</strong> (ou T1, T2, T3)<br>⚠️ Nos PF4/40 compactos o módulo IGBT pode ser integrado e não substituível individualmente.'},
+    {title:'2. Instrumento e configuração',body:'<strong>Multímetro digital</strong> na escala de <strong>diodo (🔊)</strong><br><br>Estamos testando os <strong>diodos antiparalelos</strong> dos IGBTs. O IGBT em si não conduz no modo diodo do multímetro (tensão de gate insuficiente).<br><br>Valores esperados: mesmos do retificador (0.3–0.7V direto / OL reverso)'},
+    {title:'3. Procedimento — IGBTs superiores (DC+ → saídas)',body:'Ponta <strong>VERMELHA (+)</strong> fixa em <strong>DC+</strong>.<br>Ponta <strong>PRETA (−)</strong> toca:<br><br><table class="param-table"><tr><th>Medição</th><th>Esperado (direto)</th><th>Reverso</th></tr><tr><td>DC+ → U</td><td>0.3–0.7V</td><td>OL</td></tr><tr><td>DC+ → V</td><td>0.3–0.7V</td><td>OL</td></tr><tr><td>DC+ → W</td><td>0.3–0.7V</td><td>OL</td></tr></table>'},
+    {title:'4. Procedimento — IGBTs inferiores (saídas → DC−)',body:'Ponta <strong>PRETA (−)</strong> fixa em <strong>DC−</strong>.<br>Ponta <strong>VERMELHA (+)</strong> toca:<br><br><table class="param-table"><tr><th>Medição</th><th>Esperado (direto)</th><th>Reverso</th></tr><tr><td>U → DC−</td><td>0.3–0.7V</td><td>OL</td></tr><tr><td>V → DC−</td><td>0.3–0.7V</td><td>OL</td></tr><tr><td>W → DC−</td><td>0.3–0.7V</td><td>OL</td></tr></table>'},
+    {title:'5. Teste cruzado saída-saída',body:'Testar entre fases de saída para detectar curto entre braços:<br><br><table class="param-table"><tr><th>Medição</th><th>Esperado</th></tr><tr><td>U → V (ambas direções)</td><td>OL</td></tr><tr><td>U → W (ambas direções)</td><td>OL</td></tr><tr><td>V → W (ambas direções)</td><td>OL</td></tr></table><br>Se qualquer leitura ≠ OL → <strong>IGBT em curto</strong>. Drive precisa ser reparado/substituído.'},
+    {title:'6. Interpretação geral',body:'<table class="param-table"><tr><th>Resultado</th><th>Diagnóstico</th></tr><tr><td>Todos 0.3–0.7V direto / OL reverso</td><td>✅ IGBTs OK</td></tr><tr><td>0.000V em algum (curto)</td><td>🔴 IGBT queimado em curto — causa: curto no motor, sobrecarga extrema, disparo F012</td></tr><tr><td>OL em ambas direções</td><td>🟡 IGBT aberto — causa: degradação por ciclos térmicos</td></tr><tr><td>Valores inconsistentes entre braços</td><td>⚠️ Degradação — monitorar ou substituir</td></tr></table>'},
+  ],
+  motor: [
+    {title:'1. Resistência de enrolamento (fase-fase)',body:'<strong>Instrumento:</strong> Multímetro na escala Ω (200Ω ou auto)<br><strong>Desconecte o motor do drive</strong> nos bornes U/V/W.<br><br>Meça nos bornes do motor:<br><table class="param-table"><tr><th>Medição</th><th>Esperado</th></tr><tr><td>U → V</td><td>Mesmo valor ±5%</td></tr><tr><td>U → W</td><td>Mesmo valor ±5%</td></tr><tr><td>V → W</td><td>Mesmo valor ±5%</td></tr></table><br>Valores típicos: <strong>0.5Ω a 50Ω</strong> dependendo da potência.<br>O importante é que as 3 leituras sejam <strong>iguais (±5%)</strong>.<br><br>🔴 Se uma fase difere >10%: enrolamento danificado, espira em curto.'},
+    {title:'2. Continuidade para terra (motor)',body:'<strong>Instrumento:</strong> Multímetro na escala Ω ou continuidade<br><br>Meça cada fase do motor → carcaça (terra):<br><table class="param-table"><tr><th>Medição</th><th>Esperado</th></tr><tr><td>U → Terra (carcaça)</td><td>OL (infinito)</td></tr><tr><td>V → Terra</td><td>OL</td></tr><tr><td>W → Terra</td><td>OL</td></tr></table><br>Qualquer leitura ≠ OL → <strong>fuga para terra</strong>. Confirme com Megôhmetro (próxima seção).'},
+    {title:'3. Sentido de rotação (sem drive)',body:'Com motor desconectado do drive, é possível confirmar a conexão correta medindo a sequência de fases com um <strong>sequencímetro</strong> (Phase Rotation Meter).<br><br>Para inverter sentido: <strong>troque duas fases de saída</strong> (ex: U↔V).'},
+  ],
+  isolamento: [
+    {title:'1. Megôhmetro — por que e quando',body:'O Megôhmetro aplica tensão CC (500V ou 1000V) e mede a resistência de isolamento. É o teste definitivo para detectar fuga para terra que o multímetro comum não detecta.<br><br><strong>Quando usar:</strong><br>• Drive apresentando F013 (Ground Fault) repetido<br>• Após exposição do motor a umidade/alagamento<br>• Motor parado > 3 meses<br>• Cabos longos (>50m)<br>• Manutenção preventiva anual'},
+    {title:'2. Procedimento no motor',body:'<strong>Instrumento:</strong> Megôhmetro 500V CC (motores BT) ou 1000V CC (motores 480V+)<br><br>1. <strong>Desconecte TODOS os cabos do drive</strong> (medir apenas motor+cabo)<br>2. Desconecte qualquer dispositivo ligado ao motor (encoder, PT100, etc.)<br>3. Conecte o terra do Megôhmetro à carcaça do motor<br>4. Meça cada fase → terra por <strong>60 segundos</strong>:<br><br><table class="param-table"><tr><th>Medição</th><th>Min. aceitável</th><th>Ideal</th></tr><tr><td>U → Terra</td><td>≥ 2 MΩ</td><td>> 100 MΩ</td></tr><tr><td>V → Terra</td><td>≥ 2 MΩ</td><td>> 100 MΩ</td></tr><tr><td>W → Terra</td><td>≥ 2 MΩ</td><td>> 100 MΩ</td></tr></table><br>⚠️ <strong>NUNCA</strong> aplique Megôhmetro no drive — danifica os componentes eletrônicos.'},
+    {title:'3. Interpretação dos valores',body:'<table class="param-table"><tr><th>Valor</th><th>Estado</th><th>Ação</th></tr><tr><td>> 100 MΩ</td><td>✅ Excelente</td><td>Nenhuma</td></tr><tr><td>10–100 MΩ</td><td>✅ Bom</td><td>Monitorar na próxima preventiva</td></tr><tr><td>2–10 MΩ</td><td>⚠️ Marginal</td><td>Investigar umidade, sujeira. Considerar rebobinar.</td></tr><tr><td>< 2 MΩ</td><td>🔴 Reprovado</td><td>NÃO energize. Secar motor ou rebobinar.</td></tr><tr><td>< 0.5 MΩ</td><td>🔴 Crítico</td><td>Motor com isolamento comprometido. Risco de curto.</td></tr></table><br><strong>Regra prática:</strong> IR (MΩ) ≥ (Tensão nominal ÷ 1000) + 1<br>Ex: Motor 460V → IR mín = (460÷1000)+1 = <strong>1.46 MΩ</strong>'},
+    {title:'4. Teste no cabo (separado)',body:'Para isolar se a fuga é no motor ou no cabo:<br>1. Desconecte o cabo no motor<br>2. Meça isolamento do cabo sozinho (cada condutor → terra)<br>3. Se cabo OK e motor reprovado → problema é no motor<br>4. Se cabo reprovado → substituir ou reparar cabo<br><br>Cabos longos (>100m) com múltiplas emendas são causa comum de F013.'},
+  ],
+  capacitor: [
+    {title:'1. Verificação do barramento DC',body:'<strong>APÓS tempo de descarga e confirmação <5V:</strong><br><br><strong>Inspeção visual dos capacitores:</strong><br>• Topo estufado ou com vazamento → <strong>substituir</strong><br>• Base com líquido marrom → eletrólito vazou → <strong>substituir</strong><br>• Descoloração intensa → superaquecimento<br><br>⚠️ Capacitores eletrolíticos têm vida útil de 5–10 anos. Se drive é antigo, considere substituição preventiva.'},
+    {title:'2. Teste de carga do Bus DC (rápido)',body:'Este teste é feito <strong>energizando brevemente</strong> o drive e medindo:<br><br>1. Energize o drive normalmente (sem dar partida no motor)<br>2. Com multímetro em VCC, meça entre <strong>DC+ e DC−</strong><br><br><table class="param-table"><tr><th>Entrada CA</th><th>Bus DC esperado</th></tr><tr><td>220V trifásico</td><td>~310V DC</td></tr><tr><td>380V trifásico</td><td>~537V DC</td></tr><tr><td>440V trifásico</td><td>~622V DC</td></tr><tr><td>480V trifásico</td><td>~678V DC</td></tr></table><br>Fórmula: <strong>V<sub>DC</sub> ≈ V<sub>CA</sub> × √2 × 1.0</strong><br>Se valor muito abaixo: capacitores degradados ou retificador falhando.'},
+    {title:'3. Resistor de pré-carga',body:'Drives maiores (PF700, PF755) possuem circuito de pré-carga para limitar a corrente de inrush nos capacitores.<br><br>Se o drive apresenta F003/F004 imediatamente ao energizar, ou se ouve "estalo" forte:<br>• Verificar resistor de pré-carga (se acessível)<br>• Verificar relé/contator de bypass<br>• Medir resistência do resistor de pré-carga com multímetro'},
+  ],
+  controle: [
+    {title:'1. Verificação da fonte de controle',body:'Mesmo com drive desenergizado (potência), a parte de controle pode ser verificada:<br><br><strong>Com drive energizado (apenas controle):</strong><br><table class="param-table"><tr><th>Ponto</th><th>Esperado</th></tr><tr><td>24V DC (bornes de I/O)</td><td>23.5V – 25.5V</td></tr><tr><td>5V interno (se acessível)</td><td>4.8V – 5.2V</td></tr><tr><td>+10V referência (borne)</td><td>9.8V – 10.2V</td></tr></table><br>Se 24V externo está baixo: verificar fonte de alimentação do painel.'},
+    {title:'2. Teste de entradas digitais',body:'<strong>Instrumento:</strong> Multímetro em VCC<br><br>1. Meça tensão em cada entrada digital (DI) vs COM:<br>• DI ativada: ~24V DC<br>• DI desativada: ~0V DC<br><br>2. Force manualmente com jumper (24V → DI) para verificar se o drive reconhece<br>3. Confirme no display do drive (parâmetros de diagnóstico de I/O)'},
+    {title:'3. Teste de saída analógica (4-20mA)',body:'<strong>Instrumento:</strong> Multímetro em mA (ou alicate amperímetro de processo)<br><br>1. Configure uma saída analógica para representar frequência ou corrente<br>2. Com drive parado: deve ler <strong>4mA</strong> (zero vivo)<br>3. Com drive em velocidade máxima: deve ler <strong>20mA</strong><br>4. Se leitura é 0mA: fio rompido ou saída queimada<br>5. Se leitura oscila: verificar aterramento e blindagem do cabo'},
+    {title:'4. Teste de entrada analógica (4-20mA / 0-10V)',body:'<strong>Instrumento:</strong> Gerador de sinal (ou potenciômetro para 0-10V)<br><br>1. Desconecte o sinal do transmissor de campo<br>2. Injete 4mA → drive deve mostrar 0% / 0Hz<br>3. Injete 20mA → drive deve mostrar 100% / freq máx<br>4. Injete 12mA → drive deve mostrar ~50%<br><br>Se drive não responde ao sinal injetado: verificar configuração de parâmetros ou entrada queimada.'},
+  ],
+  ventilador: [
+    {title:'1. Inspeção visual e mecânica',body:'<strong>Com drive desenergizado:</strong><br><br>1. Gire o ventilador manualmente com o dedo<br>• Deve girar livremente, sem ruído de raspagem<br>• Se trava ou "arranha": rolamento desgastado → <strong>substituir</strong><br><br>2. Verifique as pás: quebradas, sujas, empenadas<br>3. Limpe com ar comprimido (pressão baixa) ou pincel<br>4. Verifique o conector do ventilador na placa'},
+    {title:'2. Teste elétrico do ventilador',body:'<strong>Instrumento:</strong> Multímetro na escala Ω<br><br>1. Desconecte o ventilador do drive<br>2. Meça a resistência entre os fios:<br><br><table class="param-table"><tr><th>Tipo</th><th>Resistência esperada</th></tr><tr><td>Ventilador 24V DC</td><td>20Ω – 200Ω</td></tr><tr><td>Ventilador 230V AC</td><td>200Ω – 2kΩ</td></tr></table><br>• <strong>OL (infinito)</strong>: enrolamento aberto → substituir<br>• <strong>0Ω ou muito baixo</strong>: curto no enrolamento → substituir<br>• Valor dentro da faixa: provavelmente OK'},
+    {title:'3. Termistor / sensor de temperatura',body:'Drives como PF700/755 possuem termistor no dissipador:<br><br><strong>Instrumento:</strong> Multímetro na escala Ω (20kΩ)<br><br>Meça resistência do sensor NTC:<br><table class="param-table"><tr><th>Temperatura</th><th>Resistência NTC típica</th></tr><tr><td>25°C (ambiente)</td><td>5kΩ – 15kΩ</td></tr><tr><td>50°C</td><td>2kΩ – 5kΩ</td></tr><tr><td>80°C</td><td>800Ω – 2kΩ</td></tr></table><br>• OL: sensor aberto → pode gerar F008 falso<br>• 0Ω: sensor em curto → drive pode não proteger contra sobreaquecimento<br>• Para teste rápido: aqueça levemente com secador e veja se resistência diminui (NTC)'},
+  ],
+};
+
+function selectTesteFrio(key,el){
+  document.querySelectorAll('#tfChips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderTesteFrio(key);
+}
+function renderTesteFrio(key){
+  const steps=TESTE_FRIO[key]||[];
+  document.getElementById('tf-steps').innerHTML=steps.map((s,i)=>`
+    <div class="step-card" id="tf-${key}-${i}">
+      <div class="step-head" onclick="document.getElementById('tf-${key}-${i}').classList.toggle('open')">
+        <div class="step-num">${i+1}</div><div class="step-title">${s.title}</div><span class="fault-chevron">▼</span>
+      </div>
+      <div class="step-body">${s.body}</div>
+    </div>`).join('');
+}
+renderTesteFrio('seguranca');
 
 // ══ GLOSSÁRIO ═══════════════════════════════════════
 function renderGlossario(filter){
